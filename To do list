@@ -1,0 +1,56 @@
+A fazer:
+
+--- Ler ficheiro da configuração do parque e guardá-la numa matriz tri-dimensional:
+               -- Dimensão
+               -- Localização de lugares e vias de circulação
+               -- Número de pisos
+               -- Número e localização de entradas e acessos
+
+	(Não esquecer verificar se o ficheiro exite)
+
+
+------------------------------------""""------------------------------------------------
+
+-- Ler ficheiro com informação de cada viatura e guardá-la na estrutura da mesma;
+
+    (Não esquecer verificar se o ficheiro existe)
+
+
+------------------------------------""""------------------------------------------------
+
+-- Ler ficheiro com restrições
+
+	(Pode ou não ser inserido)
+
+
+------------------------------------""""------------------------------------------------
+
+--- Gerar lugar livre de estacionamento que esteja mais próximo do acesso pretendido;
+	Ter em conta as restrições!! 
+
+
+------------------------------------""""------------------------------------------------
+
+--- Calcular percurso da viatura até ao estacionamento e do pedestre até ao acesso, para cada viatura inserida.
+
+
+------------------------------------""""--------------------------------------------------
+
+--- Escrever ficheiro de saída com extensão ".pts" para inserir no Visualizador do Parque Automático.
+
+
+------------------------------------------------------------------------------------------------------------
+
+MÉTODOS:
+
+	Estruturas de memória a usar:
+		--- Grafo que contém o caminho em que os carros podem andar
+
+		--- Matriz tridimensional que contém o mapa do parque (Não sei se isto é mesmo necessário, 
+		    pois ao criarmos um grafo para cada piso, tecnicamente já deve ser informação suficiente)
+
+
+Como é que vamos selecionar o estacionamento com base na distancia ao acesso?
+
+
+
