@@ -12,15 +12,32 @@
 #include <stdio.h>
 #include "park_config.h"
 
+struct _entrance { //struct for entrances
+	char *name; //name of the entrance
+ 	int xs;  //coordinates
+ 	int ys;
+ 	int zs;
+};
 
- struct _park {
+struct _access {
+	char *name; //name of the access
+ 	int xs;  //coordinates
+ 	int ys;
+ 	int zs;
+ 	char type; //type of the access;
+};
+
+struct _park {
  	int N; //number of columns
  	int M; //number of lines
  	int P; //number of floors
  	int E; //number of entrances
  	int S; //number of accesses
  	int ***matrix; //3D matrix that stores the info about each floor;
- };
+ 	Entrance *entries; //vector that stores the info about the entrances;
+ 	Access *accesses; //vector that stores the info about the accesses;
+};
+
 
 /******************************************************************************
  * AbreFicheiro ()
@@ -102,13 +119,14 @@ void AlocaMatrizPark(Park * p)
  *
  *****************************************************************************/
 
-Park *NewPark(int columns, int lines, int entrances, int accesses, int floors){
+Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors)
+{
 	Park *p;
 
 	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
 
 	if (p == ((Park *) NULL)) {
-		fprintf(stderr, "Error in malloc of park.\n", );
+		fprintf(stderr, "Error in malloc of park.\n");
 		exit(1);
 	}
 
@@ -116,12 +134,32 @@ Park *NewPark(int columns, int lines, int entrances, int accesses, int floors){
 	p->M = lines;
 	p->P = floors;
 	p->E = entrances;
-	p->S = accesses;
+	p->S = nr_accesses;
 
 	AlocaMatrizPark(p);
+
+	p->entries = malloc(entrances*sizeof(*p->entries));  //use p->entries[i].xs
+
+ 	p->accesses = malloc(nr_accesses*sizeof(*p->accesses));
 
 	return (p);
 }
 
+
+
+//-------------------------------------------------------------------------------------------------------
+//main para testes:
+/*int main(){
+
+	Park *p;
+
+	p = NewPark(3, 4, 2, 3, 2);
+
+	p->entries[2].name = "E1";
+
+	printf("%s\n", p->entries[2].name);
+
+	return 0;
+}*/
 
 

@@ -7,10 +7,14 @@
  *
  *****************************************************************************/
 
- typedef struct _park Park;
+ typedef struct _entrance Entrance;
 
- Park *NewPark(int columns, int lines, int entrances, int accesses, int floors);
+ typedef struct _access Access;
+
+ typedef struct _park Park;
 
  FILE *AbreFicheiro(char *name, char *mode);
 
- void AlocaMatrizPark(Park * p)
+ void AlocaMatrizPark(Park * p);
+
+ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors);

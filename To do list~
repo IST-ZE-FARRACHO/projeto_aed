@@ -1,12 +1,3 @@
-
-Já faz:
-
-------Cria e aloca memória da estrutura para o park, onde é possivel guardar o mapa numa matriz 3D, guardar os acessos e entradas em dois vetores, e guardar os valores de N, M, P, E, S.
-
-
-
-############################################################################################################################
-
 A fazer:
 
 --- Ler ficheiro da configuração do parque e guardá-la numa matriz tri-dimensional:
@@ -50,15 +41,13 @@ A fazer:
 
 ------------------------------------------------------------------------------------------------------------
 
-########################################################################################################################
-
 MÉTODOS:
 
 	Estruturas de memória a usar:
 		--- Grafo que contém o caminho em que os carros podem andar
 
-		--- Matriz tridimensional que contém o mapa do parque 
-		--- Estrutura para o park, que contem esta matriz e q contem dois vetores de estruturas para as entradas e acessos.
+		--- Matriz tridimensional que contém o mapa do parque (Não sei se isto é mesmo necessário, 
+		    pois ao criarmos um grafo para cada piso, tecnicamente já deve ser informação suficiente)
 
 
 Como é que vamos selecionar o estacionamento com base na distancia ao acesso?
