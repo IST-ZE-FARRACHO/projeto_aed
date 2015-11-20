@@ -77,28 +77,28 @@ FILE *AbreFicheiro(char *name, char *mode)
 
 void AlocaMatrizPark(Park * p)
 {
-	int i, j;
+	int y, z;
 
- 	p->matrix = (int ***) malloc((p->N)*sizeof(int **));  //allocates z coordinates of the matrix
+ 	p->matrix = (int ***) malloc((p->N)*sizeof(int **));  //allocates x coordinates of the matrix
 
  	if(p->matrix == NULL){
  		printf("Error in malloc of matrix.\n");
  		exit(1);
  	}
 
-  	for (i = 0; i < p->N; i++) {  
+  	for (y = 0; y < p->N; y++) {  
 
-    	p->matrix[i] = (int **) malloc((p->M)*sizeof(int *)); //allocates x coordinates
+    	p->matrix[y] = (int **) malloc((p->M)*sizeof(int *)); //allocates y coordinates
 
-    	if(p->matrix[i] == NULL){
+    	if(p->matrix[y] == NULL){
  			printf("Error in malloc of matrix.\n");
  			exit(1);
  		}
 
-    	for (j = 0; j < p->M; j++){
-     		p->matrix[i][j] = (int*) malloc((p->P)*sizeof(int)); //allocates y coordinates
+    	for (z = 0; z < p->M; z++){
+     		p->matrix[y][z] = (int *) malloc((p->P)*sizeof(int)); //allocates z coordinates
 
-     		if(p->matrix[i][j] == NULL){
+     		if(p->matrix[y][z] == NULL){
  				printf("Error in malloc of matrix.\n");
  				exit(1);
  			}
@@ -149,7 +149,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 
 //-------------------------------------------------------------------------------------------------------
 //main para testes:
-/*int main(){
+int main(){
 
 	Park *p;
 
@@ -160,6 +160,6 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 	printf("%s\n", p->entries[2].name);
 
 	return 0;
-}*/
+}
 
 
