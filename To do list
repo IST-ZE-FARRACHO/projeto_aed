@@ -2,7 +2,7 @@
 Já faz:
 
 ------Cria e aloca memória da estrutura para o park, onde é possivel guardar o mapa numa matriz 3D, guardar os acessos e entradas em dois vetores, e guardar os valores de N, M, P, E, S.
-
+------Ler ficheiro da configuração do parque e guardá-la em estrutura (falta testar)
 
 
 ############################################################################################################################
