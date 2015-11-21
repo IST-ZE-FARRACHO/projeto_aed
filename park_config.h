@@ -7,6 +7,9 @@
  *
  *****************************************************************************/
 
+ #ifndef park_config_H
+ #define park_config_H
+
  typedef struct _entrance Entrance;
 
  typedef struct _access Access;
@@ -28,3 +31,5 @@
  void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j);
 
  Park *ReadFilePark (char * file);
+
+ #endif
