@@ -13,6 +13,7 @@
 #include <string.h>
 #include "cars.h"
 #include "park_config.h"
+#include "defs.h"
 
 struct _car // Struct for cars
 { 
@@ -43,10 +44,33 @@ int zs;
  *
  *****************************************************************************/
 
-/*ReadCarFile()
+ReadCarFile()
 {
-  
-}*/
+	 FILE *f;
+	 int tmpta, tmpxs, tmpys, tmpzs;
+	 char tmptype;
+	 char tmpid[5];
+	 char storage[]
+
+ 	 f = fopen(name, mode);
+
+ 	 if (f == NULL) 
+ 	 {
+  	  fprintf(stderr, "Error: Unable to open file %s\n.", name);
+  	  exit(1);
+ 	 }
+
+ 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs))
+ 		if(tmptype != 'S')
+ 			NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs);
+ 		else
+ 			{
+ 				if // O carro já existir, libertar o seu lugar
+
+ 				else // Não existir, libertar as coordenadas dadas
+ 			}
+ 	}
+}
 
 
 /******************************************************************************
