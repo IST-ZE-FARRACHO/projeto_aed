@@ -24,7 +24,7 @@
 
  int Char_to_Number (char * c);
 
- void Map_to_matrix (Park * p, FILE * f, int line, int column, int _floor);
+ void Map_to_matrix (Park * p, FILE * f, int _floor);
 
  void Read_Doors_info (Park * p, FILE * f, int *i, int *j);
 

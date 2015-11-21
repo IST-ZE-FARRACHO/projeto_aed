@@ -178,7 +178,8 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 
 int Char_to_Number (char * c)
 {
-	if(strcmp(c, " ") == 0)
+	printf("%s\n", c);
+	if(c == " ")
 	{
 		return road;
 	}
@@ -232,13 +233,22 @@ int Char_to_Number (char * c)
  *
  *****************************************************************************/
 
-void Map_to_matrix (Park * p, FILE * f, int line, int column, int _floor) 
+void Map_to_matrix (Park * p, FILE * f, int _floor) 
 {
-	char c;
+	int x, y;
+	char vector[p->N];
+	
+	for(y = 0; y < p->M; y++)
+	{
+		fgets(vector, p->N+1, f);
+		for (x = 0; x < p->N; x++)
+		{
+			p->matrix[x][y][_floor] = Char_to_Number(&(vector[x]));	
+			printf("%d", p->matrix[x][y][_floor]);
+		}
+		printf("\n");
+	}
 
-	fscanf(f, "%c", &c);
-
-	p->matrix[column][line][_floor] = Char_to_Number(c);
 }
 
 /******************************************************************************
@@ -258,7 +268,7 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 	int door_x, door_y, door_z;
 	char door_name[4], door_type; 
 
-	while(fscanf(f, "%s %d %d %d %c", door_name, door_x, door_y, door_z, door_type)) //reads line
+	while(fscanf(f, "%s %d %d %d %c", door_name, &door_x, &door_y, &door_z, &door_type)) //reads line
 	{
 		if (door_name[0] == 'E')
 		{
@@ -305,15 +315,9 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 
 void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicates the position to insert the entries/accesses in the vectors
 {
-	int x, y;
+	Map_to_matrix(p, f, _floor);
 
-	for(y = 0; y < p->M; y++)
-		for(x = 0; x < p->N; x++)
-		{
-			Map_to_matrix(p, f, y, x, _floor);
-		}
-
-	Read_Doors_info(p, f, (*i), (*j));
+	Read_Doors_info(p, f, &(*i), &(*j));
 }
 
 /******************************************************************************
@@ -332,20 +336,24 @@ Park *ReadFilePark (char * file)
 	int i = 0, j = 0, l = 0, n, m, p, e, s;
 
 	FILE *f;
-	Park *p;
+	Park *new_park;
+
+	char line [5];
 
 	f = AbreFicheiro(file, "r");
 
 	fscanf(f, "%d %d %d %d %d", &n, &m, &p, &e, &s);
 
-	p = NewPark(n, m, e, s, p);
+	fgets(line, sizeof(line), f);
+
+	new_park = NewPark(n, m, e, s, p);
 
 	for(l = 0; l < p; l++)
 	{
-		Read_floor(p, f, l, &i, &j);
+		Read_floor(new_park, f, l, &i, &j);
 	}
 
-	return (p);
+	return (new_park);
 }
 
 	 
@@ -359,19 +367,35 @@ Park *ReadFilePark (char * file)
 
 //-------------------------------------------------------------------------------------------------------
 //main para testes:
-/*
-int main()
+
+int main(int argc, char **argv)
 {
 
 	Park *p;
+	char *ficheiro = argv[1];
+	int k, j, i;
 
-	p = NewPark(3, 4, 2, 3, 2);
+	/*p = NewPark(3, 4, 2, 3, 2);
 
 	p->entries[2].name = "E1";
 
-	printf("%s\n", p->entries[2].name);
+	printf("%s\n", p->entries[2].name);*/
+
+	p = ReadFilePark(ficheiro);
+
+
+  for(k = 0; k< 2; k++){
+    for(j = 0; j<3; j++){
+      for(i = 0; i<5; i++){
+        p->matrix[i][j][k] = 3;
+        printf("%d   ", p->matrix[i][j][k]);
+      }
+      printf("\n");
+    }
+    printf("\n\n");
+  }
 
 	return 0;
-}*/
+}
 
 
