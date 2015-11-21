@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "park_config.h"
+#include "defs.h"
 
 /*******************Defines**************************/
 #define road 0
@@ -23,37 +24,6 @@
 #define ramp_up 6
 #define ramp_down 7
 /****************************************************/
-
-
-struct _entrance 
-{ //struct for entrances
-	char *name; //name of the entrance
- 	int xs;  //coordinates
- 	int ys;
- 	int zs;
-};
-
-struct _access
-{
-	char *name; //name of the access
- 	int xs;  //coordinates
- 	int ys;
- 	int zs;
- 	char type; //type of the access;
-};
-
-struct _park 
-{
- 	int N; //number of columns
- 	int M; //number of lines
- 	int P; //number of floors
- 	int E; //number of entrances
- 	int S; //number of accesses
- 	int ***matrix; //3D matrix that stores the info about each floor;
- 	Entrance *entries; //vector that stores the info about the entrances;
- 	Access *accesses; //vector that stores the info about the accesses;
-};
-
 
 /******************************************************************************
  * AbreFicheiro ()
