@@ -2,23 +2,13 @@
 Já faz:
 
 ------Cria e aloca memória da estrutura para o park, onde é possivel guardar o mapa numa matriz 3D, guardar os acessos e entradas em dois vetores, e guardar os valores de N, M, P, E, S.
-------Ler ficheiro da configuração do parque e guardá-la em estrutura (falta testar)
+------Ler ficheiro da configuração do parque e guardá-la em estrutura
+LEITURA DO PARQUE/ENTRADAS/ACESSOS ESTÁ DONE!!!!!!!!!!!
 
 
 ############################################################################################################################
 
 A fazer:
-
---- Ler ficheiro da configuração do parque e guardá-la numa matriz tri-dimensional:
-               -- Dimensão
-               -- Localização de lugares e vias de circulação
-               -- Número de pisos
-               -- Número e localização de entradas e acessos
-
-	(Não esquecer verificar se o ficheiro exite)
-
-
-------------------------------------""""------------------------------------------------
 
 -- Ler ficheiro com informação de cada viatura e guardá-la na estrutura da mesma;
 

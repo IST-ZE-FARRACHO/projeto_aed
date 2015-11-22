@@ -6,15 +6,10 @@
  * DESCRIPTION
  *
  *****************************************************************************/
+#include "defs.h"
 
  #ifndef park_config_H
  #define park_config_H
-
- typedef struct _entrance Entrance;
-
- typedef struct _access Access;
-
- typedef struct _park Park;
 
  FILE *AbreFicheiro(char *name, char *mode);
 

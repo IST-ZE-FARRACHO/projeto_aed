@@ -10,7 +10,11 @@
  #ifndef park_config_H
  #define park_config_H
 
- #include "defs.h"
+ typedef struct _entrance Entrance;
+
+ typedef struct _access Access;
+
+ typedef struct _park Park;
 
  FILE *AbreFicheiro(char *name, char *mode);
 
@@ -18,7 +22,7 @@
 
  Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors);
 
- int Char_to_Number (char * c);
+ int Char_to_Number (char c);
 
  void Map_to_matrix (Park * p, FILE * f, int _floor);
 

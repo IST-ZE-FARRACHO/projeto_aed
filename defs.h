@@ -1,9 +1,20 @@
+/******************************************************************************
+ *
+ * File Name: defs.h
+ * Author:    José Correia / António Farracho
+ *
+ * DESCRIPTION
+ *
+ *****************************************************************************/
+
  #ifndef defs_H
  #define defs_H
 
+ #define NAME_SIZE 4
+
 struct _entrance 
 { //struct for entrances
-	char *name; //name of the entrance
+	char name[NAME_SIZE]; //name of the entrance
  	int xs;  //coordinates
  	int ys;
  	int zs;
@@ -13,7 +24,7 @@ typedef struct _entrance Entrance;
 
 struct _access
 {
-	char *name; //name of the access
+	char name[NAME_SIZE]; //name of the access
  	int xs;  //coordinates
  	int ys;
  	int zs;
