@@ -14,16 +14,18 @@
 #include "park_config.h"
 #include "defs.h"
 
-/*******************Defines**************************/
-#define road 0
-#define wall 1
-#define entry_door 2
-#define ped_access 3
-#define empty_spot 4
-#define occupied 5
-#define ramp_up 6
-#define ramp_down 7
-/****************************************************/
+/******************* Defines **************************/
+
+#define ROAD 0
+#define WALL 1
+#define ENTRY_DOOR 2
+#define PED_ACCESS 3
+#define EMPTY_SPOT 4
+#define OCCUPIED 5
+#define RAMP_UP 6
+#define RAMP_DOWN 7
+
+/******************************************************/
 
 /******************************************************************************
  * AbreFicheiro ()
@@ -88,7 +90,8 @@ void AlocaMatrizPark(Park * p)
     	{
      		p->matrix[y][z] = (int *) malloc((p->P)*sizeof(int)); //allocates z coordinates
 
-     		if(p->matrix[y][z] == NULL){
+     		if(p->matrix[y][z] == NULL)
+     		{
  				printf("Error in malloc of matrix.\n");
  				exit(1);
  			}
@@ -151,37 +154,37 @@ int Char_to_Number (char * c)
 	printf("%s\n", c);
 	if(c == " ")
 	{
-		return road;
+		return ROAD;
 	}
 
 	if(strcmp(c, "@") == 0)
 	{
-		return wall;
+		return WALL;
 	}
 
 	if(strcmp(c, "a") == 0)
 	{
-		return ped_access;
+		return PED_ACCESS;
 	}
 
 	if(strcmp(c, ".") == 0)
 	{
-		return empty_spot;
+		return EMPTY_SPOT;
 	}
 
 	if(strcmp(c, "x") == 0)
 	{
-		return occupied;
+		return OCCUPIED;
 	}
 
 	if(strcmp(c, "u") == 0)
 	{
-		return ramp_up;
+		return RAMP_UP;
 	}
 
 	if(strcmp(c, "d") == 0)
 	{
-		return ramp_down;
+		return RAMP_DOWN;
 	}
 
 	else
@@ -206,15 +209,16 @@ int Char_to_Number (char * c)
 void Map_to_matrix (Park * p, FILE * f, int _floor) 
 {
 	int x, y;
-	char vector[p->N];
+	char vector[p->N]; // Line storage vector
 	
-	for(y = 0; y < p->M; y++)
+	for(y = 0; y < p->M; y++) // For each one of the lines
 	{
-		fgets(vector, p->N+1, f);
-		for (x = 0; x < p->N; x++)
+		fgets(vector, p->N+1, f); // Gets de line
+		
+		for (x = 0; x < p->N; x++) // For each one of the characters
 		{
-			p->matrix[x][y][_floor] = Char_to_Number(&(vector[x]));	
-			printf("%d", p->matrix[x][y][_floor]);
+			p->matrix[x][y][_floor] = Char_to_Number(&(vector[x]));	// Converts the symbol into integer and fills the corresponding floor-matrix
+			printf("%d", p->matrix[x][y][_floor]); 
 		}
 		printf("\n");
 	}
@@ -233,14 +237,14 @@ void Map_to_matrix (Park * p, FILE * f, int _floor)
  *
  *****************************************************************************/
 
-void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where to start inserting entries or accesses in the vectors
+void Read_Doors_Info (Park * p, FILE * f, int *i, int *j) //i, j, declare where to start inserting entries or accesses in the vectors
 {
-	int door_x, door_y, door_z;
-	char door_name[4], door_type; 
+	int door_x, door_y, door_z; // New door coordinates
+	char door_name[4], door_type;
 
-	while(fscanf(f, "%s %d %d %d %c", door_name, &door_x, &door_y, &door_z, &door_type)) //reads line
+	while(fscanf(f, "%s %d %d %d %c", door_name, &door_x, &door_y, &door_z, &door_type)) // Reads line
 	{
-		if (door_name[0] == 'E')
+		if (door_name[0] == 'E') // If the door is an entrance
 		{
 			strcpy(p->entries[(*i)].name, door_name);
 			p->entries[(*i)].xs = door_x;
@@ -249,7 +253,7 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 			(*i)++;
 		}
 
-		else if (door_name[0] == 'A')
+		else if (door_name[0] == 'A') // If the door is an access
 		{
 			strcpy(p->accesses[(*j)].name, door_name);
 			p->accesses[(*j)].xs = door_x;
@@ -291,11 +295,11 @@ void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicate
 }
 
 /******************************************************************************
- * ReadFilePark ()
+ * ReadFilePark (char * file)
  *
- * Arguments: File to read
- *			  Structure of the park
- * Returns: Park
+ * Arguments: File to be read
+ *			 
+ * Returns: Created Park
  *
  * Description: Reads the file with the info about the park
  *
@@ -312,18 +316,18 @@ Park *ReadFilePark (char * file)
 
 	f = AbreFicheiro(file, "r");
 
-	fscanf(f, "%d %d %d %d %d", &n, &m, &p, &e, &s);
+	fscanf(f, "%d %d %d %d %d", &n, &m, &p, &e, &s); // Reads initial file info
 
-	fgets(line, sizeof(line), f);
+	fgets(line, sizeof(line), f); // Carrys onto the next line
 
-	new_park = NewPark(n, m, e, s, p);
+	new_park = NewPark(n, m, e, s, p); // Initialises Park with retrieved info
 
-	for(l = 0; l < p; l++)
+	for(l = 0; l < p; l++) // For each one of the floors
 	{
-		Read_floor(new_park, f, l, &i, &j);
+		Read_floor(new_park, f, l, &i, &j); // Read floor function
 	}
 
-	return (new_park);
+	return new_park; // Returns new_park
 }
 
 	 
