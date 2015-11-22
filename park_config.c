@@ -12,9 +12,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "park_config.h"
-#include "defs.h"
 
-/*******************Defines**************************/
+/*******************Define's**************************/
 #define road 0
 #define wall 1
 #define entry_door 2
@@ -23,7 +22,39 @@
 #define occupied 5
 #define ramp_up 6
 #define ramp_down 7
+#define name_size 4
 /****************************************************/
+
+
+struct _entrance 
+{ //struct for entrances
+	char name[name_size]; //name of the entrance
+ 	int xs;  //coordinates
+ 	int ys;
+ 	int zs;
+};
+
+struct _access
+{
+	char name[name_size]; //name of the access
+ 	int xs;  //coordinates
+ 	int ys;
+ 	int zs;
+ 	char type; //type of the access;
+};
+
+struct _park 
+{
+ 	int N; //number of columns
+ 	int M; //number of lines
+ 	int P; //number of floors
+ 	int E; //number of entrances
+ 	int S; //number of accesses
+ 	int ***matrix; //3D matrix that stores the info about each floor;
+ 	Entrance *entries; //vector that stores the info about the entrances;
+ 	Access *accesses; //vector that stores the info about the accesses;
+};
+
 
 /******************************************************************************
  * AbreFicheiro ()
@@ -146,40 +177,44 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  *
  *****************************************************************************/
 
-int Char_to_Number (char * c)
+int Char_to_Number (char c)
 {
-	printf("%s\n", c);
-	if(c == " ")
+	if(c == ' ')
 	{
 		return road;
 	}
 
-	if(strcmp(c, "@") == 0)
+	else if(c == '@')
 	{
 		return wall;
 	}
 
-	if(strcmp(c, "a") == 0)
+	else if(c == 'e')
+	{
+		return entry_door;
+	}
+
+	else if(c == 'a')
 	{
 		return ped_access;
 	}
 
-	if(strcmp(c, ".") == 0)
+	else if(c == '.')
 	{
 		return empty_spot;
 	}
 
-	if(strcmp(c, "x") == 0)
+	else if(c == 'x')
 	{
 		return occupied;
 	}
 
-	if(strcmp(c, "u") == 0)
+	else if(c == 'u')
 	{
 		return ramp_up;
 	}
 
-	if(strcmp(c, "d") == 0)
+	else if(c == 'd')
 	{
 		return ramp_down;
 	}
@@ -191,6 +226,7 @@ int Char_to_Number (char * c)
 	}
 }
 
+
 /******************************************************************************
  * Map_to_matrix ()
  *
@@ -199,7 +235,7 @@ int Char_to_Number (char * c)
  *			  Line, column, _floor
  * Returns: ----
  *
- * Description: Reads the map and inserts in matrix
+ * Description: Reads the map and inserts in matrix. Prints the matrix on the screen
  *
  *****************************************************************************/
 
@@ -207,18 +243,20 @@ void Map_to_matrix (Park * p, FILE * f, int _floor)
 {
 	int x, y;
 	char vector[p->N];
+
+	printf("\nFloor number: %d\n", _floor);
 	
 	for(y = 0; y < p->M; y++)
 	{
-		fgets(vector, p->N+1, f);
+		fgets(vector, (p->N+1)*(p->M), f);  //reads one line and stores in the vector
 		for (x = 0; x < p->N; x++)
 		{
-			p->matrix[x][y][_floor] = Char_to_Number(&(vector[x]));	
-			printf("%d", p->matrix[x][y][_floor]);
+			p->matrix[x][y][_floor] = Char_to_Number(vector[x]); //converts each vector char in an integer
+			printf("%d", p->matrix[x][y][_floor]); //prints the matrix on the screen
 		}
 		printf("\n");
 	}
-
+	printf("\n");
 }
 
 /******************************************************************************
@@ -235,38 +273,42 @@ void Map_to_matrix (Park * p, FILE * f, int _floor)
 
 void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where to start inserting entries or accesses in the vectors
 {
-	int door_x, door_y, door_z;
-	char door_name[4], door_type; 
+	int door_x, door_y, door_z, doors = 0;
+	char door_name[name_size], door_type; 
 
-	while(fscanf(f, "%s %d %d %d %c", door_name, &door_x, &door_y, &door_z, &door_type)) //reads line
+	while(doors < p->E + p->S) //reads lines until the number of entries + accesses is reached
 	{
-		if (door_name[0] == 'E')
+		fscanf(f, "%s %d %d %d %c", door_name, &door_x, &door_y, &door_z, &door_type); //reads the first line with the dimensions, etc...
+		if (door_name[0] == 'E')  //if its an entry inserts the information in the p->entries vector
 		{
 			strcpy(p->entries[(*i)].name, door_name);
 			p->entries[(*i)].xs = door_x;
 			p->entries[(*i)].ys = door_y;
 			p->entries[(*i)].zs = door_z;
+			printf("Entrance: %s (%d,%d,%d)\n", p->entries[(*i)].name, p->entries[(*i)].xs, p->entries[(*i)].ys, p->entries[(*i)].zs);
 			(*i)++;
 		}
 
-		else if (door_name[0] == 'A')
+		else if (door_name[0] == 'A') //if its an access inserts the information in the p->accesses vector
 		{
 			strcpy(p->accesses[(*j)].name, door_name);
 			p->accesses[(*j)].xs = door_x;
 			p->accesses[(*j)].ys = door_y;
 			p->accesses[(*j)].zs = door_z;
+			printf("Access: %s (%d,%d,%d)\n", p->accesses[(*j)].name,  p->accesses[(*j)].xs,  p->accesses[(*j)].ys,  p->accesses[(*j)].zs);
 			(*j)++;
+		}
+
+		else if(door_name[0] == '+') //if +, finishes the reading about the actual floor
+		{
+			break;
 		}
 
 		else
 		{
 			printf("Invalid door information in park file!\n");
 		}
-
-		if(strcmp(door_name, "+") == 0)
-		{
-			break;
-		}
+		doors++;
 	}
 }
 
@@ -304,35 +346,26 @@ void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicate
 Park *ReadFilePark (char * file)
 {
 	int i = 0, j = 0, l = 0, n, m, p, e, s;
+	char line [name_size];
 
 	FILE *f;
 	Park *new_park;
-
-	char line [5];
 
 	f = AbreFicheiro(file, "r");
 
 	fscanf(f, "%d %d %d %d %d", &n, &m, &p, &e, &s);
 
-	fgets(line, sizeof(line), f);
+	fgets(line, sizeof(line), f); //goes to the second line of the file (line is not used anywhere else)
 
-	new_park = NewPark(n, m, e, s, p);
+	new_park = NewPark(n, m, e, s, p); //creates new park struct
 
-	for(l = 0; l < p; l++)
+	for(l = 0; l < p; l++) //reads all the info about each floor
 	{
 		Read_floor(new_park, f, l, &i, &j);
 	}
 
 	return (new_park);
 }
-
-	 
-  
-
-
-
-
-
 
 
 //-------------------------------------------------------------------------------------------------------
@@ -353,19 +386,5 @@ int main(int argc, char **argv)
 
 	p = ReadFilePark(ficheiro);
 
-
-  for(k = 0; k< 2; k++){
-    for(j = 0; j<3; j++){
-      for(i = 0; i<5; i++){
-        p->matrix[i][j][k] = 3;
-        printf("%d   ", p->matrix[i][j][k]);
-      }
-      printf("\n");
-    }
-    printf("\n\n");
-  }
-
 	return 0;
 }
-
-
