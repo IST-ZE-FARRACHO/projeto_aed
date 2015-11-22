@@ -12,11 +12,13 @@
 
 #include "park_config.h"
 
-typedef struct _car Car;
+void ReadCarFile(Park * p, char * file, Car * carlist);
 
 int CheckEntrance(Park * p, int x, int y, int z);
 
 Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs);
+
+void FreeSpot(Park * p, int xs, int ys, int zs, int time);
 
 /* End of: Protect multiple inclusions                              */
 #endif

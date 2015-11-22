@@ -47,7 +47,7 @@ FILE *AbreFicheiro(char *name, char *mode)
 
  	 if (f == NULL) 
  	 {
-  	  fprintf(stderr, "Error: Unable to open file %s\n.", name);
+  	  fprintf(stderr, "Error: Unable to open park-config file %s\n.", name);
   	  exit(1);
  	 }
  	 return f;
@@ -302,7 +302,7 @@ void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicate
 {
 	Map_to_matrix(p, f, _floor);
 
-	Read_Doors_info(p, f, &(*i), &(*j));
+	Read_Doors_info(p, f, i, j);
 }
 
 /******************************************************************************
