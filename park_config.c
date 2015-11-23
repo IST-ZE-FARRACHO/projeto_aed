@@ -346,21 +346,3 @@ Park *ReadFilePark (char * file)
 
 	return new_park; // Returns new_park
 }
-
-int main(int argc, char **argv)
-{
-
-	Park *p;
-	char *ficheiro = argv[1];
-	int k, j, i;
-
-	/*p = NewPark(3, 4, 2, 3, 2);
-
-	p->entries[2].name = "E1";
-
-	printf("%s\n", p->entries[2].name);*/
-
-	p = ReadFilePark(ficheiro);
-
-	return 0;
-}
