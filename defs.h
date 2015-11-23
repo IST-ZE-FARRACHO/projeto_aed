@@ -47,4 +47,19 @@ struct _park
 
 typedef struct _park Park;
 
+struct _car // Struct for cars
+{
+	char *id; // Vehicle identification
+	int ta; // Entrance moment - TA
+	int te; // Elapsed time - TE
+	char type; // Type of access required
+//“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)
+	int xs;  // Entrance coordinates
+	int ys; 
+	int zs;
+
+};
+
+typedef struct _car Car;
+
  #endif

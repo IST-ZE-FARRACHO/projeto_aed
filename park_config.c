@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "park_config.h"
-#include "defs.h"
 
 /******************* Defines **************************/
 
@@ -339,10 +338,6 @@ Park *ReadFilePark (char * file)
 
 	return new_park; // Returns new_park
 }
-
-
-//-------------------------------------------------------------------------------------------------------
-//main para testes:
 
 int main(int argc, char **argv)
 {
