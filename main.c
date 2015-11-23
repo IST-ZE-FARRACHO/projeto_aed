@@ -20,5 +20,17 @@ int main()
 
 	park = ReadFilePark(argv[1]);
 
+	
+// Enquanto a lista de eventos não estiver vazia		
+	// Percorre a fila de eventos 
+		// Se for a entrada de um carro
+			// Calcula automaticamente o melhor lugar e percurso
+			// Escreve a sequência de movimentos para o ficheiro de saída
+		// Se for a saída de um carro
+			// Atualiza matriz de posições
+		// Se for uma restrição nova
+			// Atualiza matriz de posições
+
+
 
 }

@@ -124,19 +124,18 @@ void FreeSpot(Park * p, int xs, int ys, int zs, int time)
  * Description: Reads car file and stores info into a list
  *
  *****************************************************************************/
-
-void ReadCarFile(Park * p, char * file, Car * carlist)
+void ReadCarFile(Park * p, char * file, LinkedList * carlist)
 {
 	 FILE *f;
 	 int tmpta, tmpxs, tmpys, tmpzs;
 	 char tmptype;
 	 char tmpid[5];
-	 char storage[]
+	 char storage[];
 	 Car * newc;
 
  	f = AbreFicheiro(file, "r");
 
- 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) >= 3) // Reads each line
+ 	while(fscanf(f, "%s %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) >= 3) // Reads each line
  	{	
 
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)
@@ -144,7 +143,7 @@ void ReadCarFile(Park * p, char * file, Car * carlist)
  			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) != 0 ) // Checks if it is a valid entrance, if it's not, ignore
  			{
 				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
-				// Insert car in carlist
+				insertUnsortedLinkedList(carlist->next, (Item) newc); // Inserts new car in given car list
  			}
 
  		}
@@ -152,18 +151,44 @@ void ReadCarFile(Park * p, char * file, Car * carlist)
  		else // It is exit info
  		{
 
- 			if() // Car is in carlist, free its coordinates
+ 			if() // Car is in carlist, register exit time
  			{
-
+ 				// Percorrer lista até encontrar carro dado
+ 				// Atualizar com tempo de saída
  			}
 
- 			else // Car doesn't exist, free given parking spot (read coordinates)
+ 			else // Car is not in carlist, register coordinates liberation time
  			{
 
  			}
 
  		}			
  	}
+}
+
+LinkedList * CarlistCreator(Park * p, char * file)
+{
+	LinkedList * carlist;
+	carlist = initLinkedList();
+
+	ReadCarFile(p, file, carlist);
+	
+}
+
+LinkedList * EventsListCreator()
+{
+
+	LinkedList * eventslist;
+
+	eventslist = initLinkedList(); // Listas criadas aqui, para depois serem enviadas para ReadCarFile e preenchidas
+
+	// Lê lista de carros e cria eventos de entrada e saída
+	// Lê lista de restrições e cria eventos de restrição
+	// Lê ficheiro de movimentações e cria evento de liberação de lugar de carro que não está na lista
+	// Ordena tudo
+
+	return eventslist;
+
 }
 
 /******************************************************************************
