@@ -64,7 +64,6 @@ struct _car // Struct for cars
 
 typedef struct _car Car;
 
-<<<<<<< HEAD
 /****************************************************************************/
 struct _restFloor
 {
