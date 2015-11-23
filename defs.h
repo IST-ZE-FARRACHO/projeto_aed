@@ -107,6 +107,18 @@ struct _event // Struct for events
 
 };
 
-typedef struct _car Event;
+typedef struct _event Event;
+
+/*************************************************************************************/
+
+struct _liberation
+{	
+	int time; // Liberation ocurring time
+	int xs; // Coordinates of the position to be liberated
+	int ys;
+	int zs;
+};
+
+typedef struct _liberation Liberation;
 
  #endif

@@ -95,22 +95,6 @@ int CheckEntrance(Park * p, int x, int y, int z)
 	return 0;	
 }
 
-/******************************************************************************
- * FreeSpot()
- *
- * Arguments: Park
- *			  Spot to liberate (coordinates)
- * 			  Time when spot will be liberated
- *
- * Returns: -
- *
- * Description: Liberates a given parking spot
- *
- *****************************************************************************/
-void FreeSpot(Park * p, int xs, int ys, int zs, int time)
-{
-
-}
 
 /******************************************************************************
  * ReadCarFile()
@@ -124,7 +108,7 @@ void FreeSpot(Park * p, int xs, int ys, int zs, int time)
  * Description: Reads car file and stores info into a list
  *
  *****************************************************************************/
-void ReadCarFile(Park * p, char * file, LinkedList * carlist)
+void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liberationlist)
 {
 	 FILE *f;
 	 int tmpta, tmpxs, tmpys, tmpzs;
@@ -132,6 +116,8 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist)
 	 char tmpid[5];
 	 char storage[];
 	 Car * newc;
+
+	 Liberation * newliberation;
 
  	f = AbreFicheiro(file, "r");
 
@@ -148,32 +134,107 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist)
 
  		}
 
- 		else // It is exit info
+ 		else // It is exit/liberation info
  		{
 
- 			if() // Car is in carlist, register exit time
+ 			if( /*fscanf só ler 3 elementos*/ ) // Car is in carlist, register exit time
  			{
- 				// Percorrer lista até encontrar carro dado
+ 				for()
  				// Atualizar com tempo de saída
  			}
 
  			else // Car is not in carlist, register coordinates liberation time
- 			{
-
+ 			{	
+ 				newliberation = LiberationStructCreator(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
+ 				insertUnsortedLinkedList(liberationlist->next, (Item) newliberation); // Inserts new liberation in liberation list
  			}
 
  		}			
  	}
 }
 
-LinkedList * CarlistCreator(Park * p, char * file)
+/******************************************************************************
+ * LiberationListCreator
+ *
+ * Arguments: Park, file to be read
+ *
+ * Returns: void
+ *
+ * Description: Creates and fills a car list, reading the input file
+ *
+ *****************************************************************************/
+
+void CarlistCreator(Park * p, char * file)
 {
 	LinkedList * carlist;
 	carlist = initLinkedList();
 
 	ReadCarFile(p, file, carlist);
-	
+
 }
+
+/******************************************************************************
+ * LiberationListCreator
+ *
+ * Arguments: -
+ *
+ * Returns: Creates an liberation list
+ *
+ * Description: 
+ *
+ *****************************************************************************/
+
+LinkedList * LiberationListCreator()
+{
+
+	LinkedList * liberationlist;
+
+	liberationlist = initLinkedList();
+
+}
+
+/******************************************************************************
+ * LiberationStructCreator
+ *
+ * Arguments: Liberation coordinates
+ *
+ * Returns: Creates an liberation structure and returns it
+ *
+ * Description: Allocates and fills an liberation structure
+ *
+ *****************************************************************************/
+
+Liberation * LiberationStructCreator(int x, int y, int z, int time)
+{
+	Liberation * libert;
+
+	libert = (Liberation *) malloc(sizeof(Liberation)); //allocates memory for the struct
+
+	if (libert == NULL)
+	{
+		fprintf(stderr, "Error in malloc of liberation struct.\n");
+		exit(1);
+	}
+
+	libert->time = time;
+	libert->xs = x;
+	libert->ys = y;
+	libert->zs = z;
+
+	return libert;
+
+}
+
+/******************************************************************************
+ * EventsListCreator
+ *
+ * Arguments: 
+ *
+ * Returns: Creates an event list and sorts it
+ *
+ * Description: Reads every other action list and creates an general event list
+ *
+ *****************************************************************************/
 
 LinkedList * EventsListCreator()
 {
@@ -184,8 +245,8 @@ LinkedList * EventsListCreator()
 
 	// Lê lista de carros e cria eventos de entrada e saída
 	// Lê lista de restrições e cria eventos de restrição
-	// Lê ficheiro de movimentações e cria evento de liberação de lugar de carro que não está na lista
-	// Ordena tudo
+	// Lê lista de liberações e cria eventos de liberação
+	// Ordena tudo em função do time
 
 	return eventslist;
 
