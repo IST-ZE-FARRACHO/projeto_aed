@@ -116,6 +116,8 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 	 char tmpid[5];
 	 char storage[];
 	 Car * newc;
+	 Car * searchcar;
+	 LinkedList * aux;
 
 	 Liberation * newliberation;
 
@@ -134,13 +136,23 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 
  		}
 
- 		else // It is exit/liberation info
+ 		else // It is an exit/liberation case
  		{
 
  			if( /*fscanf só ler 3 elementos*/ ) // Car is in carlist, register exit time
- 			{
- 				for()
- 				// Atualizar com tempo de saída
+ 			{	
+
+ 				for(aux = carlist; aux->next == NULL; aux = aux->next) // Percorre a lista de carros
+ 				{
+ 					searchcar = getItemLinkedList(aux); // Variável auxiliar searchcar é o resultado de sacar o item da lista
+
+ 					if( (searchcar->id) == tmpid)) // Se encontrar na lista o carro com o mesmo identificador
+					{
+						// Atualiza o tempo de saída desse carro
+					}
+
+ 				}
+ 		
  			}
 
  			else // Car is not in carlist, register coordinates liberation time
@@ -154,44 +166,26 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 }
 
 /******************************************************************************
- * LiberationListCreator
+ * ListCreator
  *
- * Arguments: Park, file to be read
+ * Arguments: 
  *
- * Returns: void
+ * Returns: Abstract created list
  *
- * Description: Creates and fills a car list, reading the input file
- *
- *****************************************************************************/
-
-void CarlistCreator(Park * p, char * file)
-{
-	LinkedList * carlist;
-	carlist = initLinkedList();
-
-	ReadCarFile(p, file, carlist);
-
-}
-
-/******************************************************************************
- * LiberationListCreator
- *
- * Arguments: -
- *
- * Returns: Creates an liberation list
- *
- * Description: 
+ * Description: Creates an abstract list
  *
  *****************************************************************************/
 
-LinkedList * LiberationListCreator()
+LinkedList * ListCreator()
 {
+	LinkedList * abstractlist;
 
-	LinkedList * liberationlist;
+	abstractlist = initLinkedList();
 
-	liberationlist = initLinkedList();
+	return abstractlist;	
 
 }
+
 
 /******************************************************************************
  * LiberationStructCreator
@@ -236,27 +230,50 @@ Liberation * LiberationStructCreator(int x, int y, int z, int time)
  *
  *****************************************************************************/
 
-LinkedList * EventsListCreator()
+LinkedList * EventsListCreator(Park * p, char * file)
 {
 
 	LinkedList * eventslist;
+	LinkedList * carlist;
+	LinkedList * liberationlist;
+	LinkedList * restrictionlist;
 
-	eventslist = initLinkedList(); // Listas criadas aqui, para depois serem enviadas para ReadCarFile e preenchidas
+	carlist = ListCreator();
+	liberationlist = ListCreator();
+	//restrictionlist = ListCreator();
+	eventslist = ListCreator();
+
+	ReadCarFile(p, file, carlist, liberationlist);
 
 	// Lê lista de carros e cria eventos de entrada e saída
 	// Lê lista de restrições e cria eventos de restrição
 	// Lê lista de liberações e cria eventos de liberação
-	// Ordena tudo em função do time
 
 	return eventslist;
 
 }
 
-/******************************************************************************
+LinkedList * EventsListSort(LinkedList * list)
+{
 
-								MAIN PARA TESTES
+	// Use a function to sort list
 
- *****************************************************************************/
+	return list; // Returns sorted list
+}
+
+LinkedList * TimelineCreator(Park * p, char * file)
+{
+
+	LinkedList * eventslist;
+	LinedList * sortedeventslist;
+
+	eventslist = EventsListCreator(p, file);
+	sortedeventslist = EventsListSort(eventslist);
+
+	return;
+}
+
+
 int main()
 {
 	Car * teste;

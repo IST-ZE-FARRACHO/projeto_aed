@@ -17,9 +17,11 @@ int main()
 {	
 
 	Park * park;
+	LinkedList * timeline;
 
 	park = ReadFilePark(argv[1]);
 
+	timeline = TimelineCreator(park, argv[2]);
 	
 // Enquanto a lista de eventos não estiver vazia		
 	// Percorre a fila de eventos 
