@@ -61,4 +61,16 @@ struct _car // Struct for cars
 
 typedef struct _car Car;
 
+struct _event // Struct for events
+{
+	char type; // Event type
+	// 'E' for Entrance, 'S' for Exit (Car is in list), 'F' for Exit (Car not in the list), 'R' (Ending restrition)
+	
+	int time; // Event starting time
+
+
+};
+
+typedef struct _car Event;
+
  #endif
