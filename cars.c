@@ -16,7 +16,8 @@
 /******************************************************************************
  * ReadCarFile()
  *
- * Arguments: Car file
+ * Arguments: Park
+ *			  Car file
  *			  Car list
  *
  * Returns: Updated car list
@@ -25,31 +26,50 @@
  *
  *****************************************************************************/
 
-ReadCarFile()
+void ReadCarFile(Park * p, char * file, Car * carlist)
 {
 	 FILE *f;
 	 int tmpta, tmpxs, tmpys, tmpzs;
 	 char tmptype;
 	 char tmpid[5];
 	 char storage[]
+	 Car * newc;
 
- 	 f = fopen(name, mode);
+ 	 f = fopen(file, mode); // Opens vehicles input file
 
  	 if (f == NULL) 
  	 {
-  	  fprintf(stderr, "Error: Unable to open file %s\n.", name);
+  	  fprintf(stderr, "Error: Unable to open car file %s\n.", name);
   	  exit(1);
  	 }
 
- 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs))
- 		if(tmptype != 'S')
- 			NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs);
- 		else
- 			{
- 				if // O carro já existir, libertar o seu lugar
+ 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) =! NULL) // Reads each line
+ 	{	
 
- 				else // Não existir, libertar as coordenadas dadas
+ 		if(tmptype != 'S') // If it is not exit info (it is an entrance)
+ 		{	
+ 			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) == 1 ) // Checks if it is a valid entrance, if it's not, ignore
+ 			{
+				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
+				// Insert car in carlist
  			}
+
+ 		}
+
+ 		else // It is exit info
+ 		{
+
+ 			if() // Car is in carlist, free its coordinates
+ 			{
+
+ 			}
+
+ 			else // Car doesn't exist, free given parking spot (read coordinates)
+ 			{
+
+ 			}
+
+ 		}			
  	}
 }
 
@@ -110,7 +130,30 @@ Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 
 }
 
-// Main para testes
+
+/******************************************************************************
+ * FreeSpot()
+ *
+ * Arguments: Park
+ *			  Spot to liberate (coordinates)
+ * 			  Time when spot will be liberated
+ *
+ * Returns: -
+ *
+ * Description: Liberates a given parking spot
+ *
+ *****************************************************************************/
+void FreeSpot(Park * p, int xs, int ys, int zs, int time)
+{
+
+}
+
+
+/******************************************************************************
+
+								MAIN PARA TESTES
+
+ *****************************************************************************/
 int main()
 {
 	Car * teste;

@@ -57,7 +57,6 @@ struct _car // Struct for cars
 	int xs;  // Entrance coordinates
 	int ys; 
 	int zs;
-
 };
 
 typedef struct _car Car;

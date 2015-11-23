@@ -8,14 +8,6 @@ This file contains the necessary functions to create and operate lists in C.*/
 #include <stdlib.h>
 #include "list.h"
 
-list* listInit() /* Initializes a list*/
-{
-	list* l = (list *) malloc(sizeof(list));
-	l->first = NULL;
-	l->size = 0;
-	return l;
-}
-
 node * InsertNode(Item) /* Inserts new Node with Item parameter and returns pointer to created node */
 {
 
