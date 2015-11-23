@@ -47,4 +47,20 @@ struct _park
 
 typedef struct _park Park;
 
+struct _car
+{
+ 	char * id;
+ 	char type; // Access type
+
+ 	int xs;
+ 	int ys;
+ 	int zs;
+ 	
+ 	int ta; // Entrance time
+ 	int te; // Elapsed time
+};
+
+typedef struct _car Car;
+
+
  #endif
