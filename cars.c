@@ -13,91 +13,30 @@
 #include <string.h>
 #include "cars.h"
 
-/******************************************************************************
- * ReadCarFile()
+ /******************************************************************************
+ * AbreFicheiro ()
  *
- * Arguments: Park
- *			  Car file
- *			  Car list
+ * Arguments: nome - pointer to string containing name of file to open
+ *            mode - mode to use to open the file
+ * Returns: FILE * - handle to file opened
+ * Side-Effects: input file is opened
  *
- * Returns: Updated car list
- *
- * Description: Reads car file and stores info into a list
+ * Description: Open file for reading, returns handle
  *
  *****************************************************************************/
 
-void ReadCarFile(Park * p, char * file, Car * carlist)
+FILE *AbreFicheiro(char *name, char *mode)
 {
-	 FILE *f;
-	 int tmpta, tmpxs, tmpys, tmpzs;
-	 char tmptype;
-	 char tmpid[5];
-	 char storage[]
-	 Car * newc;
+  	FILE *f;
 
- 	 f = fopen(file, mode); // Opens vehicles input file
+ 	 f = fopen(name, mode);
 
  	 if (f == NULL) 
  	 {
-  	  fprintf(stderr, "Error: Unable to open car file %s\n.", name);
+  	  fprintf(stderr, "Error: Unable to open park-config file %s\n.", name);
   	  exit(1);
  	 }
-
- 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) =! NULL) // Reads each line
- 	{	
-
- 		if(tmptype != 'S') // If it is not exit info (it is an entrance)
- 		{	
- 			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) == 1 ) // Checks if it is a valid entrance, if it's not, ignore
- 			{
-				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
-				// Insert car in carlist
- 			}
-
- 		}
-
- 		else // It is exit info
- 		{
-
- 			if() // Car is in carlist, free its coordinates
- 			{
-
- 			}
-
- 			else // Car doesn't exist, free given parking spot (read coordinates)
- 			{
-
- 			}
-
- 		}			
- 	}
-}
-
-
-/******************************************************************************
- * CheckEntrance()
- *
- * Arguments: Entrance Vector
- *			  New Entrance
- *
- * Returns: True or false, depending on Entrance Check result
- *
- * Description: Checks if an entrance is valid
- *
- *****************************************************************************/
-
-int CheckEntrance(Park * p, int x, int y, int z)
-{
-	int i;
-
-	for(i = 0; i <= p->E; i++)
-	{
-		if( (p->entries[i].xs) == x && (p->entries[i].ys == y ) && (p->entries[i].zs) == z )
-			return i;
-	}
-
-	return 0;	
-
+ 	 return f;
 }
 
 /******************************************************************************
@@ -128,8 +67,33 @@ Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 	newcar->ys = ys;
 	newcar->zs = zs;
 
+	return (newcar);
 }
 
+/******************************************************************************
+ * CheckEntrance()
+ *
+ * Arguments: Entrance Vector
+ *			  New Entrance
+ *
+ * Returns: True or false, depending on Entrance Check result
+ *
+ * Description: Checks if an entrance is valid
+ *
+ *****************************************************************************/
+
+int CheckEntrance(Park * p, int x, int y, int z)
+{
+	int i;
+
+	for(i = 0; i <= p->E; i++)
+	{
+		if( (p->entries[i].xs) == x && (p->entries[i].ys == y ) && (p->entries[i].zs) == z )
+			return i;
+	}
+
+	return 0;	
+}
 
 /******************************************************************************
  * FreeSpot()
@@ -148,6 +112,59 @@ void FreeSpot(Park * p, int xs, int ys, int zs, int time)
 
 }
 
+/******************************************************************************
+ * ReadCarFile()
+ *
+ * Arguments: Park
+ *			  Car file
+ *			  Car list
+ *
+ * Returns: Updated car list
+ *
+ * Description: Reads car file and stores info into a list
+ *
+ *****************************************************************************/
+
+void ReadCarFile(Park * p, char * file, Car * carlist)
+{
+	 FILE *f;
+	 int tmpta, tmpxs, tmpys, tmpzs;
+	 char tmptype;
+	 char tmpid[5];
+	 char storage[]
+	 Car * newc;
+
+ 	f = AbreFicheiro(file, "r");
+
+ 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) != NULL) // Reads each line
+ 	{	
+
+ 		if(tmptype != 'S') // If it is not exit info (it is an entrance)
+ 		{	
+ 			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) != 0 ) // Checks if it is a valid entrance, if it's not, ignore
+ 			{
+				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
+				// Insert car in carlist
+ 			}
+
+ 		}
+
+ 		else // It is exit info
+ 		{
+
+ 			if() // Car is in carlist, free its coordinates
+ 			{
+
+ 			}
+
+ 			else // Car doesn't exist, free given parking spot (read coordinates)
+ 			{
+
+ 			}
+
+ 		}			
+ 	}
+}
 
 /******************************************************************************
 
