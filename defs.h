@@ -22,6 +22,7 @@ struct _entrance
 
 typedef struct _entrance Entrance;
 
+/*********************************************************************/
 struct _access
 {
 	char name[NAME_SIZE]; //name of the access
@@ -33,6 +34,7 @@ struct _access
 
 typedef struct _access Access;
 
+/************************************************************************/
 struct _park 
 {
  	int N; //number of columns
@@ -47,6 +49,7 @@ struct _park
 
 typedef struct _park Park;
 
+/***************************************************************************/
 struct _car // Struct for cars
 {
 	char *id; // Vehicle identification
@@ -60,5 +63,36 @@ struct _car // Struct for cars
 };
 
 typedef struct _car Car;
+
+/****************************************************************************/
+struct _restFloor
+{
+	int ta;
+	int tb;
+	int px;
+};
+
+typedef struct _restFloor Rest_floor;
+
+/********************************************************************************/
+struct _restPos
+{
+	int ta;
+	int tb;
+	int ex;
+	int ey;
+	int ez;
+};
+
+typedef struct _restPos Rest_pos;
+
+/*******************************************************************************/
+struct _restrict
+{
+	Rest_floor *restricted_floors;
+	Rest_pos *restricted_positions;
+};
+
+typedef struct _restrict Restrictions;
 
  #endif

@@ -136,7 +136,7 @@ void ReadCarFile(Park * p, char * file, Car * carlist)
 
  	f = AbreFicheiro(file, "r");
 
- 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) != NULL) // Reads each line
+ 	while(fscanf(storage, "%s %d %c %d %d %d", &tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) >= 3) // Reads each line
  	{	
 
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)

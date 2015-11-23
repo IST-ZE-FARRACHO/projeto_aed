@@ -11,6 +11,9 @@
 #define CarsHeader
 
 #include "park_config.h"
+ #include "defs.h"
+
+FILE *AbreFicheiro(char *name, char *mode);
 
 void ReadCarFile(Park * p, char * file, Car * carlist);
 

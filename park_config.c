@@ -135,6 +135,12 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 
  	p->accesses = malloc(nr_accesses*sizeof(*p->accesses));
 
+ 	if(p->entries == ((Entrance *) NULL) || p->accesses == ((Access *) NULL))
+ 	{
+ 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 		exit(1);
+ 	}
+
 	return (p);
 }
 
@@ -335,6 +341,8 @@ Park *ReadFilePark (char * file)
 	{
 		Read_floor(new_park, f, l, &i, &j); // Read floor function
 	}
+
+	fclose(f);
 
 	return new_park; // Returns new_park
 }

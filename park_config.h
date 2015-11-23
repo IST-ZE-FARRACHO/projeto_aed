@@ -6,10 +6,11 @@
  * DESCRIPTION
  *
  *****************************************************************************/
-#include "defs.h"
 
  #ifndef park_config_H
  #define park_config_H
+
+ #include "defs.h"
 
  FILE *AbreFicheiro(char *name, char *mode);
 
