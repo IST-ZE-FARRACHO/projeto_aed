@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "park_config.h"
+#include "tools.h"
 
 /******************* Defines **************************/
 
@@ -25,32 +26,6 @@
 #define RAMP_DOWN 7
 #define ENTRY_DOOR 2
 #define NAME_SIZE 4
-
-/******************************************************************************
- * AbreFicheiro ()
- *
- * Arguments: nome - pointer to string containing name of file to open
- *            mode - mode to use to open the file
- * Returns: FILE * - handle to file opened
- * Side-Effects: input file is opened
- *
- * Description: Open file for reading, returns handle
- *
- *****************************************************************************/
-
-FILE *AbreFicheiro(char *name, char *mode)
-{
-  	FILE *f;
-
- 	 f = fopen(name, mode);
-
- 	 if (f == NULL) 
- 	 {
-  	  fprintf(stderr, "Error: Unable to open park-config file %s\n.", name);
-  	  exit(1);
- 	 }
- 	 return f;
-}
 
 
 /******************************************************************************

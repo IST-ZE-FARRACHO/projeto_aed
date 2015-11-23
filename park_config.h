@@ -11,8 +11,7 @@
  #define park_config_H
 
  #include "defs.h"
-
- FILE *AbreFicheiro(char *name, char *mode);
+ #include "tools.h"
 
  void AlocaMatrizPark(Park * p);
 

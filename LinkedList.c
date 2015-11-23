@@ -30,20 +30,6 @@
 #include "LinkedList.h"
 
 
-
-/*
- *  Data Type: LinkedListStruct
- *
- *  Description: Structure with:
- *                 1) Pointer to the item of the linked list node
- *                 2) Pointer to next node of the linked list.
- */
-struct LinkedListStruct
-{
-  Item this;
-  LinkedList * next;
-};
-
 /*
  *  Function:
  *    initLinkedList
@@ -176,6 +162,17 @@ Item getItemLinkedList(LinkedList * node)
   return node->this;
 }
 
+LinkedList * EditItemLinkedList(LinkedList * node, Item value)
+{
+  /* Check if node is not empty                                   */
+  if(node == NULL)
+    return NULL;
+
+  node->this = value;
+
+  return node;
+}
+
 
 
 /*
@@ -256,7 +253,7 @@ LinkedList * insertSortedLinkedList(LinkedList * first, Item item, int (* compar
   new->this = item;
 
   /* Check memory allocation errors                               */
-  if (newcar == NULL) 
+  if (new == NULL) 
   {
     fprintf(stderr, "Error in malloc of linkedlist.\n");
     exit(1);
@@ -295,7 +292,7 @@ LinkedList * insertSortedLinkedList(LinkedList * first, Item item, int (* compar
       aux = aux->next;
     }
   }
-  
+
   if(aux == NULL)
   {
       tmp->next = new;

@@ -54,14 +54,6 @@
 
 
 
-/*
- *  Data type: LinkedList
- *
- *  Description: Node of a linked list
- */
-typedef struct LinkedListStruct LinkedList;
-
-
 
 /*
  *  Function:
@@ -154,6 +146,8 @@ LinkedList * getNextNodeLinkedList(LinkedList * node);
  *   is returned if the node is NULL (or if the item is NULL).
  */
 Item getItemLinkedList(LinkedList * node);
+
+LinkedList * EditItemLinkedList(LinkedList * node, Item value);
 
 
 

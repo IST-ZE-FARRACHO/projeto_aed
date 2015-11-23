@@ -12,32 +12,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "cars.h"
-
- /******************************************************************************
- * AbreFicheiro ()
- *
- * Arguments: nome - pointer to string containing name of file to open
- *            mode - mode to use to open the file
- * Returns: FILE * - handle to file opened
- * Side-Effects: input file is opened
- *
- * Description: Open file for reading, returns handle
- *
- *****************************************************************************/
-
-FILE *AbreFicheiro(char *name, char *mode)
-{
-  	FILE *f;
-
- 	 f = fopen(name, mode);
-
- 	 if (f == NULL) 
- 	 {
-  	  fprintf(stderr, "Error: Unable to open park-config file %s\n.", name);
-  	  exit(1);
- 	 }
- 	 return f;
-}
+#include "LinkedList.h"
+#include "tools.h"
 
 /******************************************************************************
  * NewCar()
@@ -49,14 +25,24 @@ FILE *AbreFicheiro(char *name, char *mode)
  * Description: Allocates a new Car structure
  *
  *****************************************************************************/
+
+
+
 Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 {
 	Car * newcar;
 
 	newcar = (Car *) malloc(sizeof(Car));
-	if (newcar == ((Car*) NULL)) 
+	if (newcar == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new car.\n");
+		exit(1);
+	}
+
+	newcar->id = (char *) malloc(sizeof(char)*4);
+	if (newcar->id == NULL) 
+	{
+		fprintf(stderr, "Error in malloc of new car id.\n");
 		exit(1);
 	}
 
@@ -110,11 +96,11 @@ int CheckEntrance(Park * p, int x, int y, int z)
  *****************************************************************************/
 void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liberationlist)
 {
+
 	 FILE *f;
-	 int tmpta, tmpxs, tmpys, tmpzs;
+	 int n, tmpta, tmpxs, tmpys, tmpzs;
 	 char tmptype;
 	 char tmpid[5];
-	 char storage[];
 	 Car * newc;
 	 Car * searchcar;
 	 LinkedList * aux;
@@ -123,15 +109,16 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 
  	f = AbreFicheiro(file, "r");
 
- 	while(fscanf(f, "%s %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs) >= 3) // Reads each line
- 	{	
+ 	do{	
+ 		n = fscanf(f, "%s %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
+
 
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)
  		{	
  			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) != 0 ) // Checks if it is a valid entrance, if it's not, ignore
  			{
 				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
-				insertUnsortedLinkedList(carlist->next, (Item) newc); // Inserts new car in given car list
+				insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
  			}
 
  		}
@@ -139,17 +126,20 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  		else // It is an exit/liberation case
  		{
 
- 			if( /*fscanf só ler 3 elementos*/ ) // Car is in carlist, register exit time
+ 			if(n == 3) // Car is in carlist, register exit time
  			{	
 
- 				for(aux = carlist; aux->next == NULL; aux = aux->next) // Percorre a lista de carros
+ 				while(carlist != NULL) // Percorre a lista de carros
  				{
- 					searchcar = getItemLinkedList(aux); // Variável auxiliar searchcar é o resultado de sacar o item da lista
+ 					searchcar = (Car*) getItemLinkedList(carlist); // Variável auxiliar searchcar é o resultado de sacar o item da lista
 
- 					if( (searchcar->id) == tmpid)) // Se encontrar na lista o carro com o mesmo identificador
-					{
-						// Atualiza o tempo de saída desse carro
+ 					if( (searchcar->id) == tmpid) // Se encontrar na lista o carro com o mesmo identificador
+					{	
+						searchcar->tb = tmpta; // Novo tempo de saída é igual ao tempo lido
+						EditItemLinkedList(carlist, (Item) searchcar); // Atualiza o tempo de saída desse carro na lista
 					}
+
+					carlist = carlist->next;
 
  				}
  		
@@ -158,11 +148,15 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  			else // Car is not in carlist, register coordinates liberation time
  			{	
  				newliberation = LiberationStructCreator(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
- 				insertUnsortedLinkedList(liberationlist->next, (Item) newliberation); // Inserts new liberation in liberation list
+ 				insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
  			}
 
- 		}			
- 	}
+ 		}
+
+ 	}while(n >= 3);
+
+ 	return;
+
 }
 
 /******************************************************************************
@@ -253,6 +247,8 @@ LinkedList * EventsListCreator(Park * p, char * file)
 
 }
 
+
+
 LinkedList * EventsListSort(LinkedList * list)
 {
 
@@ -261,26 +257,41 @@ LinkedList * EventsListSort(LinkedList * list)
 	return list; // Returns sorted list
 }
 
+/******************************************************************************
+ * TimelineCreator
+ *
+ * Arguments: Park, File
+ *
+ * Returns: Pointer to created Car
+ *
+ * Description: Allocates a new Car structure
+ *
+ *****************************************************************************/
+
 LinkedList * TimelineCreator(Park * p, char * file)
 {
 
 	LinkedList * eventslist;
-	LinedList * sortedeventslist;
+	LinkedList * sortedeventslist;
 
 	eventslist = EventsListCreator(p, file);
 	sortedeventslist = EventsListSort(eventslist);
 
-	return;
+	return sortedeventslist;
 }
 
 
-int main()
+int main(int argc, char *argv[])
 {
-	Car * teste;
+	
+	Park * park;
+	LinkedList * timeline;
 
-	teste = NewCar("NQ", 0, 'H', 0, 0, 0);
+	park = ReadFilePark(argv[1]);
 
-	printf("%s %d %c %d %d %d\n", teste->id, teste->ta, teste->type, teste->xs, teste->ys, teste->zs);
+	timeline = TimelineCreator(park, argv[2]);
 
-	return 0;
+	return;
+
+
 }

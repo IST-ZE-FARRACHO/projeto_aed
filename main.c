@@ -12,8 +12,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "defs.h"
+#include "tools.h"
 
-int main()
+int main(int argc, char *argv[]))
 {	
 
 	Park * park;
