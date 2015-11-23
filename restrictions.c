@@ -91,20 +91,20 @@ void ReadRestrictsFile(Restrictions * rest, char * file)
 
 	FILE * f;
 
-	f = AbreFicheiro(file, "r");
+	f = AbreFicheiro(file, "r"); //opens the file
 
-	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez))
+	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez)) 
 	{
-		if(nr_reads == 4)
+		if(nr_reads == 4) //if floor restriction
 		{
 			nr_floors++;
 		}
-		else if(nr_reads == 6)
+		else if(nr_reads == 6) //if position restriction
 		{
 			nr_pos++;
 		}
 
-		else if(nr_reads != 4 || nr_reads != 6)
+		else if(nr_reads != 4 || nr_reads != 6) //if end of file
 		{
 			break;
 		}
@@ -116,8 +116,7 @@ void ReadRestrictsFile(Restrictions * rest, char * file)
 
 	f = AbreFicheiro(file, "r");
 
-
-	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez))
+	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez)) //reads the file again, now to store the info inside the vectors
 	{
 		if(nr_reads == 4)
 		{
@@ -141,6 +140,7 @@ void ReadRestrictsFile(Restrictions * rest, char * file)
 			break;
 		}
 	}
+
 	fclose(f);
 }
 
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 
 	ReadRestrictsFile(rest, argv[1]);
 
-	printf("%d\n %d\n", rest->restricted_positions[1].ta, rest->restricted_floors[0].px);
+	printf("%d\n", rest->restricted_floors[0].px);
 
 	return 0;
 }
