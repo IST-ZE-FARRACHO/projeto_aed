@@ -84,7 +84,7 @@ Restrictions *NewRestrictions(int rest_pos, int rest_floors)
  *
  *****************************************************************************/
 
-void ReadRestrictsFile(Restrictions * rest, char * file)
+void ReadRestrictsFile(Restrictions **rest, char * file)
 {
 	int ta, tb, ind, ex, ey, ez, nr_reads, nr_floors = 0, nr_pos = 0, i = 0, j = 0;
 	char r;
@@ -112,7 +112,7 @@ void ReadRestrictsFile(Restrictions * rest, char * file)
 
 	fclose(f);
 
-	rest = NewRestrictions(nr_pos, nr_floors);
+	(*rest) = NewRestrictions(nr_pos, nr_floors);
 
 	f = AbreFicheiro(file, "r");
 
@@ -121,18 +121,18 @@ void ReadRestrictsFile(Restrictions * rest, char * file)
 	{
 		if(nr_reads == 4)
 		{
-			rest->restricted_floors[i].ta = ta;
-			rest->restricted_floors[i].tb = tb;
-			rest->restricted_floors[i].px = ind;
+			(*rest)->restricted_floors[i].ta = ta;
+			(*rest)->restricted_floors[i].tb = tb;
+			(*rest)->restricted_floors[i].px = ind;
 			i++;
 		}
 		else if(nr_reads == 6)
 		{
-			rest->restricted_positions[j].ta = ta;
-			rest->restricted_positions[j].tb = tb;
-			rest->restricted_positions[j].ex = ind;
-			rest->restricted_positions[j].ey = ey;
-			rest->restricted_positions[j].ez = ez;
+			(*rest)->restricted_positions[j].ta = ta;
+			(*rest)->restricted_positions[j].tb = tb;
+			(*rest)->restricted_positions[j].ex = ind;
+			(*rest)->restricted_positions[j].ey = ey;
+			(*rest)->restricted_positions[j].ez = ez;
 			j++;
 		}
 
@@ -141,6 +141,7 @@ void ReadRestrictsFile(Restrictions * rest, char * file)
 			break;
 		}
 	}
+
 	fclose(f);
 }
 
@@ -151,9 +152,9 @@ int main(int argc, char **argv)
 {
 	Restrictions * rest;
 
-	ReadRestrictsFile(rest, argv[1]);
+	ReadRestrictsFile(&rest, argv[1]);
 
-	printf("%d\n %d\n", rest->restricted_positions[1].ta, rest->restricted_floors[0].px);
+	printf("%d\n%d\n", rest->restricted_positions[1].ta, rest->restricted_floors[0].px);
 
 	return 0;
 }
