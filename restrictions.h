@@ -14,6 +14,6 @@
 
 FILE *AbreFicheiro(char *name, char *mode);
 Restrictions *NewRestrictions(int rest_pos, int rest_floors);
-void ReadRestrictsFile(Restrictions * rest, char * file);
+void ReadRestrictsFile(Restrictions ** rest, char * file);
 
 #endif
