@@ -24,7 +24,7 @@
  *****************************************************************************/
 link * NEW(int v, link *next)
 {
-	link *x = (link *) malloc(sizeof(struct node));
+	link * x = (link *) malloc(sizeof(struct node));
 
 	if (x == NULL)
 	{
@@ -209,7 +209,7 @@ Graph *GRAPHinit(int V)
  }
 
 /****************Main para testes*********************************************/
- 
+
  int main()
  {
  	int i = 0;
@@ -224,7 +224,10 @@ Graph *GRAPHinit(int V)
  	e[1] = EDGE(2,3,1);
 
  	while(i < 3)
- 		GRAPHinsertE(G, e[0]);
+ 	{
+ 		GRAPHinsertE(G, e[i]);
+ 		i++;
+ 	}
 
  	printf("%d %d %d\n", G->adj[1]->v, G->adj[2]->v, G->adj[1]->weight);
  	printf("%d %d %d\n", G->adj[2]->v, G->adj[3]->v, G->adj[3]->weight);

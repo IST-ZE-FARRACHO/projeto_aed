@@ -39,7 +39,17 @@ int main(int argc, char *argv[])
 	ListCreator(park, argv[2], argv[3], carlist, liberationlist, restrictionlist); // Reads, allocates, and fills event list
 
 	timeline = TimelineCreator();
-	
+
+	//Grafos:
+
+	//Cria um grafo com o número de caminhos do parque;
+	//Cria um vetor da estrutura Edge para as arestas
+	//Percorre a matriz 3D e vai adicionando ao grafo cada lugar da matriz que represente um caminho
+		//Vê logo quais as arestas para cada posição e adiciona ao vetor de arestas (Verificar em : x+1 (se x<(Colunas-2), y+1 (se y<(Linhas-2)))
+	//Adiciona cada aresta no vetor à lista de adjacências;
+
+//Lista de eventos:
+
 // Enquanto a lista de eventos não estiver vazia		
 	// Percorre a fila de eventos 
 		// Se for a entrada de um carro
