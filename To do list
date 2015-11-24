@@ -5,6 +5,8 @@ Já faz:
 ------Ler ficheiro da configuração do parque e guardá-la em estrutura
 LEITURA DO PARQUE/ENTRADAS/ACESSOS ESTÁ DONE!!!!!!!!!!!
 -----Ler o ficheiro das restrições
+----- Lê entrada e saída de carros e insere na carlist
+----- Lê libertação de lugares e insere na liberationlist
 
 
 ############################################################################################################################
