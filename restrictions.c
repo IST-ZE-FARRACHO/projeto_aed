@@ -13,6 +13,10 @@
 #include <string.h>
 #include "restrictions.h"
 
+#define DONTCARE 0
+#define POSITION 0
+#define FLOOR 1
+
 /******************************************************************************
  * AbreFicheiro ()
  *
@@ -49,29 +53,26 @@ FILE *AbreFicheiro(char *name, char *mode)
  *
  *****************************************************************************/
 
-Restrictions *NewRestrictions(int rest_pos, int rest_floors)
+Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z)
 {
 	Restrictions * rest;
 
 	rest = (Restrictions *) malloc(sizeof(Restrictions)); //allocates memory for the struct
 
-	if (rest == ((Restrictions *) NULL))
+	if (rest == NULL)
 	{
-		fprintf(stderr, "Error in malloc of restrictions.\n");
+		fprintf(stderr, "Error in malloc of restrictions struct.\n");
 		exit(1);
 	}
 
-	rest->restricted_floors = malloc(rest_floors*sizeof(*rest->restricted_floors));  //use p->restricted_floors[i].ta
+	rest->type = type;
+	rest->ta = ta;
+	rest->tb = tb;
+	rest->xs = x;
+	rest->ys = y;
+	rest->zs = z;
 
- 	rest->restricted_positions = malloc(rest_pos*sizeof(*rest->restricted_positions));	
-
- 	if (rest->restricted_floors == ((Rest_floor *) NULL) || rest->restricted_positions == ((Rest_pos *) NULL))
- 	{
- 		fprintf(stderr, "Error in malloc of restriction vectors.\n");
- 		exit(1);
- 	}
-
- 	return (rest);
+	return rest;
 }
 
 /******************************************************************************
@@ -84,55 +85,28 @@ Restrictions *NewRestrictions(int rest_pos, int rest_floors)
  *
  *****************************************************************************/
 
-void ReadRestrictsFile(Restrictions **rest, char * file)
+void ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 {
 	int ta, tb, ind, ex, ey, ez, nr_reads, nr_floors = 0, nr_pos = 0, i = 0, j = 0;
 	char r;
+	Restrictions * aux;
 
 	FILE * f;
 
-	f = AbreFicheiro(file, "r"); //opens the file
-
-	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez)) 
-	{
-		if(nr_reads == 4) //if floor restriction
-		{
-			nr_floors++;
-		}
-		else if(nr_reads == 6) //if position restriction
-		{
-			nr_pos++;
-		}
-
-		else if(nr_reads != 4 || nr_reads != 6) //if end of file
-		{
-			break;
-		}
-	}
-
-	fclose(f);
-
-	(*rest) = NewRestrictions(nr_pos, nr_floors);
-
 	f = AbreFicheiro(file, "r");
 
-	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez)) //reads the file again, now to store the info inside the vectors
+	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez)) // Reads each line of the file
 	{
-		if(nr_reads == 4)
-		{
-			(*rest)->restricted_floors[i].ta = ta;
-			(*rest)->restricted_floors[i].tb = tb;
-			(*rest)->restricted_floors[i].px = ind;
-			i++;
+		if(nr_reads == 4) // Its a floor restriction - use type = 1
+		{	
+			aux = NewRestrictions(FLOOR, ta, tb, DONTCARE, DONTCARE, ez);
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new floor restriction in restriction list
+ 		
 		}
-		else if(nr_reads == 6)
+		else if(nr_reads == 6) // Its a position restriction - use type = 0
 		{
-			(*rest)->restricted_positions[j].ta = ta;
-			(*rest)->restricted_positions[j].tb = tb;
-			(*rest)->restricted_positions[j].ex = ind;
-			(*rest)->restricted_positions[j].ey = ey;
-			(*rest)->restricted_positions[j].ez = ez;
-			j++;
+			aux = NewRestrictions(POSITION, ta, tb, ex, ey, ez);
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new position restriction in restriction list
 		}
 
 		else if(nr_reads != 4 || nr_reads != 6)

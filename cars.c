@@ -112,8 +112,6 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  		if( n < 3 ) continue;
 
  		printf("\n%d %s   %d %c %d %d %d\n", n, tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs);
- 		printf("\n%p\n", carlist);
-
 
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)
  		{	
@@ -146,9 +144,13 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 					{	
 						searchcar->tb = tmpta; // Updates exit time
 						EditItemLinkedList(carlist, (Item) searchcar); // Sends it back to the list
+						printf("%d", searchcar->tb);
+						break;
 					}
-
-					///// ERRO AQUI FODASSE !!!!!!!! carlist = carlist->next; // Iterates to next element
+					else
+					{
+						carlist = carlist->next; // Iterates to next element
+					}
 
  				}
  		
@@ -156,8 +158,12 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 
  			else // Liberation case -> Car is not in carlist, register coordinates liberation time
  			{	
+ 				printf("\nreated liberation struct.\n");
  				newliberation = LiberationStructCreator(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
- 				insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
+ 				liberationlist = insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
+ 				newliberation = (Liberation*) getItemLinkedList(liberationlist);
+ 				printf("\nInserted liberation: Time-%d X-%d Y-%d Z-%d\n", newliberation->time, newliberation->xs, newliberation->ys, newliberation->zs);
+ 				
  			}
 
  		}
@@ -254,24 +260,12 @@ LinkedList * EventsListCreator(Park * p, char * file)
 	restrictionlist = ListCreator();
 	eventslist = ListCreator();
 
-	ReadCarFile(p, file, carlist, liberationlist);
+	ReadCarFile(p, file, carlist, liberationlist); // Carlist and liberation list created
 
-	// Lê lista de carros e cria eventos de entrada e saída
 	// Lê lista de restrições e cria eventos de restrição
-	// Lê lista de liberações e cria eventos de liberação
 
 	return eventslist;
 
-}
-
-
-
-LinkedList * EventsListSort(LinkedList * list)
-{
-
-	// Use a function to sort list
-
-	return list; // Returns sorted list
 }
 
 /******************************************************************************
@@ -292,7 +286,6 @@ LinkedList * TimelineCreator(Park * p, char * file)
 	LinkedList * sortedeventslist;
 
 	eventslist = EventsListCreator(p, file);
-	sortedeventslist = EventsListSort(eventslist);
 
 	return sortedeventslist;
 }
