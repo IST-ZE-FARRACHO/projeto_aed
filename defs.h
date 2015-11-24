@@ -149,12 +149,22 @@ struct LinkedListStruct
   LinkedList * next;
 };
 
+/************************************************************************/
+struct node
+{
+	int v;
+	int weight;
+	int *next;
+};
+
+typedef struct node link;
+
 /**************************************************************************/
 struct graph 
 {
 	int V; //number of nodes
 	int E; //number of edges
-	int **adj; //adj matrix
+	link **adj;
 };
 
 typedef struct graph Graph;
@@ -164,8 +174,10 @@ struct edge
 {
 	int v; //node 1
 	int w; //node 2
+	int weight;
 };
 
 typedef struct edge Edge;
+
 
  #endif

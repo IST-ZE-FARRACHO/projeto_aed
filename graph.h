@@ -12,15 +12,16 @@
 
  #include "defs.h"
 
-int **MATRIXint(int V, int V, int init);
+int **MATRIXint(int V, int K, int init);
 
-Edge *EDGE(int, int);
+link * NEW(int v, link *next);
+Edge *EDGE(int, int, int);
 Graph *GRAPHinit(int);
-void GRAPHinsertE(Graph *G, Edge*);
+void GRAPHinsertE(Graph *G, Edge*, int);
 void GRAPHremoveE(Graph *G, Edge*);
-int GRAPHedges(Edge a[], Graph *G);
+int GRAPHedges(Edge * a[], Graph *G);
 Graph *GRAPHcopy(Graph *G);
 void GRAPHdestroy(Graph *G);
 
 
- #endif graph_H
+ #endif
