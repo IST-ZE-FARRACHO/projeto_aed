@@ -25,6 +25,13 @@
 link * NEW(int v, link *next)
 {
 	link *x = (link *) malloc(sizeof(struct node));
+
+	if (x == NULL)
+	{
+		fprintf(stderr, "Error in malloc of node.\n");
+		exit(1);
+	}
+
 	x->v = v;
 	x->next = next;
 	return x;
@@ -98,11 +105,14 @@ Graph *GRAPHinit(int V)
  {
  	int v = e->v, w = e->w, weight = e->weight;
 
+ 	printf("%d\n", w);
+
  	G->adj[v] = NEW(w, G->adj[v]);
  	G->adj[w] = NEW(v, G->adj[w]);
- 	G->E++;
  	G->adj[v]->weight = weight;
  	G->adj[w]->weight = weight;
+
+ 	G->E++;
  }
 
  /******************************************************************************
@@ -123,7 +133,7 @@ Graph *GRAPHinit(int V)
 
  	head = G->adj[v];
 
- 	for(temp = G->adj[v].next; temp->v != w; temp = temp->next)
+ 	for(temp = G->adj[v]->next; temp->v != w; temp = temp->next)
  	{
  		head = head->next;
  	}
@@ -131,17 +141,17 @@ Graph *GRAPHinit(int V)
  	head->next = temp->next;
  	free(temp);
 
- 	link * temp;
+ 	link * temp2;
 
  	head = G->adj[w];
 
- 	for(temp = G->adj[v].next; temp->v != v; temp = temp->next)
+ 	for(temp2 = G->adj[v]->next; temp2->v != v; temp2 = temp2->next)
  	{
  		head = head->next;
  	}
 
- 	head->next = temp->next;
- 	free(temp);
+ 	head->next = temp2->next;
+ 	free(temp2);
 
  	G->E--;
  }
@@ -160,12 +170,12 @@ Graph *GRAPHinit(int V)
  int GRAPHedges(Edge * a[], Graph *G)
  {
  	int v, E = 0;
- 	link t;
+ 	link * t;
 
  	for (v = 0; v < G->V; v++)
- 		for (T = G->adj[v]; t != NULL; T++)
+ 		for (t = G->adj[v]; t != NULL; t = t->next)
  			if (v < t->v)
- 				a[E++] = EDGE(v, t->v, G->adj[v]);
+ 				a[E++] = EDGE(v, t->v, G->adj[v]->weight);
 
  	return E;
  }
@@ -182,7 +192,45 @@ Graph *GRAPHinit(int V)
  void GRAPHdestroy(Graph *G)
  {
  	int i;
+ 	link * head;
+ 	link * aux;
 
- 	free(G->adj);
- 	free(G); 
+ 	for(i = 0; i < G->V; i++)
+ 	{
+ 		for(head = G->adj[i]; head != NULL; )
+ 		{
+ 			aux = head;
+ 			head = head->next;
+ 			free(aux);
+ 		} 
+ 		free(G->adj[i]);		
+ 	}
+ 	free(G);
+ }
+
+/****************Main para testes*********************************************/
+ 
+ int main()
+ {
+ 	int i = 0;
+
+ 	Graph *G;
+ 	Edge **e = (Edge **) malloc(3*sizeof(Edge *));
+
+ 	G = GRAPHinit(5);
+
+ 	e[0] = EDGE(1,2,3);
+ 	e[2] = EDGE(3,4,2);
+ 	e[1] = EDGE(2,3,1);
+
+ 	while(i < 3)
+ 		GRAPHinsertE(G, e[0]);
+
+ 	printf("%d %d %d\n", G->adj[1]->v, G->adj[2]->v, G->adj[1]->weight);
+ 	printf("%d %d %d\n", G->adj[2]->v, G->adj[3]->v, G->adj[3]->weight);
+ 	printf("%d %d %d\n", G->adj[3]->v, G->adj[4]->v, G->adj[4]->weight);
+ 	printf("%d\n", GRAPHedges(e, G));
+
+
+ 	return 0;
  }

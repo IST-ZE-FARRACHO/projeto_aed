@@ -17,7 +17,7 @@ int **MATRIXint(int V, int K, int init);
 link * NEW(int v, link *next);
 Edge *EDGE(int, int, int);
 Graph *GRAPHinit(int);
-void GRAPHinsertE(Graph *G, Edge*, int);
+void GRAPHinsertE(Graph *G, Edge *e);
 void GRAPHremoveE(Graph *G, Edge*);
 int GRAPHedges(Edge * a[], Graph *G);
 Graph *GRAPHcopy(Graph *G);

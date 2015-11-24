@@ -154,14 +154,14 @@ struct LinkedListStruct
 };
 
 /************************************************************************/
+typedef struct node link;
+
 struct node
 {
 	int v;
 	int weight;
-	int *next;
+	link *next;
 };
-
-typedef struct node link;
 
 /**************************************************************************/
 struct graph 
