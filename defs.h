@@ -66,33 +66,16 @@ struct _car // Struct for cars
 
 typedef struct _car Car;
 
-/****************************************************************************/
-struct _restFloor
-{
-	int ta;
-	int tb;
-	int px;
-};
-
-typedef struct _restFloor Rest_floor;
-
-/********************************************************************************/
-struct _restPos
-{
-	int ta;
-	int tb;
-	int ex;
-	int ey;
-	int ez;
-};
-
-typedef struct _restPos Rest_pos;
 
 /*******************************************************************************/
 struct _restrict
 {
-	Rest_floor *restricted_floors;
-	Rest_pos *restricted_positions;
+	int type; // 0 - Position Restriction | 1 - Floor Restriction
+	int ta;
+	int tb;
+	int xs;
+	int ys;
+	int zs;
 };
 
 typedef struct _restrict Restrictions;

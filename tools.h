@@ -26,6 +26,7 @@
 
 FILE *AbreFicheiro(char *name, char *mode);
 void FechaFicheiro(FILE * f);
+LinkedList * ListCreator();
 
 
  /* End of: Protect multiple inclusions                              */

@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "park_config.h"
-#include "tools.h"
 
 /******************* Defines **************************/
 

@@ -31,3 +31,30 @@ void FechaFicheiro(FILE * f)
 {
 	fclose(f);
 }
+
+/******************************************************************************
+ * ListCreator
+ *
+ * Arguments: 
+ *
+ * Returns: Abstractly created list
+ *
+ * Description: Creates an abstract list
+ *
+ *****************************************************************************/
+
+LinkedList * ListCreator()
+{
+	LinkedList * abstractlist;
+
+	abstractlist = (LinkedList*) malloc(sizeof(LinkedList));
+
+	if (abstractlist == NULL) 
+	{
+		fprintf(stderr, "Error in malloc of new LinkedList.\n");
+		exit(1);
+	}
+
+	return abstractlist;	
+
+}

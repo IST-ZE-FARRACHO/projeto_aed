@@ -12,36 +12,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "restrictions.h"
-
+ 
 #define DONTCARE 0
 #define POSITION 0
 #define FLOOR 1
-
-/******************************************************************************
- * AbreFicheiro ()
- *
- * Arguments: nome - pointer to string containing name of file to open
- *            mode - mode to use to open the file
- * Returns: FILE * - handle to file opened
- * Side-Effects: input file is opened
- *
- * Description: Open file for reading, returns handle
- *
- *****************************************************************************/
-
-FILE *AbreFicheiro(char *name, char *mode)
-{
-  	FILE *f;
-
- 	 f = fopen(name, mode);
-
- 	 if (f == NULL) 
- 	 {
-  	  fprintf(stderr, "Error: Unable to open park-config file %s\n.", name);
-  	  exit(1);
- 	 }
- 	 return f;
-}
 
 /******************************************************************************
  * NewRestrictions ()
@@ -65,7 +39,7 @@ Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z
 		exit(1);
 	}
 
-	rest->type = type;
+	rest->type = rest_type;
 	rest->ta = ta;
 	rest->tb = tb;
 	rest->xs = x;

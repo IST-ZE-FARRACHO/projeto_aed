@@ -1,27 +1,25 @@
 /******************************************************************************
  *
- * File Name: cars.h
+ * File Name: time.h
  * Author:    José Correia / António Farracho
  *
  * DESCRIPTION
  *
  *****************************************************************************/
 
-#ifndef CarsHeader
-#define CarsHeader
+#ifndef TimeHeader
+#define TimeHeader
 
-#include "park_config.h"
 #include "defs.h"
 #include "LinkedList.h"
 #include "tools.h"
+#include "park_config.h"
 
-void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liberationlist);
+void ListsCreator(Park * p, char * carfile, char * restrictionfile, LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist);
 
-int CheckEntrance(Park * p, int x, int y, int z);
+LinkedList * TimelineCreator();
 
-Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs);
-
-Liberation * NewLiberation(int x, int y, int z, int time);
+//LinkedList * TimelineCreator(Park * p, char * file);
 
 /* End of: Protect multiple inclusions                              */
 #endif

@@ -11,36 +11,42 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <defs.h>
-
-// Fila ordenada
-
-// Funções de edição da matriz
+#include "time.h"
 
 /******************************************************************************
- * FreeSpot()
+ * EventsListCreator
  *
- * Arguments: Park
- *			  Spot to liberate (coordinates)
- * 			  Time when spot will be liberated
+ * Arguments: 
  *
- * Returns: -
+ * Returns: Creates an event list and sorts it
  *
- * Description: Liberates a given parking spot
+ * Description: Reads every other action list and creates an general event list
  *
  *****************************************************************************/
 
-void FreeSpot(Park * p, int xs, int ys, int zs, int time)
+void ListsCreator(Park * p, char * carfile, char * restrictionfile, LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist)
 {
+
+	ReadCarFile(p, carfile, carlist, liberationlist); // Carlist and liberation list created
+
+	ReadRestrictsFile(restrictionfile, restrictionlist); // Restriction list created
 
 }
 
-void CreateRestriction()
+
+/******************************************************************************
+ * TimelineCreator
+ *
+ * Arguments: 
+ *
+ * Returns: 
+ *
+ * Description: 
+ *
+ *****************************************************************************/
+
+LinkedList * TimelineCreator()
 {
 
-}
-
-void LiftRestriction()
-{
 
 }

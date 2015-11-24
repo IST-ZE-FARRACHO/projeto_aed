@@ -11,8 +11,32 @@
 #include <stdio.h>
 #include <string.h>
 #include "cars.h"
-#include "LinkedList.h"
-#include "tools.h"
+ 
+ /******************************************************************************
+ * CheckEntrance()
+ *
+ * Arguments: Entrance Vector
+ *			  New Entrance
+ *
+ * Returns: True or false, depending on Entrance Check result
+ *
+ * Description: Checks if an entrance is valid
+ *
+ *****************************************************************************/
+
+int CheckEntrance(Park * p, int x, int y, int z)
+{
+	int i;
+
+	for(i = 0; i <= p->E; i++)
+	{
+		if( (p->entries[i].xs) == x && (p->entries[i].ys == y ) && (p->entries[i].zs) == z )
+			return 1;
+	}
+
+	return 0;	
+}
+
 
 /******************************************************************************
  * NewCar()
@@ -54,28 +78,35 @@ Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 }
 
 /******************************************************************************
- * CheckEntrance()
+ * LiberationStructCreator
  *
- * Arguments: Entrance Vector
- *			  New Entrance
+ * Arguments: Liberation coordinates
  *
- * Returns: True or false, depending on Entrance Check result
+ * Returns: Created liberation structure
  *
- * Description: Checks if an entrance is valid
+ * Description: Allocates and fills an liberation structure
  *
  *****************************************************************************/
 
-int CheckEntrance(Park * p, int x, int y, int z)
+Liberation * NewLiberation(int x, int y, int z, int time)
 {
-	int i;
+	Liberation * libert;
 
-	for(i = 0; i <= p->E; i++)
+	libert = (Liberation *) malloc(sizeof(Liberation)); //allocates memory for the struct
+
+	if (libert == NULL)
 	{
-		if( (p->entries[i].xs) == x && (p->entries[i].ys == y ) && (p->entries[i].zs) == z )
-			return 1;
+		fprintf(stderr, "Error in malloc of liberation struct.\n");
+		exit(1);
 	}
 
-	return 0;	
+	libert->time = time;
+	libert->xs = x;
+	libert->ys = y;
+	libert->zs = z;
+
+	return libert;
+
 }
 
 
@@ -111,8 +142,6 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
  		if( n < 3 ) continue;
 
- 		printf("\n%d %s   %d %c %d %d %d\n", n, tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs);
-
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)
  		{	
  			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) ) // Checks if it is a valid entrance, if it's not, ignore
@@ -120,7 +149,6 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
 				newc = (Car*) getItemLinkedList(carlist);
-				printf("\nInserted car: %s %d %c %d %d %d\n", newc->id, newc->ta, newc->type, newc->xs, newc->ys, newc->zs);
 	
  			}
  			else
@@ -144,7 +172,6 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 					{	
 						searchcar->tb = tmpta; // Updates exit time
 						EditItemLinkedList(carlist, (Item) searchcar); // Sends it back to the list
-						printf("%d", searchcar->tb);
 						break;
 					}
 					else
@@ -158,11 +185,9 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 
  			else // Liberation case -> Car is not in carlist, register coordinates liberation time
  			{	
- 				printf("\nreated liberation struct.\n");
- 				newliberation = LiberationStructCreator(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
+ 				newliberation = NewLiberation(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
  				liberationlist = insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
  				newliberation = (Liberation*) getItemLinkedList(liberationlist);
- 				printf("\nInserted liberation: Time-%d X-%d Y-%d Z-%d\n", newliberation->time, newliberation->xs, newliberation->ys, newliberation->zs);
  				
  			}
 
@@ -174,140 +199,4 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  	FechaFicheiro(f);
 
  	return;
-}
-
-/******************************************************************************
- * ListCreator
- *
- * Arguments: 
- *
- * Returns: Abstractly created list
- *
- * Description: Creates an abstract list
- *
- *****************************************************************************/
-
-LinkedList * ListCreator()
-{
-	LinkedList * abstractlist;
-
-	abstractlist = (LinkedList*) malloc(sizeof(LinkedList));
-
-	if (abstractlist == NULL) 
-	{
-		fprintf(stderr, "Error in malloc of new LinkedList.\n");
-		exit(1);
-	}
-
-	return abstractlist;	
-
-}
-
-
-/******************************************************************************
- * LiberationStructCreator
- *
- * Arguments: Liberation coordinates
- *
- * Returns: Creates an liberation structure and returns it
- *
- * Description: Allocates and fills an liberation structure
- *
- *****************************************************************************/
-
-Liberation * LiberationStructCreator(int x, int y, int z, int time)
-{
-	Liberation * libert;
-
-	libert = (Liberation *) malloc(sizeof(Liberation)); //allocates memory for the struct
-
-	if (libert == NULL)
-	{
-		fprintf(stderr, "Error in malloc of liberation struct.\n");
-		exit(1);
-	}
-
-	libert->time = time;
-	libert->xs = x;
-	libert->ys = y;
-	libert->zs = z;
-
-	return libert;
-
-}
-
-/******************************************************************************
- * EventsListCreator
- *
- * Arguments: 
- *
- * Returns: Creates an event list and sorts it
- *
- * Description: Reads every other action list and creates an general event list
- *
- *****************************************************************************/
-
-LinkedList * EventsListCreator(Park * p, char * file)
-{
-
-	LinkedList * eventslist;
-	LinkedList * carlist;
-	LinkedList * liberationlist;
-	LinkedList * restrictionlist;
-
-	carlist = ListCreator();
-	liberationlist = ListCreator();
-	restrictionlist = ListCreator();
-	eventslist = ListCreator();
-
-	ReadCarFile(p, file, carlist, liberationlist); // Carlist and liberation list created
-
-	// Lê lista de restrições e cria eventos de restrição
-
-	return eventslist;
-
-}
-
-/******************************************************************************
- * TimelineCreator
- *
- * Arguments: Park, File
- *
- * Returns: Pointer to created Car
- *
- * Description: Allocates a new Car structure
- *
- *****************************************************************************/
-
-LinkedList * TimelineCreator(Park * p, char * file)
-{
-
-	LinkedList * eventslist; // Unsorted event list
-	LinkedList * sortedeventslist;
-
-	eventslist = EventsListCreator(p, file);
-
-	return sortedeventslist;
-}
-
-
-/******************************************************************************
-
- 								MAIN PARA TESTES
-
-
- *****************************************************************************/
-int main(int argc, char *argv[])
-{
-	
-	Park * park;
-	LinkedList * timeline;
-
-	park = ReadFilePark(argv[1]);
-
-	timeline = TimelineCreator(park, argv[2]);
-
-	return;
-
-
 }
