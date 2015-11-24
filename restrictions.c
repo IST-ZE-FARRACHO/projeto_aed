@@ -143,17 +143,3 @@ void ReadRestrictsFile(Restrictions **rest, char * file)
 
 	fclose(f);
 }
-
-
-/**********main para testes************************************/
-
-int main(int argc, char **argv)
-{
-	Restrictions * rest;
-
-	ReadRestrictsFile(&rest, argv[1]);
-
-	printf("%d\n%d\n", rest->restricted_positions[1].ta, rest->restricted_floors[0].px);
-	
-	return 0;
-}

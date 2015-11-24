@@ -57,7 +57,7 @@ struct _car // Struct for cars
 	int te; // Elapsed time - TE
 	char type; // Type of access required
 //“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)
-	int xs;  // Entrance coordinates
+	int xs;  // Actual coordinates
 	int ys; 
 	int zs;
 };
@@ -103,6 +103,8 @@ struct _event // Struct for events
 	// 'E' for Entrance, 'S' for Exit (Car is in list), 'F' for Exit (Car not in the list), 'R' (Ending restrition)
 	
 	int time; // Event starting time
+
+	Item *object; //object related to the event (car, restriction, etc...);
 
 
 };
