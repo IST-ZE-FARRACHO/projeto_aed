@@ -92,8 +92,12 @@ typedef struct _restPos Rest_pos;
 /*******************************************************************************/
 struct _restrict
 {
-	Rest_floor *restricted_floors;
-	Rest_pos *restricted_positions;
+	int type; // 0 - Position Restriction | 1 - Floor Restriction
+	int ta;
+	int tb;
+	int xs;
+	int ys;
+	int zs;
 };
 
 typedef struct _restrict Restrictions;

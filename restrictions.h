@@ -11,9 +11,11 @@
 #define Restrictions_H
 
 #include "defs.h"
+#include "tools.h"
+#include "LinkedList.h"
 
-FILE *AbreFicheiro(char *name, char *mode);
-Restrictions *NewRestrictions(int rest_pos, int rest_floors);
-void ReadRestrictsFile(Restrictions ** rest, char * file);
+
+Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z);
+void ReadRestrictsFile(char * file, LinkedList * restrictionslist);
 
 #endif
