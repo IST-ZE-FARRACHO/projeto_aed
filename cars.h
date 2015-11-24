@@ -11,17 +11,25 @@
 #define CarsHeader
 
 #include "park_config.h"
- #include "defs.h"
+#include "defs.h"
+#include "LinkedList.h"
+#include "tools.h"
 
-FILE *AbreFicheiro(char *name, char *mode);
-
-void ReadCarFile(Park * p, char * file, Car * carlist);
+void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liberationlist);
 
 int CheckEntrance(Park * p, int x, int y, int z);
 
 Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs);
 
-void FreeSpot(Park * p, int xs, int ys, int zs, int time);
+LinkedList * ListCreator();
+
+Liberation * LiberationStructCreator(int x, int y, int z, int time);
+
+LinkedList * EventsListCreator(Park * p, char * file);
+
+LinkedList * EventsListSort(LinkedList * list);
+
+LinkedList * TimelineCreator(Park * p, char * file);
 
 /* End of: Protect multiple inclusions                              */
 #endif

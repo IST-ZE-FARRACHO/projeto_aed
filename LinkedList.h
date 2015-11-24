@@ -54,14 +54,6 @@
 
 
 
-/*
- *  Data type: LinkedList
- *
- *  Description: Node of a linked list
- */
-typedef struct LinkedListStruct LinkedList;
-
-
 
 /*
  *  Function:
@@ -155,6 +147,8 @@ LinkedList * getNextNodeLinkedList(LinkedList * node);
  */
 Item getItemLinkedList(LinkedList * node);
 
+LinkedList * EditItemLinkedList(LinkedList * node, Item value);
+
 
 
 /*
@@ -205,13 +199,9 @@ LinkedList * insertUnsortedLinkedList(LinkedList * next, Item this);
  *  Return value:
  *    Returns the pointer to the first node of the sorted linked list.
  */
-LinkedList * insertSortedLinkedList(LinkedList * first, 
-                           Item item, 
-                           int (* comparisonItemFnt)
-                           (Item item1, Item item2)
-                           int * err);
+LinkedList * insertSortedLinkedList(LinkedList * first, Item item, int (* comparisonItemFnt)(Item item1, Item item2), int * err);
 
 
 
-/* End of: Protect multiple inclusions                              */
+/* End of: Protect multiple inclusions */
 #endif

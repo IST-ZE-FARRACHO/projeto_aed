@@ -21,29 +21,13 @@
 
 
 /* Header Inclusions                                              */
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 
 /* Include Header File with Data Type and Function Prototypes     */
-#include"LinkedList.h"
-
-
-
-/*
- *  Data Type: LinkedListStruct
- *
- *  Description: Structure with:
- *                 1) Pointer to the item of the linked list node
- *                 2) Pointer to next node of the linked list.
- */
-struct LinkedListStruct
-{
-  Item this;
-  LinkedList * next;
-};
-
+#include "LinkedList.h"
 
 
 /*
@@ -59,12 +43,11 @@ struct LinkedListStruct
  *  Return value:
  *    Returns the pointer to a new linked list.
  */
+
 LinkedList * initLinkedList(void)
 {
   return NULL;
 }
-
-
 
 /*
  *  Function:
@@ -94,8 +77,8 @@ void freeLinkedList(LinkedList * first, void (* freeItemFnt)(Item))
     next = aux->next;
 
     /* Free current item                                          */
-/*    freeItemFnt(aux->this);*/
-free(aux->this);
+  /*    freeItemFnt(aux->this);*/
+    free(aux->this);
 
     /* Free current node                                          */
     free(aux);
@@ -103,8 +86,6 @@ free(aux->this);
 
   return;
 }
-
-
 
 /*
  *  Function:
@@ -126,13 +107,10 @@ int lengthLinkedList(LinkedList * first)
   int counter;
 
   /* Length determination cycle                                   */
-  for(aux = first, counter = 0;
-      aux!=NULL; 
-      counter++, aux = aux->next);
+  for(aux = first, counter = 0; aux!=NULL; counter++, aux = aux->next);
 
   return counter;
 }
-
 
 
 /*
@@ -151,6 +129,7 @@ int lengthLinkedList(LinkedList * first)
  *   is returned in case the current node is empty or there is no
  *   node following the current node.
  */
+
 LinkedList * getNextNodeLinkedList(LinkedList * node)
 {
   return ((node == NULL) ? NULL : node->next);
@@ -173,6 +152,7 @@ LinkedList * getNextNodeLinkedList(LinkedList * node)
  *    Returns the pointer to the item of a linked list node. NULL
  *   is returned if the node is NULL (or if the item is NULL).
  */
+
 Item getItemLinkedList(LinkedList * node)
 {
   /* Check if node is not empty                                   */
@@ -180,6 +160,17 @@ Item getItemLinkedList(LinkedList * node)
     return NULL;
 
   return node->this;
+}
+
+LinkedList * EditItemLinkedList(LinkedList * node, Item value)
+{
+  /* Check if node is not empty                                   */
+  if(node == NULL)
+    return NULL;
+
+  node->this = value;
+
+  return node;
 }
 
 
@@ -200,6 +191,7 @@ Item getItemLinkedList(LinkedList * node)
  *  Return value:
  *    Returns the pointer to the node.
  */
+ 
 LinkedList * insertUnsortedLinkedList(LinkedList * next, Item this)
 {
   LinkedList * new;
@@ -248,17 +240,65 @@ LinkedList * insertUnsortedLinkedList(LinkedList * next, Item this)
  *  Return value:
  *    Returns the pointer to the first node of the sorted linked list.
  */
-LinkedList * insertSortedLinkedList(LinkedList * first, 
-                           Item item, 
-                           int (* comparisonItemFnt)
-                           (Item item1, Item item2)
-                           int * err)
+
+LinkedList * insertSortedLinkedList(LinkedList * first, Item item, int (* comparisonItemFnt) (Item item1, Item item2), int * err)
 {
+  LinkedList * new;
+  LinkedList * aux;
+  LinkedList * tmp;
+  aux = first;
 
+  /* Memory allocation                                            */
+  new = (LinkedList *) malloc(sizeof(LinkedList));
+  new->this = item;
 
+  /* Check memory allocation errors                               */
+  if (new == NULL) 
+  {
+    fprintf(stderr, "Error in malloc of linkedlist.\n");
+    exit(1);
+  }
 
+  /* Íf new is the first node of the list*/
+  if( first == NULL)
+  {
+    first = new;
+    return first;
+  }
 
+  /* Searching the best place to insert the node */ 
+  while (aux != NULL)
+  {
+    /* if function returns 1 then new found its place*/
+    if(comparisonItemFnt(new->this, aux->this) == 1)
+    {
 
-  return NULL;
+      if(aux == first)
+      {
+        new->next = first;
+        new = first;
+      }
+
+      else
+      {
+        tmp->next = new;
+        new->next = aux;
+      }
+      break;
+    }
+    else
+    {
+      tmp = aux;
+      aux = aux->next;
+    }
+  }
+
+  if(aux == NULL)
+  {
+      tmp->next = new;
+      new->next = NULL;
+  }
+
+  return first;
 }
 

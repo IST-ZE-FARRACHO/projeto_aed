@@ -12,6 +12,8 @@
 
  #define NAME_SIZE 4
 
+typedef void * Item;
+
 struct _entrance 
 { //struct for entrances
 	char name[NAME_SIZE]; //name of the entrance
@@ -54,7 +56,7 @@ struct _car // Struct for cars
 {
 	char *id; // Vehicle identification
 	int ta; // Entrance moment - TA
-	int te; // Elapsed time - TE
+	int tb; // Exit time - TE
 	char type; // Type of access required
 //“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)
 	int xs;  // Actual coordinates
@@ -109,6 +111,42 @@ struct _event // Struct for events
 
 };
 
-typedef struct _car Event;
+typedef struct _event Event;
+
+/*************************************************************************************/
+
+struct _liberation
+{	
+	int time; // Liberation ocurring time
+	int xs; // Coordinates of the position to be liberated
+	int ys;
+	int zs;
+};
+
+typedef struct _liberation Liberation;
+
+/*************************************************************************************/
+
+/*
+ *  Data Type: LinkedListStruct
+ *
+ *  Description: Structure with:
+ *                 1) Pointer to the item of the linked list node
+ *                 2) Pointer to next node of the linked list.
+ */
+
+/*
+ *  Data type: LinkedList
+ *
+ *  Description: Node of a linked list
+ */
+typedef struct LinkedListStruct LinkedList;
+
+struct LinkedListStruct
+{
+  Item this;
+  LinkedList * next;
+};
+
 
  #endif
