@@ -3,8 +3,7 @@
  * File Name: cars.c
  * Author:    José Correia / António Farracho
  *
- * DESCRIPTION
- *		reads info about car entrance/exit/unparking
+ * DESCRIPTION: Reads info about car entrance/exit/unparking
  *
  *****************************************************************************/
 
@@ -25,8 +24,6 @@
  * Description: Allocates a new Car structure
  *
  *****************************************************************************/
-
-
 
 Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 {
@@ -75,7 +72,7 @@ int CheckEntrance(Park * p, int x, int y, int z)
 	for(i = 0; i <= p->E; i++)
 	{
 		if( (p->entries[i].xs) == x && (p->entries[i].ys == y ) && (p->entries[i].zs) == z )
-			return i;
+			return 1;
 	}
 
 	return 0;	
@@ -88,8 +85,9 @@ int CheckEntrance(Park * p, int x, int y, int z)
  * Arguments: Park
  *			  Car file
  *			  Car list
+ *			  Liberation list
  *
- * Returns: Updated car list
+ * Returns: Updated car list and liberation list
  *
  * Description: Reads car file and stores info into a list
  *
@@ -97,7 +95,7 @@ int CheckEntrance(Park * p, int x, int y, int z)
 void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liberationlist)
 {
 
-	 FILE *f;
+	 FILE *f; 
 	 int n, tmpta, tmpxs, tmpys, tmpzs;
 	 char tmptype;
 	 char tmpid[5];
@@ -110,42 +108,53 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  	f = AbreFicheiro(file, "r");
 
  	do{	
- 		n = fscanf(f, "%s %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
+ 		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
+ 		if( n < 3 ) continue;
+
+ 		printf("\n%d %s   %d %c %d %d %d\n", n, tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs);
+ 		printf("\n%p\n", carlist);
 
 
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)
  		{	
- 			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) != 0 ) // Checks if it is a valid entrance, if it's not, ignore
+ 			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) ) // Checks if it is a valid entrance, if it's not, ignore
  			{
 				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
-				insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
+				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
+				newc = (Car*) getItemLinkedList(carlist);
+				printf("\nInserted car: %s %d %c %d %d %d\n", newc->id, newc->ta, newc->type, newc->xs, newc->ys, newc->zs);
+	
+ 			}
+ 			else
+ 			{
+ 				printf("Not a valid entrance!\n");
  			}
 
  		}
 
  		else // It is an exit/liberation case
  		{
-
- 			if(n == 3) // Car is in carlist, register exit time
+ 
+ 			if(n == 3) // Exit case -> Car is in carlist, register exit time
  			{	
 
- 				while(carlist != NULL) // Percorre a lista de carros
+ 				while(carlist != NULL) // Searches carlist
  				{
- 					searchcar = (Car*) getItemLinkedList(carlist); // Variável auxiliar searchcar é o resultado de sacar o item da lista
-
- 					if( (searchcar->id) == tmpid) // Se encontrar na lista o carro com o mesmo identificador
+ 					searchcar = (Car*) getItemLinkedList(carlist); // Gets Item from LinkedList
+ 					
+ 					if( !(strcmp(searchcar->id, tmpid))) // If the Item matches the given id
 					{	
-						searchcar->tb = tmpta; // Novo tempo de saída é igual ao tempo lido
-						EditItemLinkedList(carlist, (Item) searchcar); // Atualiza o tempo de saída desse carro na lista
+						searchcar->tb = tmpta; // Updates exit time
+						EditItemLinkedList(carlist, (Item) searchcar); // Sends it back to the list
 					}
 
-					carlist = carlist->next;
+					///// ERRO AQUI FODASSE !!!!!!!! carlist = carlist->next; // Iterates to next element
 
  				}
  		
  			}
 
- 			else // Car is not in carlist, register coordinates liberation time
+ 			else // Liberation case -> Car is not in carlist, register coordinates liberation time
  			{	
  				newliberation = LiberationStructCreator(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
  				insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
@@ -164,7 +173,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  *
  * Arguments: 
  *
- * Returns: Abstract created list
+ * Returns: Abstractly created list
  *
  * Description: Creates an abstract list
  *
@@ -174,7 +183,13 @@ LinkedList * ListCreator()
 {
 	LinkedList * abstractlist;
 
-	abstractlist = initLinkedList();
+	abstractlist = (LinkedList*) malloc(sizeof(LinkedList));
+
+	if (abstractlist == NULL) 
+	{
+		fprintf(stderr, "Error in malloc of new LinkedList.\n");
+		exit(1);
+	}
 
 	return abstractlist;	
 
@@ -234,7 +249,7 @@ LinkedList * EventsListCreator(Park * p, char * file)
 
 	carlist = ListCreator();
 	liberationlist = ListCreator();
-	//restrictionlist = ListCreator();
+	restrictionlist = ListCreator();
 	eventslist = ListCreator();
 
 	ReadCarFile(p, file, carlist, liberationlist);
@@ -271,7 +286,7 @@ LinkedList * EventsListSort(LinkedList * list)
 LinkedList * TimelineCreator(Park * p, char * file)
 {
 
-	LinkedList * eventslist;
+	LinkedList * eventslist; // Unsorted event list
 	LinkedList * sortedeventslist;
 
 	eventslist = EventsListCreator(p, file);
@@ -281,6 +296,12 @@ LinkedList * TimelineCreator(Park * p, char * file)
 }
 
 
+/******************************************************************************
+
+ 								MAIN PARA TESTES
+
+
+ *****************************************************************************/
 int main(int argc, char *argv[])
 {
 	
