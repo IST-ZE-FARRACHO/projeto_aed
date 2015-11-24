@@ -10,7 +10,7 @@
 #ifndef ToolsHeader
 #define ToolsHeader
 
- #include "defs.h"
+#include "defs.h"
 
  /******************************************************************************
  * AbreFicheiro ()

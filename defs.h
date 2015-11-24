@@ -80,10 +80,11 @@ typedef struct _restFloor Rest_floor;
 struct _restPos
 {
 	int ta;
+	int type;
 	int tb;
 	int ex;
 	int ey;
-	int ez;
+	int px;
 };
 
 typedef struct _restPos Rest_pos;
@@ -106,7 +107,7 @@ struct _event // Struct for events
 	
 	int time; // Event starting time
 
-	Item *object; //object related to the event (car, restriction, etc...);
+	Item object; //object related to the event (car, restriction, etc...);
 
 
 };
@@ -148,5 +149,23 @@ struct LinkedListStruct
   LinkedList * next;
 };
 
+/**************************************************************************/
+struct graph 
+{
+	int V; //number of nodes
+	int E; //number of edges
+	int **adj; //adj matrix
+};
+
+typedef struct graph Graph;
+
+/************************************************************************/
+struct edge
+{
+	int v; //node 1
+	int w; //node 2
+};
+
+typedef struct edge Edge;
 
  #endif
