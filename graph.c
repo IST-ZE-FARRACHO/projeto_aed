@@ -62,7 +62,8 @@ link * NEW(int v, int type, link *next)
 
 Edge * EDGE(int v, int w, int weight)
 {
-	Edge * e = (Edge *) malloc(sizeof(Edge));
+	Edge * e;
+	e = (Edge *) malloc(sizeof(Edge));
 
 	if(e == NULL)
 	{

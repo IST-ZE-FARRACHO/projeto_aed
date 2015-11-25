@@ -49,6 +49,8 @@ LinkedList * ListCreator()
 
 	abstractlist = (LinkedList*) malloc(sizeof(LinkedList));
 
+
+
 	if (abstractlist == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new LinkedList.\n");

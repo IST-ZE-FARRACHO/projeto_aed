@@ -29,24 +29,26 @@ int main(int argc, char *argv[])
 	LinkedList * liberationlist;
 	LinkedList * restrictionlist;
 
-	carlist = ListCreator();
-	liberationlist = ListCreator();
-	restrictionlist = ListCreator();
-	eventslist = ListCreator();
+	carlist = initLinkedList();
+	liberationlist = initLinkedList();
+	restrictionlist = initLinkedList();
+	eventslist = initLinkedList();
 
 	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park matrix
 
-	ListCreator(park, argv[2], argv[3], carlist, liberationlist, restrictionlist); // Reads, allocates, and fills event list
+	//ListCreator(park, argv[2], argv[3], carlist, liberationlist, restrictionlist); // Reads, allocates, and fills event list
 
-	timeline = TimelineCreator();
+	//timeline = TimelineCreator();
 
 	//Grafos:
 
 	//Cria um grafo com o número de caminhos do parque;
 	//Cria um vetor da estrutura Edge para as arestas
-	//Percorre a matriz 3D e vai adicionando ao grafo cada lugar da matriz que represente um caminho
+	//Percorre a matriz e insere todas as posiçoes que sejam ou ROAD ou SPOT ou ACCESS ou ENTRY no grafo
 		//Vê logo quais as arestas para cada posição e adiciona ao vetor de arestas (Verificar em : x+1 (se x<(Colunas-2), y+1 (se y<(Linhas-2)))
 	//Adiciona cada aresta no vetor à lista de adjacências;
+
+
 
 
 
@@ -59,6 +61,7 @@ int main(int argc, char *argv[])
 			// Escreve a sequência de movimentos para o ficheiro de saída
 		// Se for a saída de um carro
 			// Atualiza matriz de posições
+                      //Insere a posiçao da qual o carro saiu no grafo
 		// Se for uma restrição nova
 			// Atualiza matriz de posições
 

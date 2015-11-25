@@ -87,11 +87,18 @@ void AlocaMatrizPark(Park * p)
 
 Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors)
 {
-	Park *p;
+	Park * p;
 
-	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
+ 	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
 
-	if (p == ((Park *) NULL))
+
+ 	if(p->entries == (NULL) || p->accesses == (NULL))
+ 	{
+ 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 		exit(1);
+ 	}
+
+	if (p == (NULL))
 	{
 		fprintf(stderr, "Error in malloc of park.\n");
 		exit(1);
@@ -106,7 +113,6 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
  		exit(1);
  	}
-
 
 	p->N = columns;
 	p->M = lines;
