@@ -12,9 +12,7 @@
 
  #include "defs.h"
 
-int **MATRIXint(int V, int K, int init);
-
-link * NEW(int v, link *next);
+link * NEW(int v, int weight, link *next);
 Edge *EDGE(int, int, int);
 Graph *GRAPHinit(int);
 void GRAPHinsertE(Graph *G, Edge *e);

@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
 		//Vê logo quais as arestas para cada posição e adiciona ao vetor de arestas (Verificar em : x+1 (se x<(Colunas-2), y+1 (se y<(Linhas-2)))
 	//Adiciona cada aresta no vetor à lista de adjacências;
 
+
+
 //Lista de eventos:
 
 // Enquanto a lista de eventos não estiver vazia		
@@ -60,6 +62,6 @@ int main(int argc, char *argv[])
 		// Se for uma restrição nova
 			// Atualiza matriz de posições
 
-
+//Caminhos : algoritmo de FLoyd ou Dijkstra?
 
 }
