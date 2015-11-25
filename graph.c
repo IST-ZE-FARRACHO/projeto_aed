@@ -52,7 +52,8 @@ link * NEW(int v, int weight, link *next)
 
 Edge * EDGE(int v, int w, int weight)
 {
-	Edge * e = (Edge *) malloc(sizeof(Edge));
+	Edge * e;
+	e = (Edge *) malloc(sizeof(Edge));
 
 	if(e == NULL)
 	{
@@ -236,6 +237,8 @@ Graph *GRAPHinit(int V)
  	printf("%d %d %d\n", G->adj[2]->v, G->adj[3]->next->v, G->adj[3]->weight);
  	printf("%d %d %d\n", G->adj[3]->v, G->adj[4]->v, G->adj[4]->weight);
  	printf("%d\n", GRAPHedges(e, G));
+
+ 	GRAPHdestroy(G);
 
  	return 0;
  }

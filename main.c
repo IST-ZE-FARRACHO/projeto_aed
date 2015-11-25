@@ -29,16 +29,16 @@ int main(int argc, char *argv[])
 	LinkedList * liberationlist;
 	LinkedList * restrictionlist;
 
-	carlist = ListCreator();
-	liberationlist = ListCreator();
-	restrictionlist = ListCreator();
-	eventslist = ListCreator();
+	carlist = initLinkedList();
+	liberationlist = initLinkedList();
+	restrictionlist = initLinkedList();
+	eventslist = initLinkedList();
 
 	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park matrix
 
-	ListCreator(park, argv[2], argv[3], carlist, liberationlist, restrictionlist); // Reads, allocates, and fills event list
+	//ListCreator(park, argv[2], argv[3], carlist, liberationlist, restrictionlist); // Reads, allocates, and fills event list
 
-	timeline = TimelineCreator();
+	//timeline = TimelineCreator();
 
 	//Grafos:
 
