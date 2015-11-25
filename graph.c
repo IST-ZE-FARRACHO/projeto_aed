@@ -54,6 +54,10 @@ Edge * EDGE(int v, int w, int weight)
 {
 
 	Edge * e;
+
+	// FODASSE CARALHO É PRECISO ALOCAR MEMÓRIA PARA A ESTRUTURA E, DAÍ O SEGFAULT
+
+	e = (Edge*) malloc(sizeof(e)); // CONAÇAAAAAAAAAAAA
 	e->v = v;
 	e->w = w;
 	e->weight = weight;
@@ -215,7 +219,7 @@ Graph *GRAPHinit(int V)
  	int i = 0;
 
  	Graph *G;
- 	/*Edge **e = (Edge **) malloc(3*sizeof(Edge *));
+ 	Edge **e = (Edge **) malloc(3*sizeof(Edge *));
 
  	G = GRAPHinit(5);
 
@@ -232,24 +236,7 @@ Graph *GRAPHinit(int V)
  	printf("%d %d %d\n", G->adj[1]->v, G->adj[2]->v, G->adj[1]->weight);
  	printf("%d %d %d\n", G->adj[2]->v, G->adj[3]->v, G->adj[3]->weight);
  	printf("%d %d %d\n", G->adj[3]->v, G->adj[4]->v, G->adj[4]->weight);
- 	printf("%d\n", GRAPHedges(e, G));*/
-
- 	Edge *e; 
- 	Edge *c;
-
- 	printf("ola\n");
- 	e = EDGE(3,4,2);
- 	c = EDGE(1,2,3);
-
-
- 	G = GRAPHinit(5);
-
- 	GRAPHinsertE(G, e);
- 	GRAPHinsertE(G, c);
-
-	printf("%d %d %d\n", G->adj[3]->v, G->adj[4]->v, G->adj[4]->weight);
- 	printf("%d %d %d\n", G->adj[2]->v, G->adj[1]->v, G->adj[2]->weight);
-
+ 	printf("%d\n", GRAPHedges(e, G));
 
  	return 0;
  }
