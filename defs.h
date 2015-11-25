@@ -159,7 +159,7 @@ typedef struct node link;
 struct node
 {
 	int v;
-	int weight;
+	int type;
 	link *next;
 };
 

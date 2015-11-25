@@ -13,6 +13,16 @@
 #include <string.h>
 #include "graph.h"
 
+#define ROAD 0
+#define WALL 1
+#define ENTRY_DOOR 2
+#define PED_ACCESS 3
+#define EMPTY_SPOT 4
+#define OCCUPIED 5
+#define RAMP_UP 6
+#define RAMP_DOWN 7
+#define ENTRY_DOOR 2
+
 /******************************************************************************
  * NEW()
  *
@@ -22,7 +32,7 @@
  * Description: Creates a new node of the linked struct
  *
  *****************************************************************************/
-link * NEW(int v, int weight, link *next)
+link * NEW(int v, int type, link *next)
 {
 	link * x = (link *) malloc(sizeof(link));
 
@@ -33,7 +43,7 @@ link * NEW(int v, int weight, link *next)
 	}
 
 	x->v = v;
-	x->weight = weight;
+	x->type = type;
 	x->next = next;
 
 	return x;
@@ -205,13 +215,46 @@ Graph *GRAPHinit(int V)
  			aux = head;
  			head = head->next;
  			free(aux);
- 		} 
- 		free(G->adj[i]);		
+ 		} 	
  	}
+ 	free(G->adj);	
  	free(G);
  }
 
-/****************Main para testes*********************************************/
+
+ Graph * RoadsGRAPH(Park *p)
+ {
+ 	int x, y, z, total = P->N * p->M * p->P;
+ 	int nodes = total - Count_Matrix_Roads(p, WALL); //creates a graph with the number of nodes equal to the number of not-WALL spots
+
+ 	Graph *G;
+
+ 	G = GRAPHinit(nodes);
+
+ 	for(z = 0; z < p->P; z++) //valor de cada posição no grafo: (p->M*y) + xi+(p->M * p->N)z
+ 	{
+ 		for(y = 0; y < p->M; y++)
+ 		{
+ 			for(x = 0; x < p->N; x++)
+ 			{
+ 				if(p->matrix[x][y][z] !)
+ 			}
+ 		}
+ 	}
+
+
+
+
+
+
+ }
+
+
+
+
+
+
+/****************Main para testes********************************************/
 
  int main()
  {
@@ -236,6 +279,13 @@ Graph *GRAPHinit(int V)
  	printf("%d %d %d\n", G->adj[2]->v, G->adj[3]->next->v, G->adj[3]->weight);
  	printf("%d %d %d\n", G->adj[3]->v, G->adj[4]->v, G->adj[4]->weight);
  	printf("%d\n", GRAPHedges(e, G));
+
+ 	GRAPHdestroy(G);
+
+ 	for(i = 0; i < 3; i++)
+ 		free(e[i]);
+
+ 	free(e);
 
  	return 0;
  }

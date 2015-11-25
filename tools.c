@@ -58,3 +58,24 @@ LinkedList * ListCreator()
 	return abstractlist;	
 
 }
+
+
+
+
+int Count_Matrix_Roads(Park * p, int value)
+{
+	int counter = 0, i, j, k;
+
+	for(i = 0; i < p->P; i++)
+	{
+		for(j = 1; j < p->M - 1; j++)
+		{
+			for(k = 1; k < p->N -1; k++)
+			{
+				if(p->matrix[k][j][i] == value)
+					counter++;
+			}
+		}
+	}
+	return counter;
+}

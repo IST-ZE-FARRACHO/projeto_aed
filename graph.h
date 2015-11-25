@@ -10,9 +10,12 @@
  #ifndef graph_H
  #define graph_H
 
- #include "defs.h"
+#include "defs.h"
+#include "park_config.h"
+#include "defs.h"
+#include "tools.h"
 
-link * NEW(int v, int weight, link *next);
+link * NEW(int v, int type, link *next);
 Edge *EDGE(int, int, int);
 Graph *GRAPHinit(int);
 void GRAPHinsertE(Graph *G, Edge *e);

@@ -97,14 +97,6 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 		exit(1);
 	}
 
-	p->N = columns;
-	p->M = lines;
-	p->P = floors;
-	p->E = entrances;
-	p->S = nr_accesses;
-
-	AlocaMatrizPark(p);
-
 	p->entries = malloc(entrances*sizeof(*p->entries));  //use p->entries[i].xs
 
  	p->accesses = malloc(nr_accesses*sizeof(*p->accesses));
@@ -114,6 +106,15 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
  		exit(1);
  	}
+
+
+	p->N = columns;
+	p->M = lines;
+	p->P = floors;
+	p->E = entrances;
+	p->S = nr_accesses;
+
+	AlocaMatrizPark(p);
 
 	return (p);
 }
