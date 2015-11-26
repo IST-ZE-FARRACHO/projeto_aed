@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "park_config.h"
+#include "graph.h"
 
 /******************* Defines **************************/
 
@@ -26,51 +27,8 @@
 #define ENTRY_DOOR 2
 #define NAME_SIZE 4
 
-
-/******************************************************************************
- * AlocaMatrizPark ()
- *
- * Arguments: p - structure of the park 
- * Side-Effects: matrix is allocated;
- *
- * Description: allocates the memory for the 3D matrix;
- *
- *****************************************************************************/
-
-void AlocaMatrizPark(Park * p)
-{
-	int y, z;
-
- 	p->matrix = (int ***) malloc((p->N)*sizeof(int **));  //allocates x coordinates of the matrix
-
- 	if(p->matrix == NULL)
- 	{
- 		printf("Error in malloc of matrix.\n");
- 		exit(1);
- 	}
-
-  	for (y = 0; y < p->N; y++) 
-  	{  
-    	p->matrix[y] = (int **) malloc((p->M)*sizeof(int *)); //allocates y coordinates
-
-    	if(p->matrix[y] == NULL)
-    	{
- 			printf("Error in malloc of matrix.\n");
- 			exit(1);
- 		}
-
-    	for (z = 0; z < p->M; z++)
-    	{
-     		p->matrix[y][z] = (int *) malloc((p->P)*sizeof(int)); //allocates z coordinates
-
-     		if(p->matrix[y][z] == NULL)
-     		{
- 				printf("Error in malloc of matrix.\n");
- 				exit(1);
- 			}
-    	}
-  	}
-}
+#define NORMAL_TIME 1
+#define RAMP_TIME 2
 
 /******************************************************************************
  * NewPark ()
@@ -107,13 +65,13 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		exit(1);
  	}
 
+ 	p->G = GRAPHinit(columns*lines*floors);
+
 	p->N = columns;
 	p->M = lines;
 	p->P = floors;
 	p->E = entrances;
 	p->S = nr_accesses;
-
-	AlocaMatrizPark(p);
 
 	return (p);
 }
@@ -177,6 +135,68 @@ int Char_to_Number (char c)
 	}
 }
 
+/******************************************************************************
+ * Matrix_to_GRAPH()
+ *
+ * Arguments: p - struct of park
+ *            vector1 - actual line of the file
+ *            vector2 - next line of the file
+ *            y1 - line of the vector1
+ *            y2 - line of the vector2
+ *            floor - actual floor
+ * Description: Receives two lines of the file, and inserts the connections between every possible 
+ *              position on the graph
+ *
+ *****************************************************************************/
+
+ void Get_edges(Park *p, int vector1[], int vector2[], int nr_columns, int y1, int y2, int _floor)
+ {
+ 	int x, actual_node1 = Get_Pos(0, y1, _floor, p->M, p->N), actual_node2 = Get_Pos(0, y2, _floor, p->M, p->N);
+ 	int node_above = Get_Pos(0, y1, _floor+1, p->M, p->N);
+
+ 	for(x = 0; x < nr_columns; x++)
+ 	{	
+ 		p->G->node_info[actual_node1].pos->x = x;
+ 		p->G->node_info[actual_node1].pos->y = y1;
+ 		p->G->node_info[actual_node1].pos->z = _floor;
+ 		p->G->node_info[actual_node1].type = vector1[x];
+
+ 		p->G->node_info[actual_node2].pos->x = x;
+ 		p->G->node_info[actual_node2].pos->y = y2;
+ 		p->G->node_info[actual_node2].pos->z = _floor;
+ 		p->G->node_info[actual_node2].type = vector2[x];
+
+ 		if(vector1[x] != WALL)
+ 		{
+ 			if(vector1[x] == ROAD) //if the position is a road:
+ 			{
+ 				if(vector1[x+1] != WALL) //if the position to the right isnt a wall, it creates an edge and inserts it in the graph
+ 				{
+ 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node1 + 1, NORMAL_TIME));
+ 				}
+ 				if(vector2[x] != WALL) //if the position directly below isnt a wall, it searches for the respective node on the node positions vector
+ 				{ 
+ 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME)); //inserts the edge on the graph
+ 				}							
+ 			}
+ 			else if (vector1[x] == RAMP_UP) //if the position is a ramp:
+ 			{
+ 				if(vector1[x] == ROAD) //if theres a road to the right, creates edge and inserts on the graph
+ 				{
+ 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node1 + 1, NORMAL_TIME));
+ 				}
+ 				if(vector2[x] == ROAD) //if theres a road directly below, it searches for the node on the node positions vector
+ 				{
+ 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME));
+ 				}
+ 				GRAPHinsertE(p->G, EDGE(actual_node1, node_above, RAMP_TIME)); //inserts it on the graph
+ 			}
+ 		}
+ 		actual_node1++;
+ 		actual_node2++;
+ 	}
+ }
+
 
 /******************************************************************************
  * Map_to_matrix ()
@@ -190,25 +210,38 @@ int Char_to_Number (char c)
  *
  *****************************************************************************/
 
-void Map_to_matrix (Park * p, FILE * f, int _floor) 
+void Map_to_Park_Graph (Park * p, FILE * f, int _floor) 
 {
 	int x, y;
-	char vector[p->N]; // Line storage vector
+	char vector2[p->N]; // Line storage vector
+	int vector1_nr[p->N];
+	int vector2_nr[p->N];
 
 	printf("\nFloor number: %d\n", _floor);
-	
-	for(y = 0; y < p->M; y++) // For each one of the lines
-	{
-		fgets(vector, (p->N+1)*(p->M), f);  //reads one line and stores in the vector
 
+	fgets(vector2, (p->N+1)*(p->M), f); 
+	
+	for(y = 0; y < p->M-1; y++) // For each one of the lines
+	{
 		for (x = 0; x < p->N; x++) // For each one of the characters
 		{
-			p->matrix[x][y][_floor] = Char_to_Number(vector[x]); // Converts the symbol into integer and fills the corresponding floor-matrix
-			printf("%d", p->matrix[x][y][_floor]); //prints the matrix on the screen
+			vector1_nr[x] = Char_to_Number(vector2[x]); // Converts the symbol into integer and fills the numbers vector
+			printf("%d", vector1_nr[x]); //prints the type of the position on the screen
 		}
 		printf("\n");
+
+		fgets(vector2, (p->N+1)*(p->M), f); 
+
+		for(x = 0; x < p->N; x++){
+			vector2_nr[x] = Char_to_Number(vector2[x]);
+			if(y == p->M-2)
+				printf("%d", vector2_nr[x]);
+		}
+
+
+		Get_edges(p, vector1_nr, vector2_nr, p->N, y, y+1, _floor); //Get edges of the graph
 	}
-	printf("\n");
+	printf("\n\n");
 }
 
 /******************************************************************************
@@ -279,7 +312,7 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 
 void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicates the position to insert the entries/accesses in the vectors
 {
-	Map_to_matrix(p, f, _floor);
+	Map_to_Park_Graph(p, f, _floor);
 
 	Read_Doors_info(p, f, i, j);
 }
@@ -319,4 +352,14 @@ Park *ReadFilePark (char * file)
 	FechaFicheiro(f);
 
 	return new_park; // Returns new_park
+}
+
+int main(int argc, char *argv[])
+{
+	Park *p;
+
+	p = ReadFilePark(argv[1]);
+
+	printf("%d %d\n", p->G->adj[38]->next->weight, p->G->adj[38]->next->v);
+	return 0;
 }

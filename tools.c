@@ -60,3 +60,9 @@ LinkedList * ListCreator()
 	return abstractlist;	
 
 }
+
+
+int Get_Pos(int x, int y, int z, int columns, int lines)
+{
+	return (x + y*lines + columns*lines*z);
+}

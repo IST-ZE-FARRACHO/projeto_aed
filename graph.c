@@ -23,9 +23,6 @@
 #define RAMP_DOWN 7
 #define ENTRY_DOOR 2
 
-#define NORMAL_TIME 1
-#define RAMP_TIME 2
-
 /******************************************************************************
  * NEW()
  *
@@ -35,7 +32,7 @@
  * Description: Creates a new node of the linked struct
  *
  *****************************************************************************/
-link * NEW(int v, int type, link *next)
+link * NEW(int v, int weight, link *next)
 {
 	link * x = (link *) malloc(sizeof(link));
 
@@ -46,7 +43,7 @@ link * NEW(int v, int type, link *next)
 	}
 
 	x->v = v;
-	x->type = type;
+	x->weight = weight;
 	x->next = next;
 
 	return x;
@@ -92,7 +89,7 @@ Edge * EDGE(int v, int w, int weight)
 
 Graph *GRAPHinit(int V)
 {
-	int v;
+	int i;
 	Graph *G = (Graph *) malloc(sizeof(struct graph));
 
 	if(G == NULL)
@@ -104,9 +101,26 @@ Graph *GRAPHinit(int V)
 	G->V = V;
 	G->E = 0;
 	G->adj = (link **) malloc(V * sizeof(link *));
+	G->node_info = (Graph_node *) malloc(V * sizeof(Graph_node));
 
-	for (v = 0; v < V; v++)
-		G->adj[v] = NULL;
+	if(G->adj == NULL || G->node_info == NULL)
+	{
+		fprintf(stderr, "Error in malloc of graph vectors.\n");
+		exit(1);
+	}
+
+	for(i = 0; i < V; i++)
+	{
+		G->node_info[i].pos = (Position *) malloc(sizeof(Position));
+
+		if(G->node_info[i].pos == NULL)
+		{
+			fprintf(stderr, "Error in malloc of graph nodes information vector.\n");
+		}
+	} 
+
+	for (i = 0; i < V; i++)
+		G->adj[i] = NULL;
 
 	return G;
 }
@@ -219,239 +233,10 @@ Graph *GRAPHinit(int V)
  			aux = head;
  			head = head->next;
  			free(aux);
- 		} 	
+ 		}
  	}
+
+ 	free(G->node_info);
  	free(G->adj);	
  	free(G);
- }
-
- /******************************************************************************
- * Matrix_to_GRAPH()
- *
- * Arguments: e - vector of edges
- *            G - graph
- *            p - struct of park
- *            vector - vector with the position of each node
- *            nodes - number of nodes
- *            edges - number of edges
- * Description: Reads the matrix, and inserts the connections between every possible 
- *              position on the graph
- *
- *****************************************************************************/
-
- void Matrix_to_GRAPH(Graph *G, Edge * e[], Park *p, Position * vector[], int nodes)
- {
- 	int x, y, z, actual_node = 0, actual_edge = 0, i;
-
- 	for(z = 0; z < p->P; z++)
- 		for(y = 0; y < p->M-1; y++)
- 			for(x = 0; x < p->N-1; x++)
- 				if(p->matrix[x][y][z] != WALL)
- 				{
- 					if(p->matrix[x][y][z] == ROAD) //if the position is a road:
- 					{
- 						if(p->matrix[x+1][y][z] != WALL) //if the position to the right isnt a wall, it creates an edge and inserts it in the graph
- 						{
- 							e[actual_edge] = EDGE(actual_node, actual_node + 1, NORMAL_TIME);
- 							GRAPHinsertE(G, e[actual_edge]);
- 							actual_edge++;
- 						}
- 						if(p->matrix[x][y+1][z] != WALL) //if the position directly below isnt a wall, it searches for the respective node on the node positions vector
- 						{ 
- 							i = actual_node + 1;
-
- 							while(vector[i]->x != x && vector[i]->y != y+1 && vector[i]->z != z)
- 								i++;
- 							e[actual_edge] = EDGE(actual_node, i, NORMAL_TIME); //creates the edge
- 							GRAPHinsertE(G, e[actual_edge]); //inserts the edge on the graph
- 							actual_edge++;
- 						}							
- 					}
- 					else if (p->matrix[x][y][z] == RAMP_UP) //if the position is a ramp:
- 					{
- 						if(p->matrix[x+1][y][z] == ROAD) //if theres a road to the right, creates edge and inserts on the graph
- 						{
- 							e[actual_edge] = EDGE(actual_node, actual_node + 1, NORMAL_TIME);
- 							GRAPHinsertE(G, e[actual_edge]);
- 							actual_edge++;
- 						}
- 						if(p->matrix[x][y+1][z] == ROAD) //if theres a road directly below, it searches for the node on the node positions vector
- 						{
- 							i = actual_node + 1;
-
- 							while(vector[i]->x != x && vector[i]->y != y+1 && vector[i]->z != z)
- 								i++;
- 							e[actual_edge] = EDGE(actual_node, i, NORMAL_TIME); //creates the edge
- 							GRAPHinsertE(G, e[actual_edge]); //inserts the edge on the graph
- 							actual_edge++;
- 						}
- 						i = actual_node + 1; //searches in the node positions vector for the node driectly above the ramp
-
- 						while(vector[i]->x != x && vector[i]->y != y && vector[i]->z != z+1)
- 							i++;
- 						e[actual_edge] = EDGE(actual_node, i, RAMP_TIME); //creates the edge
- 						GRAPHinsertE(G, e[actual_edge]); //inserts it on the graph
- 						actual_edge++;
- 					}
- 					actual_node++;
- 				}
- }
-
- /******************************************************************************
- * Count_Park_Nodes_Edges()
- *
- * Arguments: p - struct of park
- *            nodes - number of nodes
- *            edges - number of edges
- * Description: Reads the matrix, and counts the number of nodes and edges
- *
- *****************************************************************************/
-
- void Count_Park_Nodes_Edges(Park *p, int * edges, int * nodes)
- {
- 	int x, y, z;
-
- 	for(z = 0; z < p->P; z++)
- 		for(y = 0; y < p->M-1; y++)
- 			for(x = 0; x < p->N-1; x++)
- 			{
- 				if(p->matrix[x][y][z] != WALL)
- 				{
- 					if(p->matrix[x][y][z] == ROAD) //if its a road, it connects to everything on its sides, except the walls
- 					{
- 						if(p->matrix[x+1][y][z] != WALL)
- 							(*edges)++;
- 						if(p->matrix[x][y+1][z] != WALL)
- 							(*edges)++;
- 					}
- 					else //if its not a road, it only connects the roads on its sides
- 					{
- 						if(p->matrix[x+1][y][z] == ROAD) 
- 							(*edges)++;
- 						if(p->matrix[x][y+1][z] == ROAD)
- 							(*edges)++;						
- 					}
-
- 					if(p->matrix[x][y][z] == RAMP_UP)
- 						(*edges)++;
-  				(*nodes)++;
- 				}
- 			}
- }
-
- /******************************************************************************
- * Creates_Park_GRAPH()
- *
- * Arguments: e - vector of edges
- *            vector - vector of graph nodes position
- *            p - struct of park
- *            vector - vector with the position of each node
- * Returns: Graph
- * Description: Creates the graph of the park and the vectors of edges and graph 
- *              nodes positions
- *
- *****************************************************************************/
-
- Graph * Creates_Park_GRAPH(Park *p, Edge ** e, Position ** vector)
- {
- 	int x, y, z, nodes = 0, edges = 0, i = 0;
-
- 	Graph *G;
-
- 	Count_Park_Nodes_Edges(p, &edges, &nodes);
-
- 	printf("%d %d\n", nodes, edges);
- 		
- 	vector = (Position **) malloc(nodes*sizeof(Position *)); //allocates memory for the graph nodes position vector
-
- 	///////////////FODAAAAASSE SEG FAULT AQUI------------------------------------------------------------------------------------
-
- 	vector[1]->x = 20;
- 	printf("%d\n", vector[0]->x);
-
- 	if(vector == NULL)
- 	{
- 		fprintf(stderr, "Error in malloc of graph nodes prosition vector.\n");
- 		exit(1);
- 	}
-
-  	for(z = 0; z < p->P; z++)
- 		for(y = 0; y < p->M-1; y++)
- 			for(x = 0; x < p->N-1; x++)
- 				if(p->matrix[x][y][z] != WALL)
- 				{
- 					vector[i]->x = x;
- 					vector[i]->y = y;
- 					vector[i]->z = z;
- 					i++;
- 				}
-
-
-
- 	e = (Edge **) malloc(edges*sizeof(Edge *)); //allocates memory for the vector of edges
-
- 	if(e == NULL)
- 	{
- 		fprintf(stderr, "Error in malloc of edge vector.\n");
- 		exit(1);
- 	}
-
- 	G = GRAPHinit(nodes); //initiates the graph
-
- 	Matrix_to_GRAPH(G, e, p, vector, nodes);
-
- 	return G;
- }
-
-
-/****************Main para testes********************************************/
-
- int main(int argc, char *argv[])
- {
- 	/*int i = 0;
-
- 	Graph *G;
- 	Edge **e = (Edge **) malloc(3*sizeof(Edge *));
-
- 	G = GRAPHinit(5);
-
- 	e[0] = EDGE(1,2,3);
- 	e[2] = EDGE(3,4,2);
- 	e[1] = EDGE(2,3,1);
-
- 	while(i < 3)
- 	{
- 		GRAPHinsertE(G, e[i]);
- 		i++;
- 	}
-
- 	printf("%d %d %d\n", G->adj[1]->v, G->adj[2]->next->v, G->adj[1]->weight);
- 	printf("%d %d %d\n", G->adj[2]->v, G->adj[3]->next->v, G->adj[3]->weight);
- 	printf("%d %d %d\n", G->adj[3]->v, G->adj[4]->v, G->adj[4]->weight);
- 	printf("%d\n", GRAPHedges(e, G));
-
- 	GRAPHdestroy(G);
-
- 	for(i = 0; i < 3; i++)
- 		free(e[i]);
-
- 	free(e);*/
-
- 	Park * p;
-
-	p = ReadFilePark(argv[1]);
-
- 	Position **vector;
-
- 	Edge **e;
-
- 	Graph *G;
-
- 	G = Creates_Park_GRAPH(p, e, vector);
-
-
-
-
-
- 	return 0;
  }

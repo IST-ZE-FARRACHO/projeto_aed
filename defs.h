@@ -23,6 +23,16 @@ struct _position
 
 typedef struct _position Position;
 
+/********************************************************/
+struct _node
+{
+	Position * pos;
+	int type;
+};
+
+typedef struct _node Graph_node;
+/**************************************************************************/
+
 struct _entrance 
 { //struct for entrances
 	char name[NAME_SIZE]; //name of the entrance
@@ -44,21 +54,6 @@ struct _access
 };
 
 typedef struct _access Access;
-
-/************************************************************************/
-struct _park 
-{
- 	int N; //number of columns
- 	int M; //number of lines
- 	int P; //number of floors
- 	int E; //number of entrances
- 	int S; //number of accesses
- 	int ***matrix; //3D matrix that stores the info about each floor;
- 	Entrance *entries; //vector that stores the info about the entrances;
- 	Access *accesses; //vector that stores the info about the accesses;
-};
-
-typedef struct _park Park;
 
 /***************************************************************************/
 struct _car // Struct for cars
@@ -168,7 +163,7 @@ typedef struct node link;
 struct node
 {
 	int v;
-	int type; //type of the node
+	int weight; //type of the node
 	link *next;
 };
 
@@ -178,6 +173,7 @@ struct graph
 	int V; //number of nodes
 	int E; //number of edges
 	link **adj;
+	Graph_node *node_info; //vector with the info about each node
 };
 
 typedef struct graph Graph;
@@ -191,6 +187,21 @@ struct edge
 };
 
 typedef struct edge Edge;
+
+/************************************************************************/
+struct _park 
+{
+ 	int N; //number of columns
+ 	int M; //number of lines
+ 	int P; //number of floors
+ 	int E; //number of entrances
+ 	int S; //number of accesses
+ 	Graph *G;
+ 	Entrance *entries; //vector that stores the info about the entrances;
+ 	Access *accesses; //vector that stores the info about the accesses;
+};
+
+typedef struct _park Park;
 
 
  #endif

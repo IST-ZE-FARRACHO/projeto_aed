@@ -13,17 +13,17 @@
  #include "defs.h"
  #include "tools.h"
 
- void AlocaMatrizPark(Park * p);
-
- Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors);
+ Park *NewPark(int, int, int, int, int);
 
  int Char_to_Number (char c);
 
- void Map_to_matrix (Park * p, FILE * f, int _floor);
+ void Get_edges(Park *p, int vector1[], int vector2[], int nr_columns, int y1, int y2, int _floor);
 
- void Read_Doors_info (Park * p, FILE * f, int *i, int *j);
+ void Map_to_Park_Graph (Park * p, FILE * f, int);
 
- void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j);
+ void Read_Doors_info (Park * p, FILE * f, int *, int *);
+
+ void Read_floor (Park * p, FILE * f, int, int *, int *);
 
  Park *ReadFilePark (char * file);
 
