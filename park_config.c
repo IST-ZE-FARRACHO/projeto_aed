@@ -281,7 +281,7 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 
 void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicates the position to insert the entries/accesses in the vectors
 {
-	Map_to_matrix(p, f, _floor);
+	//Map_to_matrix(p, f, _floor);
 
 	Read_Doors_info(p, f, i, j);
 }
