@@ -244,11 +244,8 @@ Graph *GRAPHinit(int V)
  	int x, y, z, actual_node = 0, actual_edge = 0, i;
 
  	for(z = 0; z < p->P; z++)
- 	{
  		for(y = 0; y < p->M-1; y++)
- 		{
  			for(x = 0; x < p->N-1; x++)
- 			{
  				if(p->matrix[x][y][z] != WALL)
  				{
  					if(p->matrix[x][y][z] == ROAD) //if the position is a road:
@@ -298,29 +295,21 @@ Graph *GRAPHinit(int V)
  					}
  					actual_node++;
  				}
- 			}
- 		}
- 	}
  }
 
  /******************************************************************************
- * Creates_Park_GRAPH()
+ * Count_Park_Nodes_Edges()
  *
- * Arguments: e - vector of edges
- *            vector - vector of graph nodes position
- *            p - struct of park
- *            vector - vector with the position of each node
- * Returns: Graph
- * Description: Reads the matrix, and counts the number of nodes, edges and ramps, 
- *              then creates the graph of the park.
+ * Arguments: p - struct of park
+ *            nodes - number of nodes
+ *            edges - number of edges
+ * Description: Reads the matrix, and counts the number of nodes and edges
  *
  *****************************************************************************/
 
- Graph * Creates_Park_GRAPH(Park *p, Edge * e[], Position * vector[])
+ void Count_Park_Nodes_Edges(Park *p, int * edges, int * nodes)
  {
- 	int x, y, z, nodes = 0, edges = 0, ramps = 0;
-
- 	Graph *G;
+ 	int x, y, z;
 
  	for(z = 0; z < p->P; z++)
  		for(y = 0; y < p->M-1; y++)
@@ -331,27 +320,54 @@ Graph *GRAPHinit(int V)
  					if(p->matrix[x][y][z] == ROAD) //if its a road, it connects to everything on its sides, except the walls
  					{
  						if(p->matrix[x+1][y][z] != WALL)
- 							edges++;
+ 							(*edges)++;
  						if(p->matrix[x][y+1][z] != WALL)
- 							edges++;
+ 							(*edges)++;
  					}
  					else //if its not a road, it only connects the roads on its sides
  					{
  						if(p->matrix[x+1][y][z] == ROAD) 
- 							edges++;
+ 							(*edges)++;
  						if(p->matrix[x][y+1][z] == ROAD)
- 							edges++; 						
+ 							(*edges)++;						
  					}
 
  					if(p->matrix[x][y][z] == RAMP_UP)
- 						ramps++;
-  				nodes++;
+ 						(*edges)++;
+  				(*nodes)++;
  				}
  			}
+ }
 
- 	edges += ramps; //the ramps are also edges, so they got to be added
+ /******************************************************************************
+ * Creates_Park_GRAPH()
+ *
+ * Arguments: e - vector of edges
+ *            vector - vector of graph nodes position
+ *            p - struct of park
+ *            vector - vector with the position of each node
+ * Returns: Graph
+ * Description: Creates the graph of the park and the vectors of edges and graph 
+ *              nodes positions
+ *
+ *****************************************************************************/
+
+ Graph * Creates_Park_GRAPH(Park *p, Edge ** e, Position ** vector)
+ {
+ 	int x, y, z, nodes = 0, edges = 0, i = 0;
+
+ 	Graph *G;
+
+ 	Count_Park_Nodes_Edges(p, &edges, &nodes);
+
+ 	printf("%d %d\n", nodes, edges);
  		
  	vector = (Position **) malloc(nodes*sizeof(Position *)); //allocates memory for the graph nodes position vector
+
+ 	///////////////FODAAAAASSE SEG FAULT AQUI------------------------------------------------------------------------------------
+
+ 	vector[1]->x = 20;
+ 	printf("%d\n", vector[0]->x);
 
  	if(vector == NULL)
  	{
@@ -364,10 +380,13 @@ Graph *GRAPHinit(int V)
  			for(x = 0; x < p->N-1; x++)
  				if(p->matrix[x][y][z] != WALL)
  				{
- 					vector[nodes]->x = x;
- 					vector[nodes]->y = y;
- 					vector[nodes]->z = z;	
+ 					vector[i]->x = x;
+ 					vector[i]->y = y;
+ 					vector[i]->z = z;
+ 					i++;
  				}
+
+
 
  	e = (Edge **) malloc(edges*sizeof(Edge *)); //allocates memory for the vector of edges
 
@@ -417,7 +436,7 @@ Graph *GRAPHinit(int V)
  		free(e[i]);
 
  	free(e);*/
- 	
+
  	Park * p;
 
 	p = ReadFilePark(argv[1]);

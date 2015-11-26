@@ -25,7 +25,8 @@ Graph *GRAPHcopy(Graph *G);
 void GRAPHdestroy(Graph *G);
 
 void Matrix_to_GRAPH(Graph *G, Edge * e[], Park *p, Position * vector[], int);
-Graph *Creates_Park_GRAPH(Park *p, Edge * e[], Position * vector[]);
+void Count_Park_Nodes_Edges(Park *p, int * edges, int * nodes);
+Graph *Creates_Park_GRAPH(Park *p, Edge ** e, Position ** vector);
 
 
 
