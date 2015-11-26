@@ -39,12 +39,21 @@ Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z
 		exit(1);
 	}
 
+	rest->pos = (Position*) malloc(sizeof(Position));
+
+ 	if(rest->pos == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of rest->pos.\n");
+ 		exit(1);
+ 	}
+
+
 	rest->type = rest_type;
 	rest->ta = ta;
 	rest->tb = tb;
-	rest->xs = x;
-	rest->ys = y;
-	rest->zs = z;
+	rest->pos->x = x;
+	rest->pos->y = y;
+	rest->pos->z = z;
 
 	return rest;
 }
@@ -64,6 +73,7 @@ void ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 	int ta, tb, ind, ex, ey, ez, nr_reads, nr_floors = 0, nr_pos = 0, i = 0, j = 0;
 	char r;
 	Restrictions * aux;
+	int restnumber = 0;
 
 	FILE * f;
 
@@ -75,12 +85,15 @@ void ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 		{	
 			aux = NewRestrictions(FLOOR, ta, tb, DONTCARE, DONTCARE, ez);
 			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new floor restriction in restriction list
+			restnumber++;
+
  		
 		}
 		else if(nr_reads == 6) // Its a position restriction - use type = 0
 		{
 			aux = NewRestrictions(POSITION, ta, tb, ex, ey, ez);
 			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new position restriction in restriction list
+			restnumber++;
 		}
 
 		else if(nr_reads != 4 || nr_reads != 6)

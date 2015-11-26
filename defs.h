@@ -36,9 +36,7 @@ typedef struct _node Graph_node;
 struct _entrance 
 { //struct for entrances
 	char name[NAME_SIZE]; //name of the entrance
- 	int xs;  //coordinates
- 	int ys;
- 	int zs;
+	Position * pos;
 };
 
 typedef struct _entrance Entrance;
@@ -47,9 +45,7 @@ typedef struct _entrance Entrance;
 struct _access
 {
 	char name[NAME_SIZE]; //name of the access
- 	int xs;  //coordinates
- 	int ys;
- 	int zs;
+ 	Position * pos;
  	char type; //type of the access;
 };
 
@@ -63,9 +59,8 @@ struct _car // Struct for cars
 	int tb; // Exit time - TE
 	char type; // Type of access required
 //“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)
-	int xs;  // Actual coordinates
-	int ys; 
-	int zs;
+	Position * pos;
+
 };
 
 typedef struct _car Car;
@@ -86,9 +81,7 @@ struct _restPos
 	int ta;
 	int type;
 	int tb;
-	int ex;
-	int ey;
-	int px;
+	Position * pos;
 };
 
 typedef struct _restPos Rest_pos;
@@ -99,9 +92,7 @@ struct _restrict
 	int type; // 0 - Position Restriction | 1 - Floor Restriction
 	int ta;
 	int tb;
-	int xs;
-	int ys;
-	int zs;
+	Position * pos;
 };
 
 typedef struct _restrict Restrictions;
@@ -127,9 +118,8 @@ typedef struct _event Event;
 struct _liberation
 {	
 	int time; // Liberation ocurring time
-	int xs; // Coordinates of the position to be liberated
-	int ys;
-	int zs;
+	Position * pos;
+	
 };
 
 typedef struct _liberation Liberation;
@@ -155,6 +145,7 @@ struct LinkedListStruct
 {
   Item this;
   LinkedList * next;
+  int number;
 };
 
 /************************************************************************/
@@ -202,6 +193,21 @@ struct _park
 };
 
 typedef struct _park Park;
+/*************************************************************************/
+
+struct _heap 
+{
+  int (*less) (Item, Item);     /* Surprise! this field is a function pointer
+                                 * to elements in the heap. */
+  void (*print) (Item);         /* So is this one!! */
+  int n_elements;               /* # elements in heap */
+  int size;                     /* max size of the heap. */
+  Item *heapdata;               /* An array of Items. */
+};
+
+typedef struct _heap Heap; 
+
+void (*PrintItem) (Item);
 
 
  #endif

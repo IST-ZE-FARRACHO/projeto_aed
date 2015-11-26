@@ -32,7 +32,7 @@ int CheckEntrance(Park * p, int x, int y, int z)
 
 	for(i = 0; i <= p->E; i++)
 	{
-		if( (p->entries[i].xs) == x && (p->entries[i].ys == y ) && (p->entries[i].zs) == z )
+		if( (p->entries[i].pos->x) == x && (p->entries[i].pos->y == y ) && (p->entries[i].pos->z) == z )
 			return 1;
 	}
 
@@ -68,12 +68,21 @@ Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 		exit(1);
 	}
 
+	newcar->pos = (Position*) malloc(sizeof(Position));
+
+ 	if(newcar->pos == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 		exit(1);
+ 	}
+
+
 	strcpy(newcar->id, id);
 	newcar->ta = ta;
 	newcar->type = type;
-	newcar->xs = xs;
-	newcar->ys = ys;
-	newcar->zs = zs;
+	newcar->pos->x = xs;
+	newcar->pos->y = ys;
+	newcar->pos->z = zs;
 
 	return (newcar);
 }
@@ -101,10 +110,18 @@ Liberation * NewLiberation(int x, int y, int z, int time)
 		exit(1);
 	}
 
+	libert->pos = (Position*) malloc(sizeof(Position));
+
+ 	if(libert->pos == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 		exit(1);
+ 	}
+
 	libert->time = time;
-	libert->xs = x;
-	libert->ys = y;
-	libert->zs = z;
+	libert->pos->x = x;
+	libert->pos->y = y;
+	libert->pos->z = z;
 
 	return libert;
 
@@ -134,6 +151,8 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 	 Car * newc;
 	 Car * searchcar;
 	 LinkedList * aux;
+	 int carnumber = 0;
+	 int libnumber = 0;
 
 	 Liberation * newliberation;
 
@@ -150,6 +169,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
 				newc = (Car*) getItemLinkedList(carlist);
+				carnumber++;
 	
  			}
  			else
@@ -173,6 +193,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 					{	
 						searchcar->tb = tmpta; // Updates exit time
 						EditItemLinkedList(carlist, (Item) searchcar); // Sends it back to the list
+						carnumber++;
 						break;
 					}
 					else
@@ -189,6 +210,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  				newliberation = NewLiberation(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
  				liberationlist = insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
  				newliberation = (Liberation*) getItemLinkedList(liberationlist);
+ 				libnumber++;
  				
  			}
 
@@ -196,6 +218,9 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 
  	}
  	while(n >= 3);
+
+ 	carlist->number = carnumber;
+ 	liberationlist->number = libnumber;
 
  	FechaFicheiro(f);
 

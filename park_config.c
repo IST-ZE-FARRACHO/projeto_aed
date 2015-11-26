@@ -46,6 +46,7 @@
 Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors)
 {
 	Park * p;
+	int i, j;
 
  	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
 
@@ -55,15 +56,37 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 		exit(1);
 	}
 
-	p->entries = malloc(entrances*sizeof(*p->entries));  //use p->entries[i].xs
+	p->entries = (Entrance*) malloc(entrances*sizeof(Entrance));  //use p->entries[i].xs
 
- 	p->accesses = malloc(nr_accesses*sizeof(*p->accesses));
+ 	p->accesses = (Access*) malloc(nr_accesses*sizeof(Access));
 
- 	if(p->entries == ((Entrance *) NULL) || p->accesses == ((Access *) NULL))
+ 	if(p->entries == NULL || p->accesses == NULL)
  	{
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
  		exit(1);
  	}
+
+  	for(i = 0; i < entrances; i++) 
+ 	{	
+ 		p->entries[i].pos = (Position*) malloc(sizeof(Position));
+ 		
+ 		if(p->entries[i].pos == NULL)
+ 		{
+ 			fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 			exit(1);
+ 		}
+ 	}
+
+ 	for(i = 0; i < nr_accesses; i++) 
+ 	{	
+ 		p->accesses[i].pos = (Position*) malloc(sizeof(Position));
+ 		
+ 		if(p->accesses[i].pos == NULL)
+ 		{
+ 			fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 			exit(1);
+ 		}
+ 	}	
 
  	p->G = GRAPHinit(columns*lines*floors);
 
@@ -267,20 +290,20 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 		if (door_name[0] == 'E')  //if its an entry inserts the information in the p->entries vector
 		{
 			strcpy(p->entries[(*i)].name, door_name);
-			p->entries[(*i)].xs = door_x;
-			p->entries[(*i)].ys = door_y;
-			p->entries[(*i)].zs = door_z;
-			printf("Entrance: %s (%d,%d,%d)\n", p->entries[(*i)].name, p->entries[(*i)].xs, p->entries[(*i)].ys, p->entries[(*i)].zs);
+			p->entries[(*i)].pos->x = door_x;
+			p->entries[(*i)].pos->y = door_y;
+			p->entries[(*i)].pos->z = door_z;
+			printf("Entrance: %s (%d,%d,%d)\n", p->entries[(*i)].name, p->entries[(*i)].pos->x, p->entries[(*i)].pos->y, p->entries[(*i)].pos->z);
 			(*i)++;
 		}
 
 		else if (door_name[0] == 'A') //if its an access inserts the information in the p->accesses vector
 		{
 			strcpy(p->accesses[(*j)].name, door_name);
-			p->accesses[(*j)].xs = door_x;
-			p->accesses[(*j)].ys = door_y;
-			p->accesses[(*j)].zs = door_z;
-			printf("Access: %s (%d,%d,%d)\n", p->accesses[(*j)].name,  p->accesses[(*j)].xs,  p->accesses[(*j)].ys,  p->accesses[(*j)].zs);
+			p->accesses[(*j)].pos->x = door_x;
+			p->accesses[(*j)].pos->y = door_y;
+			p->accesses[(*j)].pos->z = door_z;
+			printf("Access: %s (%d,%d,%d)\n", p->accesses[(*j)].name,  p->accesses[(*j)].pos->x,  p->accesses[(*j)].pos->y,  p->accesses[(*j)].pos->z);
 			(*j)++;
 		}
 
