@@ -73,6 +73,7 @@ void ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 	int ta, tb, ind, ex, ey, ez, nr_reads, nr_floors = 0, nr_pos = 0, i = 0, j = 0;
 	char r;
 	Restrictions * aux;
+	int restnumber = 0;
 
 	FILE * f;
 
@@ -84,12 +85,15 @@ void ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 		{	
 			aux = NewRestrictions(FLOOR, ta, tb, DONTCARE, DONTCARE, ez);
 			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new floor restriction in restriction list
+			restnumber++;
+
  		
 		}
 		else if(nr_reads == 6) // Its a position restriction - use type = 0
 		{
 			aux = NewRestrictions(POSITION, ta, tb, ex, ey, ez);
 			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new position restriction in restriction list
+			restnumber++;
 		}
 
 		else if(nr_reads != 4 || nr_reads != 6)

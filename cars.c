@@ -151,6 +151,8 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 	 Car * newc;
 	 Car * searchcar;
 	 LinkedList * aux;
+	 int carnumber = 0;
+	 int libnumber = 0;
 
 	 Liberation * newliberation;
 
@@ -167,6 +169,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
 				newc = (Car*) getItemLinkedList(carlist);
+				carnumber++;
 	
  			}
  			else
@@ -190,6 +193,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 					{	
 						searchcar->tb = tmpta; // Updates exit time
 						EditItemLinkedList(carlist, (Item) searchcar); // Sends it back to the list
+						carnumber++;
 						break;
 					}
 					else
@@ -206,6 +210,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  				newliberation = NewLiberation(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
  				liberationlist = insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
  				newliberation = (Liberation*) getItemLinkedList(liberationlist);
+ 				libnumber++;
  				
  			}
 
@@ -213,6 +218,9 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 
  	}
  	while(n >= 3);
+
+ 	carlist->number = carnumber;
+ 	liberationlist->number = libnumber;
 
  	FechaFicheiro(f);
 

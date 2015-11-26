@@ -150,6 +150,7 @@ struct LinkedListStruct
 {
   Item this;
   LinkedList * next;
+  int number;
 };
 
 /************************************************************************/
