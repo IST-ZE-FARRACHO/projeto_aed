@@ -23,6 +23,9 @@
 #define RAMP_DOWN 7
 #define ENTRY_DOOR 2
 
+#define NORMAL_TIME 1
+#define RAMP_TIME 2
+
 /******************************************************************************
  * NEW()
  *
@@ -222,44 +225,171 @@ Graph *GRAPHinit(int V)
  	free(G);
  }
 
+ /******************************************************************************
+ * Matrix_to_GRAPH()
+ *
+ * Arguments: e - vector of edges
+ *            G - graph
+ *            p - struct of park
+ *            vector - vector with the position of each node
+ *            nodes - number of nodes
+ *            edges - number of edges
+ * Description: Reads the matrix, and inserts the connections between every possible 
+ *              position on the graph
+ *
+ *****************************************************************************/
 
- Graph * RoadsGRAPH(Park *p)
+ void Matrix_to_GRAPH(Graph *G, Edge * e[], Park *p, Position * vector[], int nodes)
  {
- 	int x, y, z, total = P->N * p->M * p->P;
- 	int nodes = total - Count_Matrix_Roads(p, WALL); //creates a graph with the number of nodes equal to the number of not-WALL spots
+ 	int x, y, z, actual_node = 0, actual_edge = 0, i;
 
- 	Graph *G;
-
- 	G = GRAPHinit(nodes);
-
- 	for(z = 0; z < p->P; z++) //valor de cada posição no grafo: (p->M*y) + xi+(p->M * p->N)z
+ 	for(z = 0; z < p->P; z++)
  	{
- 		for(y = 0; y < p->M; y++)
+ 		for(y = 0; y < p->M-1; y++)
  		{
- 			for(x = 0; x < p->N; x++)
+ 			for(x = 0; x < p->N-1; x++)
  			{
- 				if(p->matrix[x][y][z] !)
+ 				if(p->matrix[x][y][z] != WALL)
+ 				{
+ 					if(p->matrix[x][y][z] == ROAD) //if the position is a road:
+ 					{
+ 						if(p->matrix[x+1][y][z] != WALL) //if the position to the right isnt a wall, it creates an edge and inserts it in the graph
+ 						{
+ 							e[actual_edge] = EDGE(actual_node, actual_node + 1, NORMAL_TIME);
+ 							GRAPHinsertE(G, e[actual_edge]);
+ 							actual_edge++;
+ 						}
+ 						if(p->matrix[x][y+1][z] != WALL) //if the position directly below isnt a wall, it searches for the respective node on the node positions vector
+ 						{ 
+ 							i = actual_node + 1;
+
+ 							while(vector[i]->x != x && vector[i]->y != y+1 && vector[i]->z != z)
+ 								i++;
+ 							e[actual_edge] = EDGE(actual_node, i, NORMAL_TIME); //creates the edge
+ 							GRAPHinsertE(G, e[actual_edge]); //inserts the edge on the graph
+ 							actual_edge++;
+ 						}							
+ 					}
+ 					else if (p->matrix[x][y][z] == RAMP_UP) //if the position is a ramp:
+ 					{
+ 						if(p->matrix[x+1][y][z] == ROAD) //if theres a road to the right, creates edge and inserts on the graph
+ 						{
+ 							e[actual_edge] = EDGE(actual_node, actual_node + 1, NORMAL_TIME);
+ 							GRAPHinsertE(G, e[actual_edge]);
+ 							actual_edge++;
+ 						}
+ 						if(p->matrix[x][y+1][z] == ROAD) //if theres a road directly below, it searches for the node on the node positions vector
+ 						{
+ 							i = actual_node + 1;
+
+ 							while(vector[i]->x != x && vector[i]->y != y+1 && vector[i]->z != z)
+ 								i++;
+ 							e[actual_edge] = EDGE(actual_node, i, NORMAL_TIME); //creates the edge
+ 							GRAPHinsertE(G, e[actual_edge]); //inserts the edge on the graph
+ 							actual_edge++;
+ 						}
+ 						i = actual_node + 1; //searches in the node positions vector for the node driectly above the ramp
+
+ 						while(vector[i]->x != x && vector[i]->y != y && vector[i]->z != z+1)
+ 							i++;
+ 						e[actual_edge] = EDGE(actual_node, i, RAMP_TIME); //creates the edge
+ 						GRAPHinsertE(G, e[actual_edge]); //inserts it on the graph
+ 						actual_edge++;
+ 					}
+ 					actual_node++;
+ 				}
  			}
  		}
  	}
-
-
-
-
-
-
  }
 
+ /******************************************************************************
+ * Creates_Park_GRAPH()
+ *
+ * Arguments: e - vector of edges
+ *            vector - vector of graph nodes position
+ *            p - struct of park
+ *            vector - vector with the position of each node
+ * Returns: Graph
+ * Description: Reads the matrix, and counts the number of nodes, edges and ramps, 
+ *              then creates the graph of the park.
+ *
+ *****************************************************************************/
 
+ Graph * Creates_Park_GRAPH(Park *p, Edge * e[], Position * vector[])
+ {
+ 	int x, y, z, nodes = 0; edges = 0, ramps = 0;
 
+ 	Graph *G;
 
+ 	for(z = 0; z < p->P; z++)
+ 		for(y = 0; y < p->M-1; y++)
+ 			for(x = 0; x < p->N-1; x++)
+ 			{
+ 				if(p->matrix[x][y][z] != WALL)
+ 				{
+ 					if(p->matrix[x][y][z] == ROAD) //if its a road, it connects to everything on its sides, except the walls
+ 					{
+ 						if(p->matrix[x+1][y][z] != WALL)
+ 							edges++;
+ 						if(p->matrix[x][y+1][z] != WALL)
+ 							edges++;
+ 					}
+ 					else //if its not a road, it only connects the roads on its sides
+ 					{
+ 						if(p->matrix[x+1][y][z] == ROAD) 
+ 							edges++;
+ 						if(p->matrix[x][y+1][z] == ROAD)
+ 							edges++; 						
+ 					}
+
+ 					if(p->matrix[x][y][z] == RAMP_UP)
+ 						ramps++;
+  				nodes++;
+ 				}
+ 			}
+
+ 	edges += ramps; //the ramps are also edges, so they got to be added
+ 		
+ 	vector = (Position **) malloc(nodes*sizeof(Position *)); //allocates memory for the graph nodes position vector
+
+ 	if(vector == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of graph nodes prosition vector.\n");
+ 		exit(1);
+ 	}
+
+  	for(z = 0; z < p->P; z++)
+ 		for(y = 0; y < p->M-1; y++)
+ 			for(x = 0; x < p->N-1; x++)
+ 				if(p->matrix[x][y][z] != WALL)
+ 				{
+ 					vector[nodes]->x = x;
+ 					vector[nodes]->y = y;
+ 					vector[nodes]->z = z;	
+ 				}
+
+ 	e = (Edge **) malloc(edges*sizeof(Edge *)); //allocates memory for the vector of edges
+
+ 	if(e == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of edge vector.\n");
+ 		exit(1);
+ 	}
+
+ 	G = GRAPHinit(nodes); //initiates the graph
+
+ 	G = Matrix_to_GRAPH(G, e, p, vector, nodes, edges);
+
+ 	return G;
+ }
 
 
 /****************Main para testes********************************************/
 
  int main()
  {
- 	int i = 0;
+ 	/*int i = 0;
 
  	Graph *G;
  	Edge **e = (Edge **) malloc(3*sizeof(Edge *));
@@ -286,7 +416,19 @@ Graph *GRAPHinit(int V)
  	for(i = 0; i < 3; i++)
  		free(e[i]);
 
- 	free(e);
+ 	free(e);*/
+
+ 	Position **vector;
+
+ 	Edge **e;
+
+ 	Graph *G;
+
+ 	G = Creates_Park_GRAPH(p, e, vector);
+
+
+
+
 
  	return 0;
  }

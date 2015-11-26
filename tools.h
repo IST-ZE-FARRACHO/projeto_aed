@@ -27,7 +27,6 @@
 FILE *AbreFicheiro(char *name, char *mode);
 void FechaFicheiro(FILE * f);
 LinkedList * ListCreator();
-int Count_Matrix_Roads(Park * p, int value);
 
 
  /* End of: Protect multiple inclusions                              */

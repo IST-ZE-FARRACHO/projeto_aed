@@ -15,7 +15,7 @@
 #include "defs.h"
 #include "tools.h"
 
-link * NEW(int v, int type, link *next);
+link * NEW(int, int, link *next);
 Edge *EDGE(int, int, int);
 Graph *GRAPHinit(int);
 void GRAPHinsertE(Graph *G, Edge *e);
@@ -23,6 +23,10 @@ void GRAPHremoveE(Graph *G, Edge*);
 int GRAPHedges(Edge * a[], Graph *G);
 Graph *GRAPHcopy(Graph *G);
 void GRAPHdestroy(Graph *G);
+
+void Matrix_to_GRAPH(Graph *G, Edge * e[], Park *p, Position * vector[], int);
+Graph *Creates_Park_GRAPH(Park *p, Edge * e[], Position * vector[]);
+
 
 
  #endif

@@ -91,13 +91,6 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 
  	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
 
-
- 	if(p->entries == (NULL) || p->accesses == (NULL))
- 	{
- 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 		exit(1);
- 	}
-
 	if (p == (NULL))
 	{
 		fprintf(stderr, "Error in malloc of park.\n");
