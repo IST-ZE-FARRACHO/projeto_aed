@@ -182,5 +182,21 @@ struct edge
 
 typedef struct edge Edge;
 
+/*************************************************************************/
+
+struct _heap 
+{
+  int (*less) (Item, Item);     /* Surprise! this field is a function pointer
+                                 * to elements in the heap. */
+  void (*print) (Item);         /* So is this one!! */
+  int n_elements;               /* # elements in heap */
+  int size;                     /* max size of the heap. */
+  Item *heapdata;               /* An array of Items. */
+};
+
+typedef struct _heap Heap; 
+
+void (*PrintItem) (Item);
+
 
  #endif
