@@ -182,7 +182,7 @@ Graph *GRAPHinit(int V)
  * Returns: number of edges
  * Description: Counts the number of edges
  *
- *****************************************************************************/
+ *****************************************************************************
 
  int GRAPHedges(Edge * a[], Graph *G)
  {
@@ -192,10 +192,10 @@ Graph *GRAPHinit(int V)
  	for (v = 0; v < G->V; v++)
  		for (t = G->adj[v]; t != NULL; t = t->next)
  			if (v < t->v)
- 				a[E++] = EDGE(v, t->v, G->adj[v]->weight);
+ 				a[E++] = EDGE(v, t->v, );
 
  	return E;
- }
+ }*/
 
  /******************************************************************************
  * GRAPdestroy()
@@ -318,7 +318,7 @@ Graph *GRAPHinit(int V)
 
  Graph * Creates_Park_GRAPH(Park *p, Edge * e[], Position * vector[])
  {
- 	int x, y, z, nodes = 0; edges = 0, ramps = 0;
+ 	int x, y, z, nodes = 0, edges = 0, ramps = 0;
 
  	Graph *G;
 
@@ -379,7 +379,7 @@ Graph *GRAPHinit(int V)
 
  	G = GRAPHinit(nodes); //initiates the graph
 
- 	G = Matrix_to_GRAPH(G, e, p, vector, nodes, edges);
+ 	Matrix_to_GRAPH(G, e, p, vector, nodes);
 
  	return G;
  }
@@ -387,7 +387,7 @@ Graph *GRAPHinit(int V)
 
 /****************Main para testes********************************************/
 
- int main()
+ int main(int argc, char *argv[])
  {
  	/*int i = 0;
 
@@ -417,6 +417,10 @@ Graph *GRAPHinit(int V)
  		free(e[i]);
 
  	free(e);*/
+ 	
+ 	Park * p;
+
+	p = ReadFilePark(argv[1]);
 
  	Position **vector;
 

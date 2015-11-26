@@ -19,7 +19,7 @@ struct _position
 	int x;
 	int y;
 	int z;
-}
+};
 
 typedef struct _position Position;
 
