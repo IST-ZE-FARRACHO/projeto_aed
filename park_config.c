@@ -174,8 +174,8 @@ int Char_to_Number (char c)
 
  void Get_edges(Park *p, int vector1[], int vector2[], int nr_columns, int y1, int y2, int _floor)
  {
- 	int x, actual_node1 = Get_Pos(0, y1, _floor, p->M, p->N), actual_node2 = Get_Pos(0, y2, _floor, p->M, p->N);
- 	int node_above = Get_Pos(0, y1, _floor+1, p->M, p->N);
+ 	int x, actual_node1 = Get_Pos(0, y1, _floor, p->N, p->M), actual_node2 = Get_Pos(0, y2, _floor, p->N, p->M);
+ 	int node_above = Get_Pos(0, y1, _floor+1, p->N, p->M);
 
  	for(x = 0; x < nr_columns; x++)
  	{	
@@ -377,12 +377,12 @@ Park *ReadFilePark (char * file)
 	return new_park; // Returns new_park
 }
 
-int main(int argc, char *argv[])
+/*int main(int argc, char *argv[])
 {
 	Park *p;
 
 	p = ReadFilePark(argv[1]);
 
-	printf("%d %d\n", p->G->adj[38]->next->weight, p->G->adj[38]->next->v);
+	printf("%d %d\n", p->G->node_info[265].type, p->G->node_info[265].type);
 	return 0;
-}
+}*/
