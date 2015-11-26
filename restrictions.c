@@ -39,12 +39,21 @@ Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z
 		exit(1);
 	}
 
+	rest->pos = (Position*) malloc(sizeof(Position));
+
+ 	if(rest->pos == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of rest->pos.\n");
+ 		exit(1);
+ 	}
+
+
 	rest->type = rest_type;
 	rest->ta = ta;
 	rest->tb = tb;
-	rest->xs = x;
-	rest->ys = y;
-	rest->zs = z;
+	rest->pos->x = x;
+	rest->pos->y = y;
+	rest->pos->z = z;
 
 	return rest;
 }

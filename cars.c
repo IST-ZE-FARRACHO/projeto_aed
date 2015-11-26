@@ -32,7 +32,7 @@ int CheckEntrance(Park * p, int x, int y, int z)
 
 	for(i = 0; i <= p->E; i++)
 	{
-		if( (p->entries[i].xs) == x && (p->entries[i].ys == y ) && (p->entries[i].zs) == z )
+		if( (p->entries[i].pos->x) == x && (p->entries[i].pos->y == y ) && (p->entries[i].pos->z) == z )
 			return 1;
 	}
 
@@ -68,12 +68,21 @@ Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 		exit(1);
 	}
 
+	newcar->pos = (Position*) malloc(sizeof(Position));
+
+ 	if(newcar->pos == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 		exit(1);
+ 	}
+
+
 	strcpy(newcar->id, id);
 	newcar->ta = ta;
 	newcar->type = type;
-	newcar->xs = xs;
-	newcar->ys = ys;
-	newcar->zs = zs;
+	newcar->pos->x = xs;
+	newcar->pos->y = ys;
+	newcar->pos->z = zs;
 
 	return (newcar);
 }
@@ -101,10 +110,18 @@ Liberation * NewLiberation(int x, int y, int z, int time)
 		exit(1);
 	}
 
+	libert->pos = (Position*) malloc(sizeof(Position));
+
+ 	if(libert->pos == NULL)
+ 	{
+ 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 		exit(1);
+ 	}
+
 	libert->time = time;
-	libert->xs = x;
-	libert->ys = y;
-	libert->zs = z;
+	libert->pos->x = x;
+	libert->pos->y = y;
+	libert->pos->z = z;
 
 	return libert;
 
