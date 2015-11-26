@@ -89,24 +89,23 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 {
 	Park * p;
 
-	p->entries = (Entrance*) malloc(entrances*sizeof(*p->entries));  //use p->entries[i].xs
-
- 	p->accesses = (Access*) malloc(nr_accesses*sizeof(*p->accesses));
-
  	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
-
-
- 	if(p->entries == (NULL) || p->accesses == (NULL))
- 	{
- 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 		exit(1);
- 	}
 
 	if (p == (NULL))
 	{
 		fprintf(stderr, "Error in malloc of park.\n");
 		exit(1);
 	}
+
+	p->entries = malloc(entrances*sizeof(*p->entries));  //use p->entries[i].xs
+
+ 	p->accesses = malloc(nr_accesses*sizeof(*p->accesses));
+
+ 	if(p->entries == ((Entrance *) NULL) || p->accesses == ((Access *) NULL))
+ 	{
+ 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
+ 		exit(1);
+ 	}
 
 	p->N = columns;
 	p->M = lines;
@@ -115,7 +114,6 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 	p->S = nr_accesses;
 
 	AlocaMatrizPark(p);
-
 
 	return (p);
 }

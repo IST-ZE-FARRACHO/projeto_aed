@@ -14,6 +14,15 @@
 
 typedef void * Item;
 
+struct _position
+{
+	int x;
+	int y;
+	int z;
+};
+
+typedef struct _position Position;
+
 struct _entrance 
 { //struct for entrances
 	char name[NAME_SIZE]; //name of the entrance
@@ -159,7 +168,7 @@ typedef struct node link;
 struct node
 {
 	int v;
-	int weight;
+	int type; //type of the node
 	link *next;
 };
 
