@@ -66,3 +66,13 @@ int Get_Pos(int x, int y, int z, int columns, int lines)
 {
 	return (columns*lines + x - columns - columns*y +z*columns*lines);
 }
+
+
+void exch(int *i, int *j)
+{
+  int temp;
+
+  temp = *i;
+  *i = *j;
+  *j = temp;
+}
