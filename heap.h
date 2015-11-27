@@ -8,8 +8,6 @@
  *****************************************************************************/
 #include "defs.h"
 
-typedef struct _heap Heap;
-
 Heap *NewHeap(int tamanho, int (*less) (Item, Item), void (*print) (Item));
 
 void FreeHeap(Heap * h);
@@ -31,4 +29,5 @@ int VerifyHeap(Heap * h);
 void HeapSort(Heap * h);
 
 void Heapify(Heap * h);
+
 

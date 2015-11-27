@@ -140,13 +140,13 @@ typedef struct _liberation Liberation;
  *  Description: Node of a linked list
  */
 typedef struct LinkedListStruct LinkedList;
-
 struct LinkedListStruct
 {
   Item this;
   LinkedList * next;
   int number;
 };
+
 
 /************************************************************************/
 typedef struct node link;

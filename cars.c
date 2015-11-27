@@ -87,45 +87,6 @@ Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 	return (newcar);
 }
 
-/******************************************************************************
- * LiberationStructCreator
- *
- * Arguments: Liberation coordinates
- *
- * Returns: Created liberation structure
- *
- * Description: Allocates and fills an liberation structure
- *
- *****************************************************************************/
-
-Liberation * NewLiberation(int x, int y, int z, int time)
-{
-	Liberation * libert;
-
-	libert = (Liberation *) malloc(sizeof(Liberation)); //allocates memory for the struct
-
-	if (libert == NULL)
-	{
-		fprintf(stderr, "Error in malloc of liberation struct.\n");
-		exit(1);
-	}
-
-	libert->pos = (Position*) malloc(sizeof(Position));
-
- 	if(libert->pos == NULL)
- 	{
- 		fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 		exit(1);
- 	}
-
-	libert->time = time;
-	libert->pos->x = x;
-	libert->pos->y = y;
-	libert->pos->z = z;
-
-	return libert;
-
-}
 
 
 /******************************************************************************
@@ -141,7 +102,7 @@ Liberation * NewLiberation(int x, int y, int z, int time)
  * Description: Reads car file and stores info into a list
  *
  *****************************************************************************/
-void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liberationlist)
+LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist)
 {
 
 	 FILE *f; 
@@ -150,15 +111,13 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
 	 char tmpid[5];
 	 Car * newc;
 	 Car * searchcar;
-	 LinkedList * aux;
+	 LinkedList * aux = carlist;
 	 int carnumber = 0;
-	 int libnumber = 0;
-
-	 Liberation * newliberation;
 
  	f = AbreFicheiro(file, "r");
 
  	do{	
+ 		
  		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
  		if( n < 3 ) continue;
 
@@ -168,50 +127,36 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  			{
 				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
-				newc = (Car*) getItemLinkedList(carlist);
-				carnumber++;
+				aux = carlist;
 	
  			}
- 			else
- 			{
- 				printf("Not a valid entrance!\n");
- 			}
-
+ 			else printf("Not a valid entrance!\n");
  		}
 
- 		else // It is an exit/liberation case
+ 		else
  		{
  
  			if(n == 3) // Exit case -> Car is in carlist, register exit time
  			{	
+ 				
 
- 				while(carlist != NULL) // Searches carlist
+ 				while(aux != NULL) // Searches carlist
  				{
- 					searchcar = (Car*) getItemLinkedList(carlist); // Gets Item from LinkedList
+ 					searchcar = (Car*) getItemLinkedList(aux); // Gets Item from LinkedList
  					
  					if( !(strcmp(searchcar->id, tmpid))) // If the Item matches the given id
 					{	
 						searchcar->tb = tmpta; // Updates exit time
-						EditItemLinkedList(carlist, (Item) searchcar); // Sends it back to the list
-						carnumber++;
+						carlist = insertUnsortedLinkedList(carlist, (Item) searchcar); // Inserts exir ocurrence in carlist
 						break;
 					}
 					else
 					{
-						carlist = carlist->next; // Iterates to next element
+						aux = aux->next; // Iterates to next element
 					}
 
  				}
  		
- 			}
-
- 			else // Liberation case -> Car is not in carlist, register coordinates liberation time
- 			{	
- 				newliberation = NewLiberation(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
- 				liberationlist = insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list
- 				newliberation = (Liberation*) getItemLinkedList(liberationlist);
- 				libnumber++;
- 				
  			}
 
  		}
@@ -219,10 +164,7 @@ void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liber
  	}
  	while(n >= 3);
 
- 	carlist->number = carnumber;
- 	liberationlist->number = libnumber;
-
  	FechaFicheiro(f);
 
- 	return;
+ 	return carlist;
 }

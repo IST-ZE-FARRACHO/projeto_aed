@@ -14,26 +14,6 @@
 #include "time.h"
 
 /******************************************************************************
- * EventsListCreator
- *
- * Arguments: 
- *
- * Returns: Creates an event list and sorts it
- *
- * Description: Reads every other action list and creates an general event list
- *
- *****************************************************************************/
-
-void ListsCreator(Park * p, char * carfile, char * restrictionfile, LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist)
-{
-
-	ReadCarFile(p, carfile, carlist, liberationlist); // Carlist and liberation list created
-
-	ReadRestrictsFile(restrictionfile, restrictionlist); // Restriction list created
-
-}
-
-/******************************************************************************
  * EventCounter
  *
  * Arguments: 
@@ -44,17 +24,15 @@ void ListsCreator(Park * p, char * carfile, char * restrictionfile, LinkedList *
  *
  *****************************************************************************/
 
-int EventCounter (LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist, Park * p)
+int EventCounter(LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist)
 {
+	int a, b, c;
 
-	int i;
-	
-	for( i = 0; i < 3; i++)
-	{
+	a = lengthLinkedList(carlist);
+	b = lengthLinkedList(liberationlist);
+	c = lengthLinkedList(restrictionlist);
 
-	}
-
-
+	return a + b + c;
 }
 
 
@@ -99,4 +77,15 @@ int LessNum(Item a, Item b) // If a < b return 1
   bb = *((int *) b);
 
   return (aa < bb);
+}
+
+
+void PrintNum(Item hi)
+{
+  int num;
+
+  num = *((int *) hi);
+  printf("%3d", num);
+
+  return;
 }

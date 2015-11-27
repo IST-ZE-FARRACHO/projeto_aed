@@ -4,3 +4,4 @@ VTE1 20 S 1 4 3
 Vbx   3 C 10 0 0
 Va1  40 S
 VTE2 70 S 1 2 3
+NQ 90 S 1 2 3
