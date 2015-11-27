@@ -15,7 +15,7 @@
 #include "LinkedList.h"
 #include "tools.h"
 
-void ReadCarFile(Park * p, char * file, LinkedList * carlist, LinkedList * liberationlist);
+LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist);
 
 int CheckEntrance(Park * p, int x, int y, int z);
 

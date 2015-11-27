@@ -103,11 +103,17 @@ void freeLinkedList(LinkedList * first, void (* freeItemFnt)(Item))
  */
 int lengthLinkedList(LinkedList * first)
 {
-  LinkedList * aux;
-  int counter;
+
+  int counter = 0;
 
   /* Length determination cycle                                   */
-  for(aux = first, counter = 0; aux!=NULL; counter++, aux = aux->next);
+  while(first != NULL)
+  {
+
+    counter++;
+    first=first->next;
+
+  }
 
   return counter;
 }
@@ -209,6 +215,7 @@ LinkedList * insertUnsortedLinkedList(LinkedList * next, Item this)
 
   return new;
 }
+
 
 
 
