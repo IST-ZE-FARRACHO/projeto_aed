@@ -13,7 +13,7 @@
 #include "defs.h"
 #include "park_config.h"
 #include "defs.h"
-#include "tools.h"
+#include "pq.h"
 
 link * NEW(int, int, link *next);
 Edge *EDGE(int, int, int);
@@ -22,5 +22,7 @@ void GRAPHinsertE(Graph *G, Edge *e);
 void GRAPHremoveE(Graph *G, Edge*);
 Graph *GRAPHcopy(Graph *G);
 void GRAPHdestroy(Graph *G);
+
+ void GRAPHpfs(Graph *G, int, int st[], double wt[]);
 
  #endif

@@ -28,6 +28,7 @@ FILE *AbreFicheiro(char *name, char *mode);
 void FechaFicheiro(FILE * f);
 LinkedList * ListCreator();
 int Get_Pos(int, int, int, int, int);
+void exch(int *i, int *j);
 
 
  /* End of: Protect multiple inclusions                              */
