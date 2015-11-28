@@ -127,14 +127,19 @@ void FixDown(Heap * h, int k)
   int j;
   Item t;
 
-  while ((2 * k + 1) < h->n_elements) {
+  while ((2 * k + 1) < h->n_elements) 
+  {
+
     j = 2 * k + 1;
-    if (((j + 1) < h->n_elements) &&
-        (h->less) (h->heapdata[j], h->heapdata[j + 1])) {
+
+    if (((j + 1) < h->n_elements) && (h->less) (h->heapdata[j], h->heapdata[j + 1])) 
+    {
       /* second offspring is greater */
       j++;
     }
-    if (!(h->less) (h->heapdata[k], h->heapdata[j])) {
+    
+    if (!(h->less) (h->heapdata[k], h->heapdata[j])) 
+    {
       /* Elements are in correct order. */
 
 #ifdef DEMO
@@ -162,6 +167,7 @@ void FixDown(Heap * h, int k)
     k = j;
 
 #ifdef DEMO
+
     /* --------------------------------------------------- */
     PrintHeap(h);
 #endif
@@ -189,7 +195,9 @@ Heap *NewHeap(int size, int (*less) (Item, Item), void (*print) (Item))
   Heap *h;
 
   h = (Heap *) malloc(sizeof(Heap));
-  if (h == ((Heap *) NULL)) {
+
+  if (h == ((Heap *) NULL)) 
+  {
     fprintf(stderr, "Error in malloc of heap\n");
     exit(1);
   }
@@ -199,7 +207,9 @@ Heap *NewHeap(int size, int (*less) (Item, Item), void (*print) (Item))
   h->print = print;
   h->size = size;
   h->heapdata = (Item *) malloc(size * sizeof(Item));
-  if (h->heapdata == ((Item *) NULL)) {
+
+  if (h->heapdata == ((Item *) NULL)) 
+  {
     fprintf(stderr, "Error in malloc of heap data\n");
     exit(1);
   }
@@ -417,7 +427,7 @@ void exch(int *i, int *j)
  *
  *****************************************************************************/
 
-void HeapSort(Heap * h)
+Heap * HeapSort(Heap * h)
 {
 	int L = 0, R = h->n_elements;
 	int Aux;
@@ -428,13 +438,18 @@ void HeapSort(Heap * h)
 
 /* Reordena a tabela, trocando o topo e exercendo FixDown na tabela com */
 /* dimensão –1 (na troca, o menor é já colocado na posição final) */
-	while(h->n_elements > L){
+	while(h->n_elements > L)
+  {
+
 		h->n_elements--;
 		exch(h->heapdata[L], h->heapdata[h->n_elements]);
-		FixDown(h, L); 
+		FixDown(h, L);
+
 	}
 
 	h->n_elements = R;
+
+  return h;
 }
 
 /******************************************************************************

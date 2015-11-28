@@ -15,7 +15,7 @@
 #include "LinkedList.h"
 
 
-Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z);
+Restrictions *NewRestrictions(int rest_type, int ta, char inout, int x, int y, int z);
 LinkedList * ReadRestrictsFile(char * file, LinkedList * restrictionslist);
 
 #endif

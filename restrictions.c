@@ -27,7 +27,7 @@
  *
  *****************************************************************************/
 
-Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z)
+Restrictions *NewRestrictions(int rest_type, int ta, char inout, int x, int y, int z)
 {
 	Restrictions * rest;
 
@@ -50,7 +50,7 @@ Restrictions *NewRestrictions(int rest_type, int ta, int tb, int x, int y, int z
 
 	rest->type = rest_type;
 	rest->ta = ta;
-	rest->tb = tb;
+	rest->inout = inout;
 	rest->pos->x = x;
 	rest->pos->y = y;
 	rest->pos->z = z;
@@ -81,14 +81,18 @@ LinkedList * ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 	{
 		if(nr_reads == 4) // Its a floor restriction - use type = 1
 		{	
-			aux = NewRestrictions(FLOOR, ta, tb, DONTCARE, DONTCARE, ez);
+			aux = NewRestrictions(FLOOR, ta, 'E', DONTCARE, DONTCARE, ez);
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new floor restriction in restriction lis
+			aux = NewRestrictions(FLOOR, tb, 'S', DONTCARE, DONTCARE, ez);
 			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new floor restriction in restriction lis
 
  		
 		}
 		else if(nr_reads == 6) // Its a position restriction - use type = 0
 		{
-			aux = NewRestrictions(POSITION, ta, tb, ex, ey, ez);
+			aux = NewRestrictions(POSITION, ta, 'E', ex, ey, ez); // Inserts restriction entrance time with ta and 'E'
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new position restriction in restriction list
+			aux = NewRestrictions(POSITION, tb, 'S', ex, ey, ez); // Inserts restriction lift time with tb and 'S'
 			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new position restriction in restriction list
 
 		}

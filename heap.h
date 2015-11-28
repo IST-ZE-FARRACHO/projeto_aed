@@ -26,7 +26,7 @@ void CleanHeap(Heap * h);
 
 int VerifyHeap(Heap * h);
 
-void HeapSort(Heap * h);
+Heap * HeapSort(Heap * h);
 
 void Heapify(Heap * h);
 

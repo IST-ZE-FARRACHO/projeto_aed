@@ -87,6 +87,8 @@ void freeLinkedList(LinkedList * first, void (* freeItemFnt)(Item))
   return;
 }
 
+
+
 /*
  *  Function:
  *    lengthLinkedList
