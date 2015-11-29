@@ -377,7 +377,7 @@ Park *ReadFilePark (char * file)
 	return new_park; // Returns new_park
 }
 
-/*int main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	Park *p;
 
@@ -387,7 +387,7 @@ Park *ReadFilePark (char * file)
 	double wt[p->G->V];
 
 	printf("%d %d\n", p->G->node_info[265].type, p->G->node_info[265].type);
-
+	
 	//GRAPHpfs(p->G, 2, st, wt);
 
 	printf("%d\n", st[22]);
@@ -395,4 +395,4 @@ Park *ReadFilePark (char * file)
 
 
 	return 0;
-}*/
+}
