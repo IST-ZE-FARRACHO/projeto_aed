@@ -255,7 +255,7 @@ Graph *GRAPHinit(int V)
  *****************************************************************************/
 
 
- void GRAPHpfs(Graph *G, int s, int st[], double wt[])
+ /*void GRAPHpfs(Graph *G, int s, int st[], double wt[])
  {
  	int v, w; link * t;
 
@@ -278,3 +278,4 @@ Graph *GRAPHinit(int V)
  					st[w] = v;
  				}
  }
+*/

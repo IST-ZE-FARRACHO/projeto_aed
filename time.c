@@ -62,7 +62,7 @@ Heap * TimelineCreator(int nr_eventos, LinkedList * carlist, LinkedList * libera
 	h = ListToHeap(liberationlist, h, LIBERATION);
 	h = ListToHeap(restrictionlist, h, RESTRICTION);
 
-	return HeapSort(h);
+	return h;
 	
 }
 
