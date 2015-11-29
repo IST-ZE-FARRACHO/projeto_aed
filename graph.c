@@ -13,7 +13,7 @@
 #include <string.h>
 #include "graph.h"
 
-#define P (wt[v] + t->weight)
+#define P (wt[(*v)] + t->weight)
 
 #define ROAD 0
 #define WALL 1
@@ -254,27 +254,28 @@ Graph *GRAPHinit(int V)
  *
  *****************************************************************************/
 
-
- void GRAPHpfs(Graph *G, int s, int st[], double wt[])
+void GRAPHpfs(Graph *G, int s, int st[], double wt[])
  {
- 	int v, w; link * t;
+ 	int * v, w; link * t;
+ 	double maxWT = G->V;
 
  	PQinit(G->V);
- 	for(v = 0; v < G->V; v++)
+ 	for((*v) = 0; (*v) < G->V; (*v)++)
  	{
- 		st[v] = -1;
- 		wt[v] = maxWT;
+ 		st[(*v)] = -1;
+ 		wt[(*v)] = maxWT;
+ 		printf("pila\n");
  		PQinsert((Item) v);
  	}
  	wt[s] = 0.0;
  	PQdec(s);
  	while(!PQempty())
- 		if(wt[v = PQdelmin()] != maxWT)
- 			for(t = G->adj[v]; t != NULL; t = t->next)
+ 		if(wt[(*v) = PQdelmin()] != maxWT)
+ 			for(t = G->adj[(*v)]; t != NULL; t = t->next)
  				if(wt[w = t->v] > P)
  				{
  					wt[w] = P;
  					PQdec(w);
- 					st[w] = v;
+ 					st[w] = (*v);
  				}
  }

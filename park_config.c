@@ -388,11 +388,10 @@ int main(int argc, char *argv[])
 
 	printf("%d %d\n", p->G->node_info[265].type, p->G->node_info[265].type);
 
-	GRAPHpfs(p->G, 2, st, wt);
 
-	printf("%d\n", st[22]);
+	printf("%d\n", 2*(p->G->E)/(p->G->V));
 
-
+	GRAPHpfs(p->G, 5, st, wt);
 
 	return 0;
 }

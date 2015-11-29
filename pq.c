@@ -16,11 +16,11 @@ static int free_h;  //number of elements on the heap
 static int hsize;
 
 
-void PQinit(unsigned Size)
+void PQinit(int Size)
 {
 	queue = (Item *) malloc(Size*sizeof(Item));
 	hsize = Size;
-	free = 0;
+	free_h = 0;
 }
 
 void PQinsert(Item I)
@@ -43,7 +43,7 @@ Item PQdelmax()
 
 Item PQdelmin()
 {
-	return queue[--free];
+	return queue[--free_h];
 }
 
 void PQsort(Item pTable[], int L, int R)
