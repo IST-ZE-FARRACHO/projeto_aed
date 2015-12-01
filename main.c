@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 	Park * park;
 	Heap * timeline;
 
-	int nr_eventos, a = 0, b = 0, c = 0;
+	int nr_eventos, i, a = 0, b = 0, c = 0;
 
 	LinkedList * eventslist, * carlist, * liberationlist, * restrictionlist; // Declares list
 
@@ -55,6 +55,14 @@ int main(int argc, char *argv[])
 	
 	PrintHeap(timeline);
 
+	int st[park->G->V];
+	long int wt[park->G->V];
+
+	GRAPHpfs(park->G, 30, st, wt);
+
+	for(i = 0; i < 600; i++)
+		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, park->G->node_info[i].pos->x, park->G->node_info[i].pos->y, park->G->node_info[i].pos->z);
+	
 	
 	/* while(não chegar ao último elemento do heap)
 	{

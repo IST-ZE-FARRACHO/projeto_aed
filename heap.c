@@ -87,10 +87,10 @@ void FixUp(Heap * h, int k)
   while ((k > 0) && (h->less) ((h->heapdata)[(k - 1) / 2], (h->heapdata)[k])) {
 #ifdef DEMO
     /* --------------------------------------------------- */
-    printf("FixUp: heap[%d]: %d is smaller than offspring heap[%d]: %d\n",
+   /* printf("FixUp: heap[%d]: %d is smaller than offspring heap[%d]: %d\n",
            (k - 1) / 2, *((int *) (h->heapdata)[(k - 1) / 2]),
            k, *((int *) (h->heapdata)[k]));
-    printf("\t=> exchange\n");
+    printf("\t=> exchange\n");*/
 #endif
     /*---------------------------------------------------------*/
     t = (h->heapdata)[k];
@@ -99,8 +99,8 @@ void FixUp(Heap * h, int k)
 
 #ifdef DEMO
     /* --------------------------------------------------- */
-    printf("\t=> \n");
-    PrintHeap(h);
+   /* printf("\t=> \n");
+    PrintHeap(h);*/
 #endif
     /*---------------------------------------------------------*/
     k = (k - 1) / 2;
@@ -144,18 +144,18 @@ void FixDown(Heap * h, int k)
 
 #ifdef DEMO
       /* --------------------------------------------------- */
-      printf
+     /* printf
           ("FixDown: Compare heap[%d]: %d with heap[%d]: %d => don't exchange\n",
-           k, *((int *) h->heapdata[k]), j, *((int *) h->heapdata[j]));
+           k, *((int *) h->heapdata[k]), j, *((int *) h->heapdata[j]));*/
 #endif
       /*---------------------------------------------------------*/
       break;
     }
 #ifdef DEMO
     /* --------------------------------------------------- */
-    printf("FixDown: heap[%d]: %d is smaller than offspring heap[%d]: %d\n",
+    /*printf("FixDown: heap[%d]: %d is smaller than offspring heap[%d]: %d\n",
            k, *((int *) (h->heapdata)[k]), j, *((int *) (h->heapdata)[j]));
-    printf("\t=> exchange\n");
+    printf("\t=> exchange\n");*/
 #endif
     /*---------------------------------------------------------*/
 
@@ -169,13 +169,81 @@ void FixDown(Heap * h, int k)
 #ifdef DEMO
 
     /* --------------------------------------------------- */
-    PrintHeap(h);
+    /*PrintHeap(h);*/
 #endif
     /*---------------------------------------------------------*/
   }
 
   return;
 }
+
+/******************************************************************************
+ * FixDown()
+ *
+ * Arguments: h - pointer to heap structure
+ *            k - index of element to fixdown
+ * Returns:
+ * Side-Effects: none
+ *
+ * Description: performs fixdown from index
+ *
+ *****************************************************************************/
+
+void FixDownPQ(Heap * h, int k, long int vector[])
+{
+  int j;
+  Item t;
+
+  while ((2 * k + 1) < h->n_elements) 
+  {
+
+    j = 2 * k + 1;
+
+    if (((j + 1) < h->n_elements) && (h->less) ((Item) vector[j], (Item) vector[j + 1])) 
+    {
+      /* second offspring is greater */
+      j++;
+    }
+    
+    if (!(h->less) ((Item) vector[k], (Item) vector[j])) 
+    {
+      /* Elements are in correct order. */
+
+#ifdef DEMO
+      /* --------------------------------------------------- */
+     /* printf
+          ("FixDown: Compare heap[%d]: %d with heap[%d]: %d => don't exchange\n",
+           k, *((int *) h->heapdata[k]), j, *((int *) h->heapdata[j]));*/
+#endif
+      /*---------------------------------------------------------*/
+      break;
+    }
+#ifdef DEMO
+    /* --------------------------------------------------- */
+    /*printf("FixDown: heap[%d]: %d is smaller than offspring heap[%d]: %d\n",
+           k, *((int *) (h->heapdata)[k]), j, *((int *) (h->heapdata)[j]));
+    printf("\t=> exchange\n");*/
+#endif
+    /*---------------------------------------------------------*/
+
+    /* the 2 elements are not correctly sorted, it is
+       necessary to exchange them */
+    t = (h->heapdata)[k];
+    (h->heapdata)[k] = (h->heapdata)[j];
+    (h->heapdata)[j] = t;
+    k = j;
+
+#ifdef DEMO
+
+    /* --------------------------------------------------- */
+    /*PrintHeap(h);*/
+#endif
+    /*---------------------------------------------------------*/
+  }
+
+  return;
+}
+
 
 
 /******************************************************************************
@@ -254,6 +322,13 @@ int Insert(Heap * h, Item element)
   FixUp(h, h->n_elements - 1);
 
   return 1;
+}
+
+void InsertNum(Heap * h, long int i)
+{
+  Insert(h, (Item) i);
+
+  return;
 }
 
 /******************************************************************************
@@ -350,6 +425,28 @@ Item RemoveMax(Heap * h)
   return NULL;
 }
 
+long int RemoveMin(Heap * h, long int vector[])
+{
+  long int i, men = 0;
+  Item t;
+
+  for(i = 0; i < h->n_elements; i++)
+    if(vector[(long int) h->heapdata[i]] <= vector[(long int) h->heapdata[men]])
+      men = i;       
+
+  i = (long int) h->heapdata[men];
+
+  t = (h->heapdata)[men];
+  (h->heapdata)[men] = (h->heapdata)[h->n_elements - 1];
+  (h->heapdata)[h->n_elements - 1] = t;
+
+  //free(h->heapdata[h->n_elements -1]);
+  h->n_elements--;
+  FixDownPQ(h, i, vector);
+
+  return i;
+}
+
 /******************************************************************************
  * CleanHeap()
  *
@@ -425,7 +522,7 @@ Heap * HeapSort(Heap * h)
 
 /* Constroi acervo na própria tabela, executando FixDown na parte inferior */
 	for(Aux = (L+R-1)/2; Aux >= L; Aux--)
-		FixUp(h, Aux);
+		FixDown(h, Aux);
 
 /* Reordena a tabela, trocando o topo e exercendo FixDown na tabela com */
 /* dimensão –1 (na troca, o menor é já colocado na posição final) */
@@ -433,8 +530,8 @@ Heap * HeapSort(Heap * h)
   {
 
 		h->n_elements--;
-		exch(h->heapdata[L], h->heapdata[h->n_elements]);
-		FixUp(h, L);
+		exchEvento(h->heapdata[L], h->heapdata[h->n_elements]);
+		FixDown(h, L);
 
 	}
 
@@ -463,4 +560,15 @@ void Heapify(Heap * h)
 
   return;
 }
+
+
+int HeapEmpty(Heap * h)
+{
+  if(h->n_elements == 0)
+    return 1;
+
+  return 0;
+}
+
+
 

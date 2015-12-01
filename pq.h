@@ -14,7 +14,7 @@
  #include "heap.h"
 #include "tools.h"
 
-void PQinit(unsigned Size);
+Item PQinit(int Size);
 void PQinsert(Item I);
 Item PQdelmax();
 void PQsort(Item pTable[], int L, int R);
