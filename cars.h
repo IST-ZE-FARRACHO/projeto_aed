@@ -19,7 +19,7 @@ LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist);
 
 int CheckEntrance(Park * p, int x, int y, int z);
 
-Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs);
+Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs);
 
 Liberation * NewLiberation(int x, int y, int z, int time);
 

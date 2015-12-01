@@ -55,10 +55,10 @@ typedef struct _access Access;
 struct _car // Struct for cars
 {
 	char *id; // Vehicle identification
-	int ta; // Entrance moment - TA
-	int tb; // Exit time - TE
-	char type; // Type of access required
-//“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)
+	int ta; // Car event time
+	char type; // Type of access required //“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)
+	char inout; // 'E' for entrance event, 'S' for exit event
+
 	Position * pos;
 
 };
@@ -90,8 +90,8 @@ typedef struct _restPos Rest_pos;
 struct _restrict
 {
 	int type; // 0 - Position Restriction | 1 - Floor Restriction
-	int ta;
-	int tb;
+	int ta; // Occurence time
+	char inout; // 'O' for restriction creation, 'F' for restriction lift
 	Position * pos;
 };
 

@@ -13,6 +13,10 @@
 #include <string.h>
 #include "time.h"
 
+#define CAR 1
+#define LIBERATION 2
+#define RESTRICTION 3
+
 /******************************************************************************
  * EventCounter
  *
@@ -48,12 +52,75 @@ int EventCounter(LinkedList * carlist, LinkedList * liberationlist, LinkedList *
  *
  *****************************************************************************/
 
-LinkedList * TimelineCreator(int nr_eventos)
+Heap * TimelineCreator(int nr_eventos, LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist)
 {	
+	int i;
 	Heap * h;
 	h = NewHeap(nr_eventos, LessNum, PrintNum);
 
+	h = ListToHeap(carlist, h, CAR);
+	h = ListToHeap(liberationlist, h, LIBERATION);
+	h = ListToHeap(restrictionlist, h, RESTRICTION);
+
+	return HeapSort(h);
 }
+
+Heap * ListToHeap(LinkedList * list, Heap * h, int listtype)
+{		
+		Event * event;
+
+		if(list == NULL)
+			return;
+		
+		if(listtype == CAR)
+		{	
+			Car * item1;
+			item1 = (Car*) getItemLinkedList(list);
+			event = EventCreator(item1, item1->ta, item1->inout);
+
+		}
+		else if(listtype == RESTRICTION)
+		{
+
+			Restrictions * item2;
+			item2 = (Restrictions*) getItemLinkedList(list);
+			event = EventCreator(item2, item2->ta, item2->inout);
+			
+		}
+		else if(listtype == LIBERATION)
+		{
+			Liberation * item3;
+			item3 = (Liberation*) getItemLinkedList(list);
+			event = EventCreator(item3, item3->time, 'L');
+
+		}
+
+		Insert(h, event);
+		ListToHeap(getNextNodeLinkedList(list), h, listtype);
+
+		return;
+}
+
+Event * EventCreator(Item this, int time, char type)
+{
+	Event * newevent;
+	newevent = (Event*) malloc(sizeof(Event));
+	if (newevent == NULL) 
+	{
+		fprintf(stderr, "Error in malloc of new event.\n");
+		exit(1);
+	}
+
+	newevent->object = this;
+	newevent->time = time;
+	newevent->type = type;
+
+	return newevent;
+
+}
+
+
+
 
 /******************************************************************************
  * LessNumero()
@@ -69,23 +136,24 @@ LinkedList * TimelineCreator(int nr_eventos)
  *
  *****************************************************************************/
 
-int LessNum(Item a, Item b) // If a < b return 1
+int LessNumEvento(Item a, Item b) // If a < b return 1
 {
-  int aa, bb;
+  Event aa, bb;
 
-  aa = *((int *) a);
-  bb = *((int *) b);
+  aa = *( (Event *) a );
+  bb = *( (Event *) b );
 
-  return (aa < bb);
+
+
+  return (aa.time < bb.time);
 }
 
-
-void PrintNum(Item hi)
+void PrintNumEvento(Item hi)
 {
-  int num;
+  Event num;
 
-  num = *((int *) hi);
-  printf("%3d", num);
+  num = *((Event *) hi);
+  printf("%d", num.time);
 
   return;
 }

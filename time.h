@@ -18,13 +18,17 @@
 
 void ListsCreator(Park * p, char * carfile, char * restrictionfile, LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist);
 
-LinkedList * TimelineCreator();
-
 int EventCounter(LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist);
 
 void PrintNum(Item hi);
 
 int LessNum(Item a, Item b);
+
+Heap * TimelineCreator(int nr_eventos, LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist);
+
+Heap * ListToHeap(LinkedList * list, Heap * h, int listtype);
+
+Event * EventCreator(Item this, int time, char type);
 
 /* End of: Protect multiple inclusions                              */
 #endif

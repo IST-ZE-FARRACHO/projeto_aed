@@ -64,7 +64,7 @@ LinkedList * ListCreator()
 
 int Get_Pos(int x, int y, int z, int columns, int lines)
 {
-	return (columns*lines + x - columns - columns*y +z*columns*lines);
+	return (x + y*columns + columns*lines*z);
 }
 
 

@@ -13,7 +13,7 @@
 #include "defs.h"
 #include "park_config.h"
 #include "defs.h"
-#include "pq.h"
+#include "heap.h"
 
 link * NEW(int, int, link *next);
 Edge *EDGE(int, int, int);
@@ -23,6 +23,9 @@ void GRAPHremoveE(Graph *G, Edge*);
 Graph *GRAPHcopy(Graph *G);
 void GRAPHdestroy(Graph *G);
 
- void GRAPHpfs(Graph *G, int, int st[], double wt[]);
+int LessNumPQ (Item a, Item b);
+void PrintNumPQ(Item hi);
+
+ void GRAPHpfs(Graph *G, int s, int parent[], long int dist[]);
 
  #endif

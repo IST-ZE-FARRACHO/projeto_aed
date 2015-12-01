@@ -50,7 +50,7 @@ int CheckEntrance(Park * p, int x, int y, int z)
  *
  *****************************************************************************/
 
-Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
+Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
 {
 	Car * newcar;
 
@@ -80,6 +80,7 @@ Car * NewCar(char * id, int ta, char type, int xs, int ys, int zs)
 	strcpy(newcar->id, id);
 	newcar->ta = ta;
 	newcar->type = type;
+	newcar->inout = inout;
 	newcar->pos->x = xs;
 	newcar->pos->y = ys;
 	newcar->pos->z = zs;
@@ -125,7 +126,7 @@ LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist)
  		{	
  			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) ) // Checks if it is a valid entrance, if it's not, ignore
  			{
-				newc = NewCar(tmpid, tmpta, tmptype, tmpxs, tmpys, tmpzs); // Creates new car
+				newc = NewCar(tmpid, tmpta, tmptype, 'E', tmpxs, tmpys, tmpzs); // Creates new car
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
 				aux = carlist;
 	
@@ -140,22 +141,11 @@ LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist)
  			{	
  				
 
- 				while(aux != NULL) // Searches carlist
- 				{
- 					searchcar = (Car*) getItemLinkedList(aux); // Gets Item from LinkedList
- 					
- 					if( !(strcmp(searchcar->id, tmpid))) // If the Item matches the given id
-					{	
-						searchcar->tb = tmpta; // Updates exit time
+						searchcar->inout = 'S'; // Car movement becomes an exit movement
+						searchcar->ta = tmpta; // Updates exit time
 						carlist = insertUnsortedLinkedList(carlist, (Item) searchcar); // Inserts exir ocurrence in carlist
-						break;
-					}
-					else
-					{
-						aux = aux->next; // Iterates to next element
-					}
-
- 				}
+				
+				
  		
  			}
 

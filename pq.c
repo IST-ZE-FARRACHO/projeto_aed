@@ -16,11 +16,12 @@ static int free_h;  //number of elements on the heap
 static int hsize;
 
 
-void PQinit(int Size)
+Item PQinit(int Size)
 {
 	queue = (Item *) malloc(Size*sizeof(Item));
 	hsize = Size;
 	free_h = 0;
+	return queue;
 }
 
 void PQinsert(Item I)

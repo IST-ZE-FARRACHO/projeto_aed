@@ -175,7 +175,7 @@ int Char_to_Number (char c)
  void Get_edges(Park *p, int vector1[], int vector2[], int nr_columns, int y1, int y2, int _floor)
  {
  	int x, actual_node1 = Get_Pos(0, y1, _floor, p->N, p->M), actual_node2 = Get_Pos(0, y2, _floor, p->N, p->M);
- 	int node_above = Get_Pos(0, y1, _floor+1, p->N, p->M);
+ 	int node_above;
 
  	for(x = 0; x < nr_columns; x++)
  	{	
@@ -200,11 +200,11 @@ int Char_to_Number (char c)
  				if(vector2[x] != WALL) //if the position directly below isnt a wall, it searches for the respective node on the node positions vector
  				{ 
  					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME)); //inserts the edge on the graph
- 				}							
+ 				}					
  			}
  			else if (vector1[x] == RAMP_UP) //if the position is a ramp:
  			{
- 				if(vector1[x] == ROAD) //if theres a road to the right, creates edge and inserts on the graph
+ 				if(vector1[x+1] == ROAD) //if theres a road to the right, creates edge and inserts on the graph
  				{
  					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node1 + 1, NORMAL_TIME));
  				}
@@ -212,7 +212,19 @@ int Char_to_Number (char c)
  				{
  					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME));
  				}
+ 				node_above = Get_Pos(x, y1, _floor+1, p->N, p->M);
  				GRAPHinsertE(p->G, EDGE(actual_node1, node_above, RAMP_TIME)); //inserts it on the graph
+ 			}
+ 			else if(vector1[x] == EMPTY_SPOT)
+ 			{
+ 				if(vector1[x+1] == ROAD)
+ 				{
+ 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node1 + 1, NORMAL_TIME));
+ 				}
+ 				if(vector2[x] == ROAD)
+ 				{
+ 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME));
+ 				}
  			}
  		}
  		actual_node1++;
@@ -244,7 +256,7 @@ void Map_to_Park_Graph (Park * p, FILE * f, int _floor)
 
 	fgets(vector2, (p->N+1)*(p->M), f); 
 	
-	for(y = 0; y < p->M-1; y++) // For each one of the lines
+	for(y = p->M-1; y > 0; y--) // For each one of the lines
 	{
 		for (x = 0; x < p->N; x++) // For each one of the characters
 		{
@@ -257,12 +269,12 @@ void Map_to_Park_Graph (Park * p, FILE * f, int _floor)
 
 		for(x = 0; x < p->N; x++){
 			vector2_nr[x] = Char_to_Number(vector2[x]);
-			if(y == p->M-2)
+			if(y == 1)
 				printf("%d", vector2_nr[x]);
 		}
 
 
-		Get_edges(p, vector1_nr, vector2_nr, p->N, y, y+1, _floor); //Get edges of the graph
+		Get_edges(p, vector1_nr, vector2_nr, p->N, y, y-1, _floor); //Get edges of the graph
 	}
 	printf("\n\n");
 }
@@ -380,18 +392,21 @@ Park *ReadFilePark (char * file)
 int main(int argc, char *argv[])
 {
 	Park *p;
+	int i;
 
 	p = ReadFilePark(argv[1]);
 
 	int st[p->G->V];
-	double wt[p->G->V];
+	long int wt[p->G->V];
 
-	printf("%d %d\n", p->G->node_info[265].type, p->G->node_info[265].type);
+	GRAPHpfs(p->G, 30, st, wt);
 
+	printf("\n\n%d\n\n\n", p->G->adj[334]->v);
 
-	printf("%d\n", 2*(p->G->E)/(p->G->V));
+	printf("\n\n\n%d %d %d\n\n\n", p->G->node_info[0].pos->x, p->G->node_info[0].pos->y, p->G->node_info[0].pos->z);
 
-	GRAPHpfs(p->G, 5, st, wt);
+	for(i = 0; i < 600; i++)
+		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, p->G->node_info[i].pos->x, p->G->node_info[i].pos->y, p->G->node_info[i].pos->z);
 
 	return 0;
 }

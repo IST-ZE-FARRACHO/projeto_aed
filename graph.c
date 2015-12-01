@@ -13,7 +13,7 @@
 #include <string.h>
 #include "graph.h"
 
-#define P (wt[(*v)] + t->weight)
+#define P (wt[v] + t->weight)
 
 #define ROAD 0
 #define WALL 1
@@ -244,6 +244,25 @@ Graph *GRAPHinit(int V)
  }
 
 
+int LessNumPQ (Item a, Item b)
+{
+  int aa, bb;
+
+  aa = (long int) a;
+  bb = (long int) b;
+  return (aa < bb);
+}
+
+void PrintNumPQ(Item hi)
+{
+  int num;
+
+  num = *((int *) hi);
+  printf("%3d", num);
+
+  return;
+}
+
  /******************************************************************************
  * GRAPHpfs()
  *
@@ -254,28 +273,34 @@ Graph *GRAPHinit(int V)
  *
  *****************************************************************************/
 
-void GRAPHpfs(Graph *G, int s, int st[], double wt[])
+void GRAPHpfs(Graph *G, int s, int st[], long int wt[])
  {
- 	int * v, w; link * t;
- 	double maxWT = G->V;
+ 	int w, i;
+ 	link * t;
+ 	long int v;
+ 	long int maxWT = G->V;
 
- 	PQinit(G->V);
- 	for((*v) = 0; (*v) < G->V; (*v)++)
+ 	Heap * queue;
+
+ 	queue = NewHeap(G->V, LessNumPQ, PrintNumPQ);
+ 	for(v = 0; v < G->V; v++)
  	{
- 		st[(*v)] = -1;
- 		wt[(*v)] = maxWT;
- 		printf("pila\n");
- 		PQinsert((Item) v);
+ 		st[v] = -1;
+ 		wt[v] = maxWT;
+    	Insert(queue, (Item) v);
  	}
  	wt[s] = 0.0;
- 	PQdec(s);
- 	while(!PQempty())
- 		if(wt[(*v) = PQdelmin()] != maxWT)
- 			for(t = G->adj[(*v)]; t != NULL; t = t->next)
- 				if(wt[w = t->v] > P)
- 				{
- 					wt[w] = P;
- 					PQdec(w);
- 					st[w] = (*v);
- 				}
+ 	FixDownPQ(queue, s, wt);
+ 	for(i = 0; i < 600; i++)
+ 		while(HeapEmpty(queue) != 1){
+ 			v = RemoveMin(queue, wt);
+ 			if(wt[v] != maxWT)
+ 				for(t = G->adj[v]; t != NULL; t = t->next)
+ 					if(wt[w = t->v] > P)
+ 					{
+ 						wt[w] = P;
+ 						FixDownPQ(queue, w, wt);
+ 						st[w] = v;
+ 					}
+ 	}
  }

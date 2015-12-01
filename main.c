@@ -25,14 +25,11 @@ int main(int argc, char *argv[])
 {	
 
 	Park * park;
+	Heap * timeline;
 
 	int nr_eventos, a = 0, b = 0, c = 0;
 
-	LinkedList * timeline;
-	LinkedList * eventslist;
-	LinkedList * carlist;
-	LinkedList * liberationlist;
-	LinkedList * restrictionlist; // Declares list
+	LinkedList * eventslist, * carlist, * liberationlist, * restrictionlist; // Declares list
 
 	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park matrix
 
@@ -54,11 +51,44 @@ int main(int argc, char *argv[])
 	printf("Número de restrições: %d\n", c);
 	printf("Número de eventos: %d\n\n", nr_eventos);
 
-	//timeline = TimelineCreator();
+	timeline = TimelineCreator(nr_eventos, carlist, liberationlist, restrictionlist);
+	
+	PrintHeap(timeline);
 
-//Lista de eventos:
+	
+	/* while(não chegar ao último elemento do heap)
+	{
 
-// Enquanto a lista de eventos não estiver vazia		
+		for(primeiro elemento, ultimo elemento, elemento++)
+		{
+			if(é uma entrada de carro)
+			{
+				calculate best lugar
+				calculate best percurso
+				write output file
+			}
+			else if(é uma saída de carro)
+			{	
+				atualiza lista de carros
+				atualiza o grafo, marcando lugar como vago
+			}
+			else if(é uma nova restrição)
+			{
+
+				atualiza grafo das ligações
+			}
+			else if(acabou uma restrição)
+			{
+				atualiza o grafo das ligações
+			}
+			else if(libertação de lugar)
+			{
+
+				atualiza grafo das posições
+			}
+
+	}	*/
+
 	// Percorre a fila de eventos 
 		// Se for a entrada de um carro
 			// Calcula automaticamente o melhor lugar e percurso
@@ -68,7 +98,5 @@ int main(int argc, char *argv[])
                       //Insere a posiçao da qual o carro saiu no grafo
 		// Se for uma restrição nova
 			// Atualiza matriz de posições
-
-//Caminhos : algoritmo de FLoyd ou Dijkstra?
 
 }
