@@ -19,6 +19,6 @@ link_tree *rotate_right(link_tree * tree);
 link_tree *rotate_left(link_tree * tree);
 link_tree * insert(Parking_spot *i, link_tree *tree);
 link_tree * join(link_tree *a, link_tree *b);
-link_tree * delete(int i, link *tree);
+link_tree * delete(Parking_spot *i, link_tree *tree);
 
  #endif

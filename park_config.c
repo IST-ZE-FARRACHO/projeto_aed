@@ -389,6 +389,20 @@ Park *ReadFilePark (char * file)
 	return new_park; // Returns new_park
 }
 
+
+link_tree * AccessTreesCreator(Park *p)
+{
+	link_tree **trees_vector = (link_tree **) malloc((p->S)*sizeof(link_tree *));
+	
+	if(trees_vector == NULL)
+	{
+		fprintf((stderr), "Error in malloc of trees vector.\n");
+		exit(1);
+	}
+
+
+}
+
 /*int main(int argc, char *argv[])
 {
 	Park *p;

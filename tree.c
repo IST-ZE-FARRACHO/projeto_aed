@@ -17,7 +17,7 @@
 Parking_spot **parks; ///vetor com nodos de estacionamento, distâncias e estado
 int i;
 
-link_tree * NEW(Parking_spot *spot, link_tree *l, link_tree *r)
+link_tree * NEW_tree_node(Parking_spot *spot, link_tree *l, link_tree *r)
 {
 	link_tree *x = (link_tree *) malloc(sizeof(link_tree));
 
@@ -46,7 +46,7 @@ link_tree * NEW(Parking_spot *spot, link_tree *l, link_tree *r)
 link_tree * parse()
 {
 	Parking_spot *t = parks[i++];
-	link_tree *x = NEW(t, NULL, NULL);
+	link_tree *x = NEW_tree_node(t, NULL, NULL);
 	if((t->status != OCCUPIED))
 	{
 		x->left = parse();
@@ -61,7 +61,7 @@ int height(link_tree *tree)
 
 	if(tree == NULL)
 		return 0;
-	if(tree->left == Null && tree->right == NULL)
+	if(tree->left == NULL && tree->right == NULL)
 		return 1;
 	hl = height(tree->left);
 	hr = height(tree->right);
@@ -125,13 +125,13 @@ link_tree * insert(Parking_spot *i, link_tree *tree)
 
 		if(tree == NULL)
 		{
-			fprintf("Error in tree insertion.\n");
+			fprintf(stderr, "Error in tree insertion.\n");
 			exit(1);
 		}
 
 		tree->parking = (Parking_spot *) malloc(sizeof(Parking_spot));
 
-		if(t->parking == NULL)
+		if(tree->parking == NULL)
 		{
 			fprintf(stderr, "Error in malloc of tree.\n");
 			exit(1);
@@ -149,7 +149,7 @@ link_tree * insert(Parking_spot *i, link_tree *tree)
 	if (i->distance < tree->parking->distance) //inserts in the left sub-tree
 	{
 		tree->left = insert(i, tree->left);
-		h1 = heigt(tree->left->left);
+		h1 = height(tree->left->left);
 		h2 = height(tree->left->right);
 		h3 = height(tree->right);
 
@@ -197,7 +197,7 @@ link_tree * join(link_tree *a, link_tree *b)
 	return b;
 }
 
-link_tree * delete(int i, link *tree)
+link_tree * delete(Parking_spot *i, link_tree *tree)
 {
 	link_tree *aux = tree;
 	if (tree == NULL)
