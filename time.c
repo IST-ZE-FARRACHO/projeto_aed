@@ -56,11 +56,11 @@ Heap * TimelineCreator(int nr_eventos, LinkedList * carlist, LinkedList * libera
 {	
 	int i;
 	Heap * h;
-	h = NewHeap(nr_eventos, LessNum, PrintNum);
+	h = NewHeap(nr_eventos, LessNumEvento, PrintNumEvento);
 
-	h = ListToHeap(carlist, h, CAR);
-	h = ListToHeap(liberationlist, h, LIBERATION);
-	h = ListToHeap(restrictionlist, h, RESTRICTION);
+	ListToHeap(carlist, h, CAR);
+	ListToHeap(liberationlist, h, LIBERATION);
+	ListToHeap(restrictionlist, h, RESTRICTION);
 
 	return HeapSort(h);
 }
@@ -98,7 +98,7 @@ Heap * ListToHeap(LinkedList * list, Heap * h, int listtype)
 		Insert(h, event);
 		ListToHeap(getNextNodeLinkedList(list), h, listtype);
 
-		return;
+		return h;
 }
 
 Event * EventCreator(Item this, int time, char type)
@@ -138,6 +138,7 @@ Event * EventCreator(Item this, int time, char type)
 
 int LessNumEvento(Item a, Item b) // If a < b return 1
 {
+
   Event aa, bb;
 
   aa = *( (Event *) a );
@@ -156,4 +157,21 @@ void PrintNumEvento(Item hi)
   printf("%d", num.time);
 
   return;
+}
+
+void exchEvento(Item *i, Item *j)
+{	
+
+  int temp;
+
+  Event * aa;
+  Event * bb;
+
+  aa = ( (Event *) i );
+  bb = ( (Event *) j );
+
+  temp = aa->time;
+  aa->time = bb->time;
+  bb->time = temp;
+
 }

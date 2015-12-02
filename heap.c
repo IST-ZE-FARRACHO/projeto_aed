@@ -522,7 +522,7 @@ Heap * HeapSort(Heap * h)
 
 /* Constroi acervo na própria tabela, executando FixDown na parte inferior */
 	for(Aux = (L+R-1)/2; Aux >= L; Aux--)
-		FixUp(h, Aux);
+		FixDown(h, Aux);
 
 /* Reordena a tabela, trocando o topo e exercendo FixDown na tabela com */
 /* dimensão –1 (na troca, o menor é já colocado na posição final) */
@@ -530,8 +530,8 @@ Heap * HeapSort(Heap * h)
   {
 
 		h->n_elements--;
-		exch(h->heapdata[L], h->heapdata[h->n_elements]);
-		FixUp(h, L);
+		exchEvento(h->heapdata[L], h->heapdata[h->n_elements]);
+		FixDown(h, L);
 
 	}
 

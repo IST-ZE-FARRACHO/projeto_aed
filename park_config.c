@@ -389,7 +389,7 @@ Park *ReadFilePark (char * file)
 	return new_park; // Returns new_park
 }
 
-int main(int argc, char *argv[])
+/*int main(int argc, char *argv[])
 {
 	Park *p;
 	int i;
@@ -405,4 +405,4 @@ int main(int argc, char *argv[])
 		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, p->G->node_info[i].pos->x, p->G->node_info[i].pos->y, p->G->node_info[i].pos->z);
 
 	return 0;
-}
+}*/
