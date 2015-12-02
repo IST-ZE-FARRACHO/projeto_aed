@@ -401,10 +401,6 @@ int main(int argc, char *argv[])
 
 	GRAPHpfs(p->G, 30, st, wt);
 
-	printf("\n\n%d\n\n\n", p->G->adj[334]->v);
-
-	printf("\n\n\n%d %d %d\n\n\n", p->G->node_info[0].pos->x, p->G->node_info[0].pos->y, p->G->node_info[0].pos->z);
-
 	for(i = 0; i < 600; i++)
 		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, p->G->node_info[i].pos->x, p->G->node_info[i].pos->y, p->G->node_info[i].pos->z);
 

@@ -207,6 +207,30 @@ struct _heap
 
 typedef struct _heap Heap; 
 
+/**********************************************************/
+
+struct _spot
+{
+	int node;
+	int distance;
+	int status;
+};
+
+typedef struct _spot Parking_spot;
+
+/*******************************************************/
+
+typedef struct Tnode link_tree;
+
+struct Tnode
+{
+	Parking_spot *parking;
+	link_tree *left;
+	link_tree *right;
+};
+
+/***************************************************/
+
 void (*PrintItem) (Item);
 
 
