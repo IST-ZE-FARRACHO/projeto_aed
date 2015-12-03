@@ -20,20 +20,23 @@
 #include "park_config.h"
 #include "heap.h"
 #include "liberation.h"
+#include "spots.h"
 
 int main(int argc, char *argv[])
 {	
 
 	Park * park;
 	Heap * timeline;
+	Parking_spot **spots_matrix;
 
 	int nr_eventos, i, a = 0, b = 0, c = 0;
 
-	LinkedList * eventslist, * carlist, * liberationlist, * restrictionlist; // Declares list
+	LinkedList * eventslist, * carlist, * wait_carlist, * liberationlist, * restrictionlist; // Declares list
 
 	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park matrix
 
 	carlist = initLinkedList();
+	wait_carlist = initLinkedList();
 	liberationlist = initLinkedList();
 	restrictionlist = initLinkedList();
 
@@ -58,11 +61,26 @@ int main(int argc, char *argv[])
 	int st[park->G->V];
 	long int wt[park->G->V];
 
-	GRAPHpfs(park->G, 30, st, wt);
+	GRAPHpfs(park->G, 2, st, wt);
 
-	for(i = 0; i < 600; i++)
+	for(i = 0; i < park->G->V; i++)
 		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, park->G->node_info[i].pos->x, park->G->node_info[i].pos->y, park->G->node_info[i].pos->z);
 	
+	printf("\n\n\n");
+
+	spots_matrix = CreatesSpotsTable(park);
+
+	InsertSpotMatrix(park, spots_matrix, st, wt);
+
+
+	/*for(i = 0; i < park->S; i++)
+	{
+		for(aux = spot_trees_vector; aux[i] != NULL; aux[i] = aux[i]->left)
+		{
+			printf("access: %d  %d\n", i, aux[i]->parking->node);
+		}	
+	}*/
+
 	
 	/* while(não chegar ao último elemento do heap)
 	{

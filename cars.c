@@ -124,14 +124,9 @@ LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist)
 
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)
  		{	
- 			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) ) // Checks if it is a valid entrance, if it's not, ignore
- 			{
 				newc = NewCar(tmpid, tmpta, tmptype, 'E', tmpxs, tmpys, tmpzs); // Creates new car
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
 				aux = carlist;
-	
- 			}
- 			else printf("Not a valid entrance!\n");
  		}
 
  		else

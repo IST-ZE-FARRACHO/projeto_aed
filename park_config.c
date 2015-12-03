@@ -8,6 +8,7 @@
  *
  *****************************************************************************/
 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,12 +25,13 @@
 #define OCCUPIED 5
 #define RAMP_UP 6
 #define RAMP_DOWN 7
-#define ENTRY_DOOR 2
 #define NAME_SIZE 4
 
 #define NORMAL_TIME 1
 #define RAMP_TIME 2
 
+ #define CAN_GO 0
+ #define CANT_GO 1
 /******************************************************************************
  * NewPark ()
  *
@@ -95,6 +97,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 	p->P = floors;
 	p->E = entrances;
 	p->S = nr_accesses;
+	p->Spots = 0;
 
 	return (p);
 }
@@ -176,9 +179,22 @@ int Char_to_Number (char c)
  {
  	int x, actual_node1 = Get_Pos(0, y1, _floor, p->N, p->M), actual_node2 = Get_Pos(0, y2, _floor, p->N, p->M);
  	int node_above;
+ 	Parking_spot new_spot;
 
  	for(x = 0; x < nr_columns; x++)
  	{	
+ 		if(vector1[x] != OCCUPIED && vector1[x] != WALL)
+ 			p->G->node_info[actual_node1].status = CAN_GO;
+ 		else{
+ 			p->G->node_info[actual_node1].status = CANT_GO;
+ 		}
+
+ 		if(vector2[x] != OCCUPIED && vector2[x] != WALL)
+ 			p->G->node_info[actual_node2].status = CAN_GO;
+ 		else{
+ 			p->G->node_info[actual_node2].status = CANT_GO;
+ 		}
+
  		p->G->node_info[actual_node1].pos->x = x;
  		p->G->node_info[actual_node1].pos->y = y1;
  		p->G->node_info[actual_node1].pos->z = _floor;
@@ -188,6 +204,9 @@ int Char_to_Number (char c)
  		p->G->node_info[actual_node2].pos->y = y2;
  		p->G->node_info[actual_node2].pos->z = _floor;
  		p->G->node_info[actual_node2].type = vector2[x];
+
+ 		if(vector1[x] == EMPTY_SPOT)
+ 			p->Spots++;
 
  		if(vector1[x] != WALL)
  		{
@@ -202,7 +221,7 @@ int Char_to_Number (char c)
  					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME)); //inserts the edge on the graph
  				}					
  			}
- 			else if (vector1[x] == RAMP_UP) //if the position is a ramp:
+ 			else if (vector1[x] == RAMP_UP || vector1[x] == RAMP_DOWN) //if the position is a ramp:
  			{
  				if(vector1[x+1] == ROAD) //if theres a road to the right, creates edge and inserts on the graph
  				{
@@ -215,7 +234,7 @@ int Char_to_Number (char c)
  				node_above = Get_Pos(x, y1, _floor+1, p->N, p->M);
  				GRAPHinsertE(p->G, EDGE(actual_node1, node_above, RAMP_TIME)); //inserts it on the graph
  			}
- 			else if(vector1[x] == EMPTY_SPOT)
+ 			else if(vector1[x] == EMPTY_SPOT || vector1[x] == PED_ACCESS || vector1[x] == ENTRY_DOOR)
  			{
  				if(vector1[x+1] == ROAD)
  				{
@@ -387,20 +406,6 @@ Park *ReadFilePark (char * file)
 	FechaFicheiro(f);
 
 	return new_park; // Returns new_park
-}
-
-
-link_tree * AccessTreesCreator(Park *p)
-{
-	link_tree **trees_vector = (link_tree **) malloc((p->S)*sizeof(link_tree *));
-	
-	if(trees_vector == NULL)
-	{
-		fprintf((stderr), "Error in malloc of trees vector.\n");
-		exit(1);
-	}
-
-
 }
 
 /*int main(int argc, char *argv[])

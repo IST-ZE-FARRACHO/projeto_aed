@@ -11,7 +11,7 @@
 #define ToolsHeader
 
 #include "defs.h"
-
+#include "graph.h"
  /******************************************************************************
  * AbreFicheiro ()
  *
@@ -29,7 +29,6 @@ void FechaFicheiro(FILE * f);
 LinkedList * ListCreator();
 int Get_Pos(int, int, int, int, int);
 void exch(int *i, int *j);
-
 
  /* End of: Protect multiple inclusions                              */
 #endif

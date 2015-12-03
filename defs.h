@@ -28,6 +28,7 @@ struct _node
 {
 	Position * pos;
 	int type;
+	int status;
 };
 
 typedef struct _node Graph_node;
@@ -144,7 +145,6 @@ struct LinkedListStruct
 {
   Item this;
   LinkedList * next;
-  int number;
 };
 
 
@@ -179,6 +179,16 @@ struct edge
 
 typedef struct edge Edge;
 
+/**********************************************************/
+struct _spot
+{
+	int node;
+	long int distance;
+	int status;
+};
+
+typedef struct _spot Parking_spot;
+
 /************************************************************************/
 struct _park 
 {
@@ -187,6 +197,7 @@ struct _park
  	int P; //number of floors
  	int E; //number of entrances
  	int S; //number of accesses
+ 	int Spots;
  	Graph *G;
  	Entrance *entries; //vector that stores the info about the entrances;
  	Access *accesses; //vector that stores the info about the accesses;
@@ -206,17 +217,6 @@ struct _heap
 };
 
 typedef struct _heap Heap; 
-
-/**********************************************************/
-
-struct _spot
-{
-	int node;
-	int distance;
-	int status;
-};
-
-typedef struct _spot Parking_spot;
 
 /*******************************************************/
 

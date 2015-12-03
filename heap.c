@@ -425,6 +425,18 @@ Item RemoveMax(Heap * h)
   return NULL;
 }
 
+/******************************************************************************
+ * RemoveMin()
+ *
+ * Arguments: Heap
+ *            vector
+ * Returns: none
+ * Side-Effects: None
+ *
+ * Description: cleans an heap
+ *
+ *****************************************************************************/
+
 long int RemoveMin(Heap * h, long int vector[])
 {
   long int i, men = 0;

@@ -67,7 +67,6 @@ int Get_Pos(int x, int y, int z, int columns, int lines)
 	return (x + y*columns + columns*lines*z);
 }
 
-
 void exch(int *i, int *j)
 {
   int temp;
@@ -76,4 +75,3 @@ void exch(int *i, int *j)
   *i = *j;
   *j = temp;
 }
-

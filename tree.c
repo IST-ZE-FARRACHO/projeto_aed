@@ -14,10 +14,7 @@
 
 #define OCCUPIED 5
 
-Parking_spot **parks; ///vetor com nodos de estacionamento, distâncias e estado
-int i;
-
-link_tree * NEW_tree_node(Parking_spot *spot, link_tree *l, link_tree *r)
+link_tree * NEW_tree(Parking_spot *spot)
 {
 	link_tree *x = (link_tree *) malloc(sizeof(link_tree));
 
@@ -36,22 +33,9 @@ link_tree * NEW_tree_node(Parking_spot *spot, link_tree *l, link_tree *r)
 	}
 
 	x->parking = spot;
-	x->left = l;
-	x->right = r;
+	x->left = NULL;
+	x->right = NULL;
 
-	return x;
-}
-
-
-link_tree * parse()
-{
-	Parking_spot *t = parks[i++];
-	link_tree *x = NEW_tree_node(t, NULL, NULL);
-	if((t->status != OCCUPIED))
-	{
-		x->left = parse();
-		x->right = parse();
-	}
 	return x;
 }
 
@@ -143,9 +127,6 @@ link_tree * insert(Parking_spot *i, link_tree *tree)
 		return tree;
 	}
 
-	if (i->distance == tree->parking->distance)
-		return tree;
-
 	if (i->distance < tree->parking->distance) //inserts in the left sub-tree
 	{
 		tree->left = insert(i, tree->left);
@@ -159,6 +140,25 @@ link_tree * insert(Parking_spot *i, link_tree *tree)
 		{
 			tree->left = rotate_left(tree->left);
 			tree = rotate_right(tree);
+		}
+	}
+
+	else if(i->distance == tree->parking->distance)
+	{
+		if(i->secundary < tree->parking->secundary)
+		{
+			tree->right = insert(i, tree->right);
+			h1 = height(tree->right->right);
+			h2 = height(tree->right->left);
+			h3 = height(tree->left);
+
+			if (h1 > h3)
+				tree = rotate_left(tree);
+			if (h2 > h3)
+			{
+				tree->right = rotate_right(tree->right);
+				tree = rotate_left(tree);
+			}		
 		}
 	}
 

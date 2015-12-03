@@ -296,7 +296,7 @@ void GRAPHpfs(Graph *G, int s, int st[], long int wt[])
  			v = RemoveMin(queue, wt);
  			if(wt[v] != maxWT)
  				for(t = G->adj[v]; t != NULL; t = t->next)
- 					if(wt[w = t->v] > P)
+ 					if(wt[w = t->v] > P  && G->node_info[v].type != EMPTY_SPOT)
  					{
  						wt[w] = P;
  						FixDownPQ(queue, w, wt);

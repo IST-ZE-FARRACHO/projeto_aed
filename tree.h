@@ -12,7 +12,7 @@
 
  #include "defs.h"
 
-link_tree * NEW(Parking_spot *spot, link_tree *l, link_tree *r);
+link_tree * NEW_tree(Parking_spot *spot);
 link_tree * parse();
 int height(link_tree *tree);
 link_tree *rotate_right(link_tree * tree);
