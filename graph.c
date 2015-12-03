@@ -41,7 +41,7 @@ link * NEW(int v, int weight, link *next)
 	if (x == NULL)
 	{
 		fprintf(stderr, "Error in malloc of node.\n");
-		exit(1);
+		exit(0);
 	}
 
 	x->v = v;
@@ -97,7 +97,7 @@ Graph *GRAPHinit(int V)
 	if(G == NULL)
 	{
 		fprintf(stderr, "Error in malloc of graph.\n");
-		exit(1);
+		exit(0);
 	}
 
 	G->V = V;
@@ -108,7 +108,7 @@ Graph *GRAPHinit(int V)
 	if(G->adj == NULL || G->node_info == NULL)
 	{
 		fprintf(stderr, "Error in malloc of graph vectors.\n");
-		exit(1);
+		exit(0);
 	}
 
 	for(i = 0; i < V; i++)
@@ -118,6 +118,7 @@ Graph *GRAPHinit(int V)
 		if(G->node_info[i].pos == NULL)
 		{
 			fprintf(stderr, "Error in malloc of graph nodes information vector.\n");
+			exit(0);
 		}
 	} 
 
@@ -188,30 +189,6 @@ Graph *GRAPHinit(int V)
 
  	G->E--;
  }
-
- /******************************************************************************
- * GRAPHedges()
- *
- * Arguments: a - vector of edges
- *            G - graph
-*
- * Returns: number of edges
- * Description: Counts the number of edges
- *
- *****************************************************************************
-
- int GRAPHedges(Edge * a[], Graph *G)
- {
- 	int v, E = 0;
- 	link * t;
-
- 	for (v = 0; v < G->V; v++)
- 		for (t = G->adj[v]; t != NULL; t = t->next)
- 			if (v < t->v)
- 				a[E++] = EDGE(v, t->v, );
-
- 	return E;
- }*/
 
  /******************************************************************************
  * GRAPdestroy()

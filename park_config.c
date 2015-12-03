@@ -55,7 +55,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 	if (p == (NULL))
 	{
 		fprintf(stderr, "Error in malloc of park.\n");
-		exit(1);
+		exit(0);
 	}
 
 	p->entries = (Entrance*) malloc(entrances*sizeof(Entrance));  //use p->entries[i].xs
@@ -65,7 +65,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  	if(p->entries == NULL || p->accesses == NULL)
  	{
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 		exit(1);
+ 		exit(0);
  	}
 
   	for(i = 0; i < entrances; i++) 
@@ -75,7 +75,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		if(p->entries[i].pos == NULL)
  		{
  			fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 			exit(1);
+ 			exit(0);
  		}
  	}
 
@@ -86,7 +86,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		if(p->accesses[i].pos == NULL)
  		{
  			fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 			exit(1);
+ 			exit(0);
  		}
  	}	
 

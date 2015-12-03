@@ -265,7 +265,7 @@ LinkedList * insertSortedLinkedList(LinkedList * first, Item item, int (* compar
   if (new == NULL) 
   {
     fprintf(stderr, "Error in malloc of linkedlist.\n");
-    exit(1);
+    exit(0);
   }
 
   /* Íf new is the first node of the list*/

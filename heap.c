@@ -267,7 +267,7 @@ Heap *NewHeap(int size, int (*less) (Item, Item), void (*print) (Item))
   if (h == ((Heap *) NULL)) 
   {
     fprintf(stderr, "Error in malloc of heap\n");
-    exit(1);
+    exit(0);
   }
 
   h->n_elements = 0;
@@ -279,7 +279,7 @@ Heap *NewHeap(int size, int (*less) (Item, Item), void (*print) (Item))
   if (h->heapdata == ((Item *) NULL)) 
   {
     fprintf(stderr, "Error in malloc of heap data\n");
-    exit(1);
+    exit(0);
   }
 
   return (h);

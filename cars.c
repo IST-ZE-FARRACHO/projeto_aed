@@ -58,14 +58,14 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
 	if (newcar == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new car.\n");
-		exit(1);
+		exit(0);
 	}
 
 	newcar->id = (char *) malloc(sizeof(char)*4);
 	if (newcar->id == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new car id.\n");
-		exit(1);
+		exit(0);
 	}
 
 	newcar->pos = (Position*) malloc(sizeof(Position));
@@ -73,7 +73,7 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
  	if(newcar->pos == NULL)
  	{
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 		exit(1);
+ 		exit(0);
  	}
 
 

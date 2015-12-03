@@ -108,7 +108,7 @@ Event * EventCreator(Item this, int time, char type)
 	if (newevent == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new event.\n");
-		exit(1);
+		exit(0);
 	}
 
 	newevent->object = this;

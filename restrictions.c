@@ -36,7 +36,7 @@ Restrictions *NewRestrictions(int rest_type, int ta, char inout, int x, int y, i
 	if (rest == NULL)
 	{
 		fprintf(stderr, "Error in malloc of restrictions struct.\n");
-		exit(1);
+		exit(0);
 	}
 
 	rest->pos = (Position*) malloc(sizeof(Position));
@@ -44,7 +44,7 @@ Restrictions *NewRestrictions(int rest_type, int ta, char inout, int x, int y, i
  	if(rest->pos == NULL)
  	{
  		fprintf(stderr, "Error in malloc of rest->pos.\n");
- 		exit(1);
+ 		exit(0);
  	}
 
 

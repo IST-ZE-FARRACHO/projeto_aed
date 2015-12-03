@@ -22,7 +22,7 @@
  	 if (f == NULL) 
  	 {
   	  fprintf(stderr, "Error: Unable to open park-config file %s\n.", name);
-  	  exit(1);
+  	  exit(0);
  	 }
  	 return f;
 }
@@ -54,7 +54,7 @@ LinkedList * ListCreator()
 	if (abstractlist == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new LinkedList.\n");
-		exit(1);
+		exit(0);
 	}
 
 	return abstractlist;	

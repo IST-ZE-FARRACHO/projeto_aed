@@ -34,7 +34,7 @@ Liberation * NewLiberation(int x, int y, int z, int time)
 	if (libert == NULL)
 	{
 		fprintf(stderr, "Error in malloc of liberation struct.\n");
-		exit(1);
+		exit(0);
 	}
 
 	libert->pos = (Position*) malloc(sizeof(Position));
@@ -42,7 +42,7 @@ Liberation * NewLiberation(int x, int y, int z, int time)
  	if(libert->pos == NULL)
  	{
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 		exit(1);
+ 		exit(0);
  	}
 
 	libert->time = time;

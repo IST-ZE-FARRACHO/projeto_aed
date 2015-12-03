@@ -21,7 +21,7 @@ link_tree * NEW_tree(Parking_spot *spot)
 	if(x == NULL)
 	{
 		fprintf(stderr, "Error in malloc of tree.\n");
-		exit(1);
+		exit(0);
 	}
 
 	x->parking = (Parking_spot *) malloc(sizeof(Parking_spot));
@@ -29,7 +29,7 @@ link_tree * NEW_tree(Parking_spot *spot)
 	if(x->parking == NULL)
 	{
 		fprintf(stderr, "Error in malloc of tree.\n");
-		exit(1);
+		exit(0);
 	}
 
 	x->parking = spot;
@@ -110,7 +110,7 @@ link_tree * insert(Parking_spot *i, link_tree *tree)
 		if(tree == NULL)
 		{
 			fprintf(stderr, "Error in tree insertion.\n");
-			exit(1);
+			exit(0);
 		}
 
 		tree->parking = (Parking_spot *) malloc(sizeof(Parking_spot));
@@ -118,7 +118,7 @@ link_tree * insert(Parking_spot *i, link_tree *tree)
 		if(tree->parking == NULL)
 		{
 			fprintf(stderr, "Error in malloc of tree.\n");
-			exit(1);
+			exit(0);
 		}
 
 		tree->parking = i;
