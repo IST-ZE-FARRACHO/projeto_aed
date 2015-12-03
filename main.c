@@ -25,26 +25,38 @@
 int main(int argc, char *argv[])
 {	
 
-
+	/***********************************
+	*   Initial variable declaration
+	***********************************/
 	Park * park; // Park structure
+	
 	Heap * timeline; // Timeline structure - Heap format
+	
 	Parking_spot **spots_matrix;
 
 	int nr_eventos, i, j, a = 0, b = 0, c = 0;
 
-	LinkedList * eventslist, * carlist, * liberationlist, * restrictionlist; // List to store initial data
+	LinkedList * eventslist, *wait_carlist, * carlist, * liberationlist, * restrictionlist; // List to store initial data
 
+
+	/***********************************
+	*   	Park construction
+	***********************************/
 	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park graph
 
+
+	/***********************************
+	*   	List init and fill
+	***********************************/
 	carlist = initLinkedList();
 	wait_carlist = initLinkedList();
 	liberationlist = initLinkedList();
 	restrictionlist = initLinkedList();
 
 	carlist = ReadCarFile(argv[2], carlist);
-	//liberationlist = ReadLiberationFile(argv[2], liberationlist);
-	//restrictionlist = ReadRestrictsFile(argv[3], restrictionlist); // Sends list pointer to function
-/*
+	liberationlist = ReadLiberationFile(argv[2], liberationlist);
+	restrictionlist = ReadRestrictsFile(argv[3], restrictionlist); // Sends list pointer to function
+
 	a = lengthLinkedList(carlist);
 	b = lengthLinkedList(liberationlist);
 	c = lengthLinkedList(restrictionlist);
@@ -55,21 +67,23 @@ int main(int argc, char *argv[])
 	printf("Número de restrições: %d\n", c);
 	printf("Número de eventos: %d\n\n", nr_eventos);
 
+
+	/***********************************
+	*  	 Timeline heap creation
+	***********************************/
 	timeline = TimelineCreator(nr_eventos, carlist, liberationlist, restrictionlist);
 	
 	PrintHeap(timeline);
 
+	/***********************************
+	*   Initial variable declaration
+	***********************************/
+
 	int st[park->G->V];
 	long int wt[park->G->V];
 
-	GRAPHpfs(park->G, 30, st, wt);
-
 	for(i = 0; i < park->G->V; i++)
 		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, park->G->node_info[i].pos->x, park->G->node_info[i].pos->y, park->G->node_info[i].pos->z);
-	*/
-
-	freeLinkedList(carlist, FreeCar);
-	FreePark(park);
 
 	printf("\n\n\n");
 
@@ -134,6 +148,18 @@ int main(int argc, char *argv[])
                       Insere a posiçao da qual o carro saiu no grafo
 		Se for uma restrição nova
 			/Atualiza matriz de posições*/
+
+		
+
+	/***********************************
+	*   	Final memory free
+	***********************************/
+
+
+		freeLinkedList(carlist, FreeCar);
+		FreePark(park);
+
+
 		exit(0);
 
 }

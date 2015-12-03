@@ -81,7 +81,6 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
 LinkedList * ReadCarFile(char * file, LinkedList * carlist)
 {
 
-<<<<<<< HEAD
 	FILE *f;
 	int n, tmpta, tmpxs, tmpys, tmpzs;
 	char tmptype;
@@ -99,8 +98,7 @@ LinkedList * ReadCarFile(char * file, LinkedList * carlist)
  	f = OpenFile(file, "r");
 
  	do{	
- 		
-<<<<<<< HEAD
+ 	
  		n = fscanf(f, "%s %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
  		if( n < 3 ) continue; // If data is not in correct format, skip
 
@@ -131,10 +129,10 @@ LinkedList * ReadCarFile(char * file, LinkedList * carlist)
 
 void FreeCar(Item this)
 {
-	this = (Car*) this;
+	/*this = (Car*) this;
 	free(this->pos);
 	free(this->id);
 	//free(carro);
 
-	return;
+	return;*/
 }
