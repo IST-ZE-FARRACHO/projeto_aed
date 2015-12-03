@@ -82,7 +82,7 @@ Parking_spot ** CreatesSpotsTable(Park *p)
 
 	for(i = 0; i < p->Spots; i++)
 	{
-		spots_matrix[i] = (Parking_spot *) malloc(sizeof(Parking_spot));
+		spots_matrix[i] = (Parking_spot *) malloc((p->Spots)*sizeof(Parking_spot));
 
 		if(spots_matrix[i] == NULL)
 		{
@@ -115,6 +115,8 @@ void InsertSpotMatrix(Park *p, Parking_spot ** spots_matrix, int st[], long int 
 			x++;
 		}
 	}
+
+	printf("%ld\n", spots_matrix[1][0].distance);
 
 	for(y = 0; y < p->S; y++)
 		quick_sort(spots_matrix[y], p->Spots);
