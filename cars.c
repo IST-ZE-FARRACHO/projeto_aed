@@ -11,9 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "cars.h"
-#include "LinkedList.h"
-#include "tools.h"
- 
+
  /******************************************************************************
  * CheckEntrance()
  *
@@ -112,33 +110,30 @@ LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist)
 	 char tmpid[5];
 	 Car * newc;
 	 Car * searchcar;
-	 LinkedList * aux = carlist;
-	 int carnumber = 0;
 
  	f = AbreFicheiro(file, "r");
 
  	do{	
  		
- 		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
+ 		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); /* Reads each line*/
  		if( n < 3 ) continue;
 
- 		if(tmptype != 'S') // If it is not exit info (it is an entrance)
+ 		if(tmptype != 'S') /*If it is not exit info (it is an entrance)*/
  		{	
-				newc = NewCar(tmpid, tmpta, tmptype, 'E', tmpxs, tmpys, tmpzs); // Creates new car
-				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
-				aux = carlist;
+				newc = NewCar(tmpid, tmpta, tmptype, 'E', tmpxs, tmpys, tmpzs); /*Creates new car*/
+				carlist = insertUnsortedLinkedList(carlist, (Item) newc); /*Inserts new car in given car list*/
  		}
 
  		else
  		{
  
- 			if(n == 3) // Exit case -> Car is in carlist, register exit time
+ 			if(n == 3) /*Exit case -> Car is in carlist, register exit time*/
  			{	
  				
 
-						searchcar->inout = 'S'; // Car movement becomes an exit movement
-						searchcar->ta = tmpta; // Updates exit time
-						carlist = insertUnsortedLinkedList(carlist, (Item) searchcar); // Inserts exir ocurrence in carlist
+						searchcar->inout = 'S'; /*Car movement becomes an exit movement*/
+						searchcar->ta = tmpta; /*Updates exit time*/
+						carlist = insertUnsortedLinkedList(carlist, (Item) searchcar); /*Inserts exir ocurrence in carlist*/
 				
 				
  		

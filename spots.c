@@ -81,12 +81,12 @@ void InsertSpotMatrix(Park *p, Parking_spot ** spots_matrix, int st[], long int 
 	{
 		if(p->G->node_info[i].type == EMPTY_SPOT || p->G->node_info[i].type == OCCUPIED)
 		{
-			spots_matrix[y][x].node = i;
-			spots_matrix[y][x].status = p->G->node_info[i].status;
-			printf("valor: %d\n", i);
-
 			for(y = 0; y < p->S; y++)
 			{
+				spots_matrix[y][x].node = i;
+				spots_matrix[y][x].status = p->G->node_info[i].status;
+				printf("valor: %d\n", i);
+
 				pos = Get_Pos(p->accesses[y].pos->x, p->accesses[y].pos->y, p->accesses[y].pos->z, p->N, p->M);
 				GRAPHpfs(p->G, pos, st, wt);
 				spots_matrix[y][x].distance = 3*wt[i];

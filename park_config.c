@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "park_config.h"
-#include "graph.h"
 
 /******************* Defines **************************/
 
@@ -48,9 +47,9 @@
 Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors)
 {
 	Park * p;
-	int i, j;
+	int i;
 
- 	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
+ 	p = (Park *) malloc(sizeof(Park)); /*allocates memory for the struct*/
 
 	if (p == (NULL))
 	{
@@ -58,7 +57,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 		exit(0);
 	}
 
-	p->entries = (Entrance*) malloc(entrances*sizeof(Entrance));  //use p->entries[i].xs
+	p->entries = (Entrance*) malloc(entrances*sizeof(Entrance));  /*use p->entries[i].xs*/
 
  	p->accesses = (Access*) malloc(nr_accesses*sizeof(Access));
 
@@ -179,7 +178,6 @@ int Char_to_Number (char c)
  {
  	int x, actual_node1 = Get_Pos(0, y1, _floor, p->N, p->M), actual_node2 = Get_Pos(0, y2, _floor, p->N, p->M);
  	int node_above;
- 	Parking_spot new_spot;
 
  	for(x = 0; x < nr_columns; x++)
  	{	
@@ -210,29 +208,29 @@ int Char_to_Number (char c)
 
  		if(vector1[x] != WALL)
  		{
- 			if(vector1[x] == ROAD) //if the position is a road:
+ 			if(vector1[x] == ROAD) /*if the position is a road:*/
  			{
- 				if(vector1[x+1] != WALL) //if the position to the right isnt a wall, it creates an edge and inserts it in the graph
+ 				if(vector1[x+1] != WALL) /*if the position to the right isnt a wall, it creates an edge and inserts it in the graph*/
  				{
  					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node1 + 1, NORMAL_TIME));
  				}
- 				if(vector2[x] != WALL) //if the position directly below isnt a wall, it searches for the respective node on the node positions vector
+ 				if(vector2[x] != WALL) /*if the position directly below isnt a wall, it searches for the respective node on the node positions vector*/
  				{ 
- 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME)); //inserts the edge on the graph
+ 					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME)); /*inserts the edge on the graph*/
  				}					
  			}
- 			else if (vector1[x] == RAMP_UP || vector1[x] == RAMP_DOWN) //if the position is a ramp:
+ 			else if (vector1[x] == RAMP_UP || vector1[x] == RAMP_DOWN) /*if the position is a ramp:*/
  			{
- 				if(vector1[x+1] == ROAD) //if theres a road to the right, creates edge and inserts on the graph
+ 				if(vector1[x+1] == ROAD) /*if theres a road to the right, creates edge and inserts on the graph*/
  				{
  					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node1 + 1, NORMAL_TIME));
  				}
- 				if(vector2[x] == ROAD) //if theres a road directly below, it searches for the node on the node positions vector
+ 				if(vector2[x] == ROAD) /*if theres a road directly below, it searches for the node on the node positions vector*/
  				{
  					GRAPHinsertE(p->G, EDGE(actual_node1, actual_node2, NORMAL_TIME));
  				}
  				node_above = Get_Pos(x, y1, _floor+1, p->N, p->M);
- 				GRAPHinsertE(p->G, EDGE(actual_node1, node_above, RAMP_TIME)); //inserts it on the graph
+ 				GRAPHinsertE(p->G, EDGE(actual_node1, node_above, RAMP_TIME)); /*inserts it on the graph*/
  			}
  			else if(vector1[x] == EMPTY_SPOT || vector1[x] == PED_ACCESS || vector1[x] == ENTRY_DOOR)
  			{
@@ -267,7 +265,7 @@ int Char_to_Number (char c)
 void Map_to_Park_Graph (Park * p, FILE * f, int _floor) 
 {
 	int x, y;
-	char vector2[p->N]; // Line storage vector
+	char vector2[p->N]; /*Line storage vector*/
 	int vector1_nr[p->N];
 	int vector2_nr[p->N];
 
@@ -275,12 +273,12 @@ void Map_to_Park_Graph (Park * p, FILE * f, int _floor)
 
 	fgets(vector2, (p->N+1)*(p->M), f); 
 	
-	for(y = p->M-1; y > 0; y--) // For each one of the lines
+	for(y = p->M-1; y > 0; y--) /*For each one of the lines*/
 	{
-		for (x = 0; x < p->N; x++) // For each one of the characters
+		for (x = 0; x < p->N; x++) /*For each one of the characters*/
 		{
-			vector1_nr[x] = Char_to_Number(vector2[x]); // Converts the symbol into integer and fills the numbers vector
-			printf("%d", vector1_nr[x]); //prints the type of the position on the screen
+			vector1_nr[x] = Char_to_Number(vector2[x]); /*Converts the symbol into integer and fills the numbers vector*/
+			printf("%d", vector1_nr[x]); /*prints the type of the position on the screen*/
 		}
 		printf("\n");
 
@@ -293,7 +291,7 @@ void Map_to_Park_Graph (Park * p, FILE * f, int _floor)
 		}
 
 
-		Get_edges(p, vector1_nr, vector2_nr, p->N, y, y-1, _floor); //Get edges of the graph
+		Get_edges(p, vector1_nr, vector2_nr, p->N, y, y-1, _floor); /*Get edges of the graph*/
 	}
 	printf("\n\n");
 }
@@ -310,15 +308,15 @@ void Map_to_Park_Graph (Park * p, FILE * f, int _floor)
  *
  *****************************************************************************/
 
-void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where to start inserting entries or accesses in the vectors
+void Read_Doors_info (Park * p, FILE * f, int *i, int *j) /*i, j, declare where to start inserting entries or accesses in the vectors*/
 {
 	int door_x, door_y, door_z, doors = 0;
 	char door_name[NAME_SIZE], door_type; 
 
-	while(doors < p->E + p->S) //reads lines until the number of entries + accesses is reached
+	while(doors < p->E + p->S) /*reads lines until the number of entries + accesses is reached*/
 	{
-		fscanf(f, "%s %d %d %d %c", door_name, &door_x, &door_y, &door_z, &door_type); //reads the first line with the dimensions, etc...
-		if (door_name[0] == 'E')  //if its an entry inserts the information in the p->entries vector
+		fscanf(f, "%s %d %d %d %c", door_name, &door_x, &door_y, &door_z, &door_type); /*reads the first line with the dimensions, etc...*/
+		if (door_name[0] == 'E')  /*if its an entry inserts the information in the p->entries vector*/
 		{
 			strcpy(p->entries[(*i)].name, door_name);
 			p->entries[(*i)].pos->x = door_x;
@@ -328,7 +326,7 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 			(*i)++;
 		}
 
-		else if (door_name[0] == 'A') //if its an access inserts the information in the p->accesses vector
+		else if (door_name[0] == 'A') /*if its an access inserts the information in the p->accesses vector*/
 		{
 			strcpy(p->accesses[(*j)].name, door_name);
 			p->accesses[(*j)].pos->x = door_x;
@@ -338,7 +336,7 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 			(*j)++;
 		}
 
-		else if(door_name[0] == '+') //if +, finishes the reading about the actual floor
+		else if(door_name[0] == '+') /*if +, finishes the reading about the actual floor*/
 		{
 			break;
 		}
@@ -364,7 +362,7 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
  *
  *****************************************************************************/
 
-void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicates the position to insert the entries/accesses in the vectors
+void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) /*i, j indicates the position to insert the entries/accesses in the vectors*/
 {
 	Map_to_Park_Graph(p, f, _floor);
 
@@ -392,20 +390,20 @@ Park *ReadFilePark (char * file)
 
 	f = AbreFicheiro(file, "r");
 
-	fscanf(f, "%d %d %d %d %d", &n, &m, &p, &e, &s); // Reads initial file info
+	fscanf(f, "%d %d %d %d %d", &n, &m, &p, &e, &s); /*Reads initial file info*/
 
-	fgets(line, sizeof(line), f); //carrys on to the second line of the file (line is not used anywhere else)
+	fgets(line, sizeof(line), f); /*carrys on to the second line of the file (line is not used anywhere else)*/
 
-	new_park = NewPark(n, m, e, s, p); //creates new park struct
+	new_park = NewPark(n, m, e, s, p); /*creates new park struct*/
 
-	for(l = 0; l < p; l++) //reads all the info about each floor
+	for(l = 0; l < p; l++) /*reads all the info about each floor*/
 	{
-		Read_floor(new_park, f, l, &i, &j); // Read floor function
+		Read_floor(new_park, f, l, &i, &j); /*Read floor function*/
 	}
 
 	FechaFicheiro(f);
 
-	return new_park; // Returns new_park
+	return new_park; /*Returns new_park*/
 }
 
 /*int main(int argc, char *argv[])

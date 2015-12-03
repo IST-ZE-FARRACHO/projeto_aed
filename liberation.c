@@ -29,7 +29,7 @@ Liberation * NewLiberation(int x, int y, int z, int time)
 {
 	Liberation * libert;
 
-	libert = (Liberation *) malloc(sizeof(Liberation)); //allocates memory for the struct
+	libert = (Liberation *) malloc(sizeof(Liberation)); /*allocates memory for the struct*/
 
 	if (libert == NULL)
 	{
@@ -79,16 +79,16 @@ LinkedList * ReadLiberationFile(char * file, LinkedList * liberationlist)
 
 	do{	
  		
- 		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
+ 		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); /*Reads each line*/
  		if( n < 3 ) break;
 
-		if(tmptype == 'S') // If it is not exit info (it is an entrance)
+		if(tmptype == 'S') /*If it is not exit info (it is an entrance)*/
  			{	
 
  				if(n > 3) 
  				{
- 						newliberation = NewLiberation(tmpxs, tmpys, tmpzs, tmpta); // Creates a new struct to save liberation info
- 						liberationlist = insertUnsortedLinkedList(liberationlist, (Item) newliberation); // Inserts new liberation in liberation list			
+ 						newliberation = NewLiberation(tmpxs, tmpys, tmpzs, tmpta); /*Creates a new struct to save liberation info*/
+ 						liberationlist = insertUnsortedLinkedList(liberationlist, (Item) newliberation); /*Inserts new liberation in liberation list*/			
  				}
 
  			}

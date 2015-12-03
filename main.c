@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
 
 	int nr_eventos, i, a = 0, b = 0, c = 0;
 
-	LinkedList * eventslist, * carlist, * wait_carlist, * liberationlist, * restrictionlist; // Declares list
+	LinkedList * eventslist, * carlist, * wait_carlist, * liberationlist, * restrictionlist; /*Declares list*/
 
-	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park matrix
+	park = ReadFilePark(argv[1]); /*Reads, allocates, and fills park matrix*/
 
 	carlist = initLinkedList();
 	wait_carlist = initLinkedList();
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
 	carlist = ReadCarFile(park, argv[2], carlist);
 	liberationlist = ReadLiberationFile(argv[2], liberationlist);
-	restrictionlist = ReadRestrictsFile(argv[3], restrictionlist); // Sends list pointer to function
+	restrictionlist = ReadRestrictsFile(argv[3], restrictionlist); /*Sends list pointer to function*/
 
 	a = lengthLinkedList(carlist);
 	b = lengthLinkedList(liberationlist);
@@ -115,14 +115,14 @@ int main(int argc, char *argv[])
 
 	}	*/
 
-	// Percorre a fila de eventos 
-		// Se for a entrada de um carro
-			// Calcula automaticamente o melhor lugar e percurso
-			// Escreve a sequência de movimentos para o ficheiro de saída
-		// Se for a saída de um carro
-			// Atualiza matriz de posições
-                      //Insere a posiçao da qual o carro saiu no grafo
-		// Se for uma restrição nova
-			// Atualiza matriz de posições
-
+	/*Percorre a fila de eventos 
+		Se for a entrada de um carro
+			Calcula automaticamente o melhor lugar e percurso
+			Escreve a sequência de movimentos para o ficheiro de saída
+		Se for a saída de um carro
+			Atualiza matriz de posições
+                      Insere a posiçao da qual o carro saiu no grafo
+		Se for uma restrição nova
+			/Atualiza matriz de posições*/
+		exit(0);
 }

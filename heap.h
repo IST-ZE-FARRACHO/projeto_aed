@@ -7,10 +7,17 @@
  *
  *****************************************************************************/
 #include "defs.h"
+#include "time.h"
 
 Heap *NewHeap(int tamanho, int (*less) (Item, Item), void (*print) (Item));
 
 void FreeHeap(Heap * h);
+
+void FixUp(Heap * h, int k);
+
+void FixDown(Heap * h, int k);
+
+void FixDownPQ(Heap * h, int k, long int vector[]);
 
 int Insert(Heap * h, Item element);
 
