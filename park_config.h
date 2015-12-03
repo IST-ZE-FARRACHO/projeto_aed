@@ -12,6 +12,7 @@
 
  #include "defs.h"
  #include "tools.h"
+ #include "graph.h"
 
  Park *NewPark(int, int, int, int, int);
 

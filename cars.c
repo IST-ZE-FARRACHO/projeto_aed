@@ -14,6 +14,7 @@
 #include "LinkedList.h"
 #include "tools.h"
 
+
 /******************************************************************************
  * NewCar
  *
@@ -33,21 +34,21 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
 	if (newcar == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new car.\n");
-		exit(1);
+		exit(0);
 	}
 
 	newcar->id = (char *) malloc((strlen(id)+1)*(sizeof(char)));
 	if (newcar->id == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new car id.\n");
-		exit(1);
+		exit(0);
 	}
 
 	newcar->pos = (Position*) malloc(sizeof(Position));
  	if(newcar->pos == NULL)
  	{
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
- 		exit(1);
+ 		exit(0);
  	}
 
 
@@ -80,6 +81,7 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
 LinkedList * ReadCarFile(char * file, LinkedList * carlist)
 {
 
+<<<<<<< HEAD
 	FILE *f;
 	int n, tmpta, tmpxs, tmpys, tmpzs;
 	char tmptype;
@@ -98,6 +100,7 @@ LinkedList * ReadCarFile(char * file, LinkedList * carlist)
 
  	do{	
  		
+<<<<<<< HEAD
  		n = fscanf(f, "%s %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
  		if( n < 3 ) continue; // If data is not in correct format, skip
 
@@ -106,23 +109,19 @@ LinkedList * ReadCarFile(char * file, LinkedList * carlist)
 
 				newc = NewCar(tmpid, tmpta, tmptype, 'E', tmpxs, tmpys, tmpzs); // Creates new car structure
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
-	
  		}
 
- 		else
- 		{
- 
- 			if(n == 3) // Exit case -> Car is in carlist, register exit time
- 			{			
+
+
+ 		if(n == 3) // Exit case -> Car is in carlist, register exit time
+ 		{			
  						searchcar = getItemLinkedList(carlist);
 						searchcar->inout = 'S'; // Car movement becomes an exit movement
 						searchcar->ta = tmpta; // Updates exit time
 						carlist = insertUnsortedLinkedList(carlist, (Item) searchcar); // Inserts exir ocurrence in carlist
- 			}
-
  		}
 
- 	}
+  	}
  	while(n >= 3);
 
  	CloseFile(f);

@@ -28,14 +28,15 @@ struct _node
 {
 	Position * pos;
 	int type;
+	int status;
 };
 
 typedef struct _node Graph_node;
 /**************************************************************************/
 
 struct _entrance 
-{ //struct for entrances
-	char name[NAME_SIZE]; //name of the entrance
+{ /*struct for entrances*/
+	char name[NAME_SIZE]; /*name of the entrance*/
 	Position * pos;
 };
 
@@ -44,20 +45,20 @@ typedef struct _entrance Entrance;
 /*********************************************************************/
 struct _access
 {
-	char name[NAME_SIZE]; //name of the access
+	char name[NAME_SIZE]; /*name of the access*/
  	Position * pos;
- 	char type; //type of the access;
+ 	char type; /*type of the access;*/
 };
 
 typedef struct _access Access;
 
 /***************************************************************************/
-struct _car // Struct for cars
+struct _car /*Struct for cars*/
 {
-	char *id; // Vehicle identification
-	int ta; // Car event time
-	char type; // Type of access required //“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)
-	char inout; // 'E' for entrance event, 'S' for exit event
+	char *id; /*Vehicle identification*/
+	int ta; /*Car event time*/
+	char type; /*Type of access required //“C” (Cinema), “H” (Habitacão), “E” (Escritorios), “L” (Loja) ou “R”(Restauracao)*/
+	char inout; /*'E' for entrance event, 'S' for exit event*/
 
 	Position * pos;
 
@@ -89,9 +90,9 @@ typedef struct _restPos Rest_pos;
 /*******************************************************************************/
 struct _restrict
 {
-	int type; // 0 - Position Restriction | 1 - Floor Restriction
-	int ta; // Occurence time
-	char inout; // 'O' for restriction creation, 'F' for restriction lift
+	int type; /*0 - Position Restriction | 1 - Floor Restriction*/
+	int ta; /*Occurence time*/
+	char inout; /*'O' for restriction creation, 'F' for restriction lift*/
 	Position * pos;
 };
 
@@ -99,14 +100,14 @@ typedef struct _restrict Restrictions;
 
 /*********************************************************************************/
 
-struct _event // Struct for events
+struct _event /*Struct for events*/
 {
-	char type; // Event type
-	// 'E' for Entrance, 'S' for Exit (Car is in list), 'F' for Exit (Car not in the list), 'R' (Ending restrition)
+	char type; /*Event type*/
+	/*'E' for Entrance, 'S' for Exit (Car is in list), 'F' for Exit (Car not in the list), 'R' (Ending restrition)*/
 	
-	int time; // Event starting time
+	int time; /*Event starting time*/
 
-	Item object; //object related to the event (car, restriction, etc...);
+	Item object; /*object related to the event (car, restriction, etc...);*/
 
 
 };
@@ -117,7 +118,7 @@ typedef struct _event Event;
 
 struct _liberation
 {	
-	int time; // Liberation ocurring time
+	int time; /*Liberation ocurring time*/
 	Position * pos;
 	
 };
@@ -144,7 +145,6 @@ struct LinkedListStruct
 {
   Item this;
   LinkedList * next;
-  int number;
 };
 
 
@@ -154,17 +154,17 @@ typedef struct node link;
 struct node
 {
 	int v;
-	int weight; //type of the node
+	int weight; /*type of the node*/
 	link *next;
 };
 
 /**************************************************************************/
 struct graph 
 {
-	int V; //number of nodes
-	int E; //number of edges
+	int V; /*number of nodes*/
+	int E; /*number of edges*/
 	link **adj;
-	Graph_node *node_info; //vector with the info about each node
+	Graph_node *node_info; /*vector with the info about each node*/
 };
 
 typedef struct graph Graph;
@@ -172,24 +172,35 @@ typedef struct graph Graph;
 /************************************************************************/
 struct edge
 {
-	int v; //node 1
-	int w; //node 2
+	int v; /*node 1*/
+	int w; /*node 2*/
 	int weight;
 };
 
 typedef struct edge Edge;
 
+/**********************************************************/
+struct _spot
+{
+	int node;
+	long int distance;
+	int status;
+};
+
+typedef struct _spot Parking_spot;
+
 /************************************************************************/
 struct _park 
 {
- 	int N; //number of columns
- 	int M; //number of lines
- 	int P; //number of floors
- 	int E; //number of entrances
- 	int S; //number of accesses
+ 	int N; /*number of columns*/
+ 	int M; /*number of lines*/
+ 	int P; /*number of floors*/
+ 	int E; /*number of entrances*/
+ 	int S; /*number of accesses*/
+ 	int Spots; /*number of parking spots*/
  	Graph *G;
- 	Entrance *entries; //vector that stores the info about the entrances;
- 	Access *accesses; //vector that stores the info about the accesses;
+ 	Entrance *entries; /*vector that stores the info about the entrances*/
+ 	Access *accesses; /*vector that stores the info about the accesses*/
 };
 
 typedef struct _park Park;
@@ -197,8 +208,8 @@ typedef struct _park Park;
 
 struct _heap 
 {
-  int (*less) (Item, Item);     /* Surprise! this field is a function pointer
-                                 * to elements in the heap. */
+  int (*less) (Item, Item);     /* Surprise! this field is a function pointer*/
+                                /* to elements in the heap. */
   void (*print) (Item);         /* So is this one!! */
   int n_elements;               /* # elements in heap */
   int size;                     /* max size of the heap. */
@@ -206,17 +217,6 @@ struct _heap
 };
 
 typedef struct _heap Heap; 
-
-/**********************************************************/
-
-struct _spot
-{
-	int node;
-	int distance;
-	int status;
-};
-
-typedef struct _spot Parking_spot;
 
 /*******************************************************/
 

@@ -54,7 +54,6 @@ int EventCounter(LinkedList * carlist, LinkedList * liberationlist, LinkedList *
 
 Heap * TimelineCreator(int nr_eventos, LinkedList * carlist, LinkedList * liberationlist, LinkedList * restrictionlist)
 {	
-	int i;
 	Heap * h;
 	h = NewHeap(nr_eventos, LessNumEvento, PrintNumEvento);
 
@@ -70,7 +69,7 @@ Heap * ListToHeap(LinkedList * list, Heap * h, int listtype)
 		Event * event;
 
 		if(list == NULL)
-			return;
+			return NULL;
 		
 		if(listtype == CAR)
 		{	
@@ -108,7 +107,7 @@ Event * EventCreator(Item this, int time, char type)
 	if (newevent == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new event.\n");
-		exit(1);
+		exit(0);
 	}
 
 	newevent->object = this;
@@ -136,7 +135,7 @@ Event * EventCreator(Item this, int time, char type)
  *
  *****************************************************************************/
 
-int LessNumEvento(Item a, Item b) // If a < b return 1
+int LessNumEvento(Item a, Item b) /*If a < b return 1*/
 {
 
   Event aa, bb;

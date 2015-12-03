@@ -31,12 +31,12 @@ Restrictions *NewRestrictions(int rest_type, int ta, char inout, int x, int y, i
 {
 	Restrictions * rest;
 
-	rest = (Restrictions *) malloc(sizeof(Restrictions)); //allocates memory for the struct
+	rest = (Restrictions *) malloc(sizeof(Restrictions)); /*allocates memory for the struct*/
 
 	if (rest == NULL)
 	{
 		fprintf(stderr, "Error in malloc of restrictions struct.\n");
-		exit(1);
+		exit(0);
 	}
 
 	rest->pos = (Position*) malloc(sizeof(Position));
@@ -44,7 +44,7 @@ Restrictions *NewRestrictions(int rest_type, int ta, char inout, int x, int y, i
  	if(rest->pos == NULL)
  	{
  		fprintf(stderr, "Error in malloc of rest->pos.\n");
- 		exit(1);
+ 		exit(0);
  	}
 
 
@@ -69,7 +69,7 @@ Restrictions *NewRestrictions(int rest_type, int ta, char inout, int x, int y, i
  *****************************************************************************/
 LinkedList * ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 {
-	int ta, tb, ind, ex, ey, ez, nr_reads, nr_floors = 0, nr_pos = 0, i = 0, j = 0;
+	int ta, tb, ind, ex, ey, ez, nr_reads;
 	char r;
 	Restrictions * aux;
 
@@ -77,23 +77,23 @@ LinkedList * ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 
 	f = OpenFile(file, "r");
 
-	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez)) // Reads each line of the file
+	while((nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez))) /*Reads each line of the file*/
 	{
-		if(nr_reads == 4) // Its a floor restriction - use type = 1
+		if(nr_reads == 4) /*Its a floor restriction - use type = 1*/
 		{	
 			aux = NewRestrictions(FLOOR, ta, 'E', DONTCARE, DONTCARE, ez);
-			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new floor restriction in restriction lis
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); /*Inserts new floor restriction in restriction list*/
 			aux = NewRestrictions(FLOOR, tb, 'S', DONTCARE, DONTCARE, ez);
-			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new floor restriction in restriction lis
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); /*Inserts new floor restriction in restriction list*/
 
  		
 		}
-		else if(nr_reads == 6) // Its a position restriction - use type = 0
+		else if(nr_reads == 6) /*Its a position restriction - use type = 0*/
 		{
-			aux = NewRestrictions(POSITION, ta, 'E', ex, ey, ez); // Inserts restriction entrance time with ta and 'E'
-			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new position restriction in restriction list
-			aux = NewRestrictions(POSITION, tb, 'S', ex, ey, ez); // Inserts restriction lift time with tb and 'S'
-			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); // Inserts new position restriction in restriction list
+			aux = NewRestrictions(POSITION, ta, 'E', ex, ey, ez); /*Inserts restriction entrance time with ta and 'E'*/
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); /*Inserts new position restriction in restriction list*/
+			aux = NewRestrictions(POSITION, tb, 'S', ex, ey, ez); /*Inserts restriction lift time with tb and 'S'*/
+			restrictionslist = insertUnsortedLinkedList(restrictionslist, (Item) aux); /*Inserts new position restriction in restriction list*/
 
 		}
 

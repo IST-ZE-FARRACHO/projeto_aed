@@ -20,20 +20,24 @@
 #include "park_config.h"
 #include "heap.h"
 #include "liberation.h"
+#include "spots.h"
 
 int main(int argc, char *argv[])
 {	
 
+
 	Park * park; // Park structure
 	Heap * timeline; // Timeline structure - Heap format
+	Parking_spot **spots_matrix;
 
-	int nr_eventos, i, a = 0, b = 0, c = 0;
+	int nr_eventos, i, j, a = 0, b = 0, c = 0;
 
 	LinkedList * eventslist, * carlist, * liberationlist, * restrictionlist; // List to store initial data
 
 	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park graph
 
 	carlist = initLinkedList();
+	wait_carlist = initLinkedList();
 	liberationlist = initLinkedList();
 	restrictionlist = initLinkedList();
 
@@ -60,13 +64,32 @@ int main(int argc, char *argv[])
 
 	GRAPHpfs(park->G, 30, st, wt);
 
-	for(i = 0; i < 600; i++)
+	for(i = 0; i < park->G->V; i++)
 		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, park->G->node_info[i].pos->x, park->G->node_info[i].pos->y, park->G->node_info[i].pos->z);
 	*/
 
 	freeLinkedList(carlist, FreeCar);
 	FreePark(park);
-	
+
+	printf("\n\n\n");
+
+	spots_matrix = CreatesSpotsTable(park);
+
+	InsertSpotMatrix(park, spots_matrix, st, wt);
+
+	printf("%d\n",spots_matrix[0][0].node);
+
+	printf("\n\n");
+
+	for(i = 0; i < park->S; i++)
+	{
+		for(j = 0; j < park->Spots; j++)
+		{
+			printf("%ld  ", spots_matrix[i][j].distance);
+		}
+		printf("\n\n");
+	}
+
 	/* while(não chegar ao último elemento do heap)
 	{
 
@@ -100,16 +123,17 @@ int main(int argc, char *argv[])
 
 	}
 
-	// Percorre a fila de eventos 
-		// Se for a entrada de um carro
-			// Calcula automaticamente o melhor lugar e percurso
-			// Escreve a sequência de movimentos para o ficheiro de saída
-		// Se for a saída de um carro
-			// Atualiza matriz de posições
-                      //Insere a posiçao da qual o carro saiu no grafo
-		// Se for uma restrição nova
-			// Atualiza matriz de posições
-
 	*/
+
+	/*Percorre a fila de eventos 
+		Se for a entrada de um carro
+			Calcula automaticamente o melhor lugar e percurso
+			Escreve a sequência de movimentos para o ficheiro de saída
+		Se for a saída de um carro
+			Atualiza matriz de posições
+                      Insere a posiçao da qual o carro saiu no grafo
+		Se for uma restrição nova
+			/Atualiza matriz de posições*/
+		exit(0);
 
 }
