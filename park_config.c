@@ -31,34 +31,35 @@
 #define RAMP_TIME 2
 
 /******************************************************************************
- * NewPark ()
+ * NewPark
  *
- * Arguments: columns- number of columns
- *            lines - number of lines
- *			  entrances - number of entrances
- *            accesses - number of accesses
- * Returns: Park
+ * Arguments: Number of columns
+ *            Number of lines
+ *			  Number of entrances
+ *            Number of accesses
  *
- * Description: Creates a new Park structure
+ * Returns: Allocated Park
+ *
+ * Description: Creates a new Park Structure
  *
  *****************************************************************************/
 
-Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors)
+Park * NewPark(int columns, int lines, int entrances, int nr_accesses, int floors)
 {
 	Park * p;
 	int i, j;
 
- 	p = (Park *) malloc(sizeof(Park)); //allocates memory for the struct
+ 	p = (Park *) malloc(sizeof(Park)); // Allocates memory for the struct
 
-	if (p == (NULL))
+	if (p == (NULL)) // Memory allocation testing
 	{
 		fprintf(stderr, "Error in malloc of park.\n");
 		exit(1);
 	}
 
-	p->entries = (Entrance*) malloc(entrances*sizeof(Entrance));  //use p->entries[i].xs
+	p->entries = (Entrance*) malloc(entrances*sizeof(Entrance));  // Entries array
 
- 	p->accesses = (Access*) malloc(nr_accesses*sizeof(Access));
+ 	p->accesses = (Access*) malloc(nr_accesses*sizeof(Access)); // Access array
 
  	if(p->entries == NULL || p->accesses == NULL)
  	{
@@ -66,7 +67,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		exit(1);
  	}
 
-  	for(i = 0; i < entrances; i++) 
+  	for(i = 0; i < entrances; i++) // Allocates entries coordinates storage
  	{	
  		p->entries[i].pos = (Position*) malloc(sizeof(Position));
  		
@@ -77,7 +78,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		}
  	}
 
- 	for(i = 0; i < nr_accesses; i++) 
+ 	for(i = 0; i < nr_accesses; i++) // Allocates accesses coordinates storage
  	{	
  		p->accesses[i].pos = (Position*) malloc(sizeof(Position));
  		
@@ -88,7 +89,7 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
  		}
  	}	
 
- 	p->G = GRAPHinit(columns*lines*floors);
+ 	p->G = GRAPHinit(columns*lines*floors); // Initializes a park-sized Graph
 
 	p->N = columns;
 	p->M = lines;
@@ -100,10 +101,11 @@ Park *NewPark(int columns, int lines, int entrances, int nr_accesses, int floors
 }
 
 /******************************************************************************
- * Char_to_Number ()
+ * Char_to_Number
  *
- * Arguments: character to transform
- * Returns: integer
+ * Arguments: Character to transform
+ *
+ * Returns: Integer
  *
  * Description: Transforms a character from the map to the equivalent integer
  *
@@ -333,19 +335,22 @@ void Read_Doors_info (Park * p, FILE * f, int *i, int *j) //i, j, declare where 
 }
 
 /******************************************************************************
- * Read_floor()
+ * Read_floor
  *
  * Arguments: File to read
  *            Struct of park
- *			  _floor
- *			  i, j;
- * Returns: ----
+ *			  Floor to be read
+ *			  Position index i
+ *			  Position index j
+ *			
  *
- * Description: Reads the info about each floor and inserts in the structs
+ * Returns: -
+ *
+ * Description: Transforms each floor into a graph. Reads Door info
  *
  *****************************************************************************/
 
-void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicates the position to insert the entries/accesses in the vectors
+void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j)
 {
 	Map_to_Park_Graph(p, f, _floor);
 
@@ -353,17 +358,17 @@ void Read_floor (Park * p, FILE * f, int _floor, int *i, int *j) //i, j indicate
 }
 
 /******************************************************************************
- * ReadFilePark (char * file)
+ * ReadFilePark
  *
  * Arguments: File to be read
  *			 
  * Returns: Created Park
  *
- * Description: Reads the file with the info about the park
+ * Description: Reads the file with the initial info about the park
  *
  *****************************************************************************/
 
-Park *ReadFilePark (char * file)
+Park * ReadFilePark (char * file)
 {
 	int i = 0, j = 0, l = 0, n, m, p, e, s;
 	char line [NAME_SIZE];
@@ -371,26 +376,36 @@ Park *ReadFilePark (char * file)
 	FILE *f;
 	Park *new_park;
 
-	f = AbreFicheiro(file, "r");
+	f = OpenFile(file, "r");
 
 	fscanf(f, "%d %d %d %d %d", &n, &m, &p, &e, &s); // Reads initial file info
 
-	fgets(line, sizeof(line), f); //carrys on to the second line of the file (line is not used anywhere else)
+	fgets(line, sizeof(line), f); // Carrys on to the second line of the file (line is not used anywhere else)
 
-	new_park = NewPark(n, m, e, s, p); //creates new park struct
+	new_park = NewPark(n, m, e, s, p); // Creates new park struct with read info
 
-	for(l = 0; l < p; l++) //reads all the info about each floor
+	for(l = 0; l < p; l++) // For each of the floors
 	{
-		Read_floor(new_park, f, l, &i, &j); // Read floor function
+		Read_floor(new_park, f, l, &i, &j); // Read floor function - reads floor data
 	}
 
-	FechaFicheiro(f);
+	CloseFile(f); // Closes file
 
-	return new_park; // Returns new_park
+	return new_park; // Returns created Park
 }
 
+/******************************************************************************
+ * AccessTreesCreator
+ *
+ * Arguments: Park structure
+ *			 
+ * Returns: 
+ *
+ * Description:
+ *
+ *****************************************************************************/
 
-link_tree * AccessTreesCreator(Park *p)
+/*link_tree * AccessTreesCreator(Park *p)
 {
 	link_tree **trees_vector = (link_tree **) malloc((p->S)*sizeof(link_tree *));
 	
@@ -401,22 +416,25 @@ link_tree * AccessTreesCreator(Park *p)
 	}
 
 
-}
+}*/
 
-/*int main(int argc, char *argv[])
-{
-	Park *p;
+void FreePark(Park * p)
+{	
 	int i;
 
-	p = ReadFilePark(argv[1]);
+	for(i = 0; i < p->E; i++) // Frees structures from Entries array
+ 	{	
+ 		free(p->entries[i].pos);
+ 	}
 
-	int st[p->G->V];
-	long int wt[p->G->V];
+ 	for(i = 0; i < p->S; i++) // Free structures from Accesses array
+ 	{	
+ 		free(p->accesses[i].pos);
+ 	}	
 
-	GRAPHpfs(p->G, 30, st, wt);
+	free(p->entries);
+ 	free(p->accesses);
+ 	GRAPHdestroy(p->G);
+ 	free(p);
 
-	for(i = 0; i < 600; i++)
-		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, p->G->node_info[i].pos->x, p->G->node_info[i].pos->y, p->G->node_info[i].pos->z);
-
-	return 0;
-}*/
+}

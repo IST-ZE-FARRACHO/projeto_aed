@@ -13,7 +13,19 @@
 #include <string.h>
 #include "tools.h"
 
- FILE *AbreFicheiro(char *name, char *mode)
+ /******************************************************************************
+ * OpenFile
+ *
+ * Arguments: Name of the file
+ *			  Open mode
+ *
+ * Returns: Pointer to open file
+ *
+ * Description: Opens a given file
+ *
+ *****************************************************************************/
+
+ FILE *OpenFile(char *name, char *mode)
 {
   	FILE *f;
 
@@ -27,7 +39,18 @@
  	 return f;
 }
 
-void FechaFicheiro(FILE * f)
+/******************************************************************************
+ * CloseFile
+ *
+ * Arguments: FILE pointer
+ *
+ * Returns: -
+ *
+ * Description: Closes a given file
+ *
+ *****************************************************************************/
+
+void CloseFile(FILE * f)
 {
 	fclose(f);
 }

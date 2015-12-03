@@ -13,34 +13,9 @@
 #include "cars.h"
 #include "LinkedList.h"
 #include "tools.h"
- 
- /******************************************************************************
- * CheckEntrance()
- *
- * Arguments: Entrance Vector
- *			  New Entrance
- *
- * Returns: True or false, depending on Entrance Check result
- *
- * Description: Checks if an entrance is valid
- *
- *****************************************************************************/
-
-int CheckEntrance(Park * p, int x, int y, int z)
-{
-	int i;
-
-	for(i = 0; i <= p->E; i++)
-	{
-		if( (p->entries[i].pos->x) == x && (p->entries[i].pos->y == y ) && (p->entries[i].pos->z) == z )
-			return 1;
-	}
-
-	return 0;	
-}
 
 /******************************************************************************
- * NewCar()
+ * NewCar
  *
  * Arguments: Car info
  *
@@ -61,7 +36,7 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
 		exit(1);
 	}
 
-	newcar->id = (char *) malloc(sizeof(char)*4);
+	newcar->id = (char *) malloc((strlen(id)+1)*(sizeof(char)));
 	if (newcar->id == NULL) 
 	{
 		fprintf(stderr, "Error in malloc of new car id.\n");
@@ -69,7 +44,6 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
 	}
 
 	newcar->pos = (Position*) malloc(sizeof(Position));
-
  	if(newcar->pos == NULL)
  	{
  		fprintf(stderr, "Error in malloc of entries/accesses.\n");
@@ -103,50 +77,47 @@ Car * NewCar(char * id, int ta, char type, char inout, int xs, int ys, int zs)
  * Description: Reads car file and stores info into a list
  *
  *****************************************************************************/
-LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist)
+LinkedList * ReadCarFile(char * file, LinkedList * carlist)
 {
 
-	 FILE *f; 
-	 int n, tmpta, tmpxs, tmpys, tmpzs;
-	 char tmptype;
-	 char tmpid[5];
-	 Car * newc;
-	 Car * searchcar;
-	 LinkedList * aux = carlist;
-	 int carnumber = 0;
+	FILE *f;
+	int n, tmpta, tmpxs, tmpys, tmpzs;
+	char tmptype;
+	char tmpid[5];
+	Car * newc;
+	Car * searchcar;
+	int carnumber = 0;
 
- 	f = AbreFicheiro(file, "r");
+	if(tmpid == NULL) 
+	{
+		fprintf(stderr, "Error in malloc of tmpid.\n");
+		exit(1);
+	}
+
+ 	f = OpenFile(file, "r");
 
  	do{	
  		
- 		n = fscanf(f, "%s   %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
- 		if( n < 3 ) continue;
+ 		n = fscanf(f, "%s %d %c %d %d %d", tmpid, &tmpta, &tmptype, &tmpxs, &tmpys, &tmpzs); // Reads each line
+ 		if( n < 3 ) continue; // If data is not in correct format, skip
 
  		if(tmptype != 'S') // If it is not exit info (it is an entrance)
- 		{	
- 			if( CheckEntrance(p, tmpxs, tmpys, tmpzs) ) // Checks if it is a valid entrance, if it's not, ignore
- 			{
-				newc = NewCar(tmpid, tmpta, tmptype, 'E', tmpxs, tmpys, tmpzs); // Creates new car
+ 		{
+
+				newc = NewCar(tmpid, tmpta, tmptype, 'E', tmpxs, tmpys, tmpzs); // Creates new car structure
 				carlist = insertUnsortedLinkedList(carlist, (Item) newc); // Inserts new car in given car list
-				aux = carlist;
 	
- 			}
- 			else printf("Not a valid entrance!\n");
  		}
 
  		else
  		{
  
  			if(n == 3) // Exit case -> Car is in carlist, register exit time
- 			{	
- 				
-
+ 			{			
+ 						searchcar = getItemLinkedList(carlist);
 						searchcar->inout = 'S'; // Car movement becomes an exit movement
 						searchcar->ta = tmpta; // Updates exit time
 						carlist = insertUnsortedLinkedList(carlist, (Item) searchcar); // Inserts exir ocurrence in carlist
-				
-				
- 		
  			}
 
  		}
@@ -154,7 +125,17 @@ LinkedList * ReadCarFile(Park * p, char * file, LinkedList * carlist)
  	}
  	while(n >= 3);
 
- 	FechaFicheiro(f);
+ 	CloseFile(f);
 
  	return carlist;
+}
+
+void FreeCar(Item this)
+{
+	this = (Car*) this;
+	free(this->pos);
+	free(this->id);
+	//free(carro);
+
+	return;
 }

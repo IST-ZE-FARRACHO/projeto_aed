@@ -27,4 +27,6 @@
 
  Park *ReadFilePark (char * file);
 
+ void FreePark(Park * p);
+
  #endif

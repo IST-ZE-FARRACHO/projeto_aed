@@ -146,6 +146,8 @@ Graph *GRAPHinit(int V)
  	G->adj[w] = NEW(v, weight, G->adj[w]);
 
  	G->E++;
+
+ 	free(e);
  }
 
  /******************************************************************************
@@ -237,6 +239,11 @@ Graph *GRAPHinit(int V)
  			free(aux);
  		}
  	}
+
+ 	for(i = 0; i < G->V; i++)
+	{
+		free(G->node_info[i].pos);
+	} 
 
  	free(G->node_info);
  	free(G->adj);	

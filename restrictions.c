@@ -75,7 +75,7 @@ LinkedList * ReadRestrictsFile(char * file, LinkedList * restrictionslist)
 
 	FILE * f;
 
-	f = AbreFicheiro(file, "r");
+	f = OpenFile(file, "r");
 
 	while(nr_reads = fscanf(f, "%s %d %d %d %d %d", &r, &ta, &tb, &ind, &ey, &ez)) // Reads each line of the file
 	{

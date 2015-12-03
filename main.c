@@ -24,23 +24,23 @@
 int main(int argc, char *argv[])
 {	
 
-	Park * park;
-	Heap * timeline;
+	Park * park; // Park structure
+	Heap * timeline; // Timeline structure - Heap format
 
 	int nr_eventos, i, a = 0, b = 0, c = 0;
 
-	LinkedList * eventslist, * carlist, * liberationlist, * restrictionlist; // Declares list
+	LinkedList * eventslist, * carlist, * liberationlist, * restrictionlist; // List to store initial data
 
-	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park matrix
+	park = ReadFilePark(argv[1]); // Reads, allocates, and fills park graph
 
 	carlist = initLinkedList();
 	liberationlist = initLinkedList();
 	restrictionlist = initLinkedList();
 
-	carlist = ReadCarFile(park, argv[2], carlist);
-	liberationlist = ReadLiberationFile(argv[2], liberationlist);
-	restrictionlist = ReadRestrictsFile(argv[3], restrictionlist); // Sends list pointer to function
-
+	carlist = ReadCarFile(argv[2], carlist);
+	//liberationlist = ReadLiberationFile(argv[2], liberationlist);
+	//restrictionlist = ReadRestrictsFile(argv[3], restrictionlist); // Sends list pointer to function
+/*
 	a = lengthLinkedList(carlist);
 	b = lengthLinkedList(liberationlist);
 	c = lengthLinkedList(restrictionlist);
@@ -62,7 +62,10 @@ int main(int argc, char *argv[])
 
 	for(i = 0; i < 600; i++)
 		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, park->G->node_info[i].pos->x, park->G->node_info[i].pos->y, park->G->node_info[i].pos->z);
-	
+	*/
+
+	freeLinkedList(carlist, FreeCar);
+	FreePark(park);
 	
 	/* while(não chegar ao último elemento do heap)
 	{
@@ -95,7 +98,7 @@ int main(int argc, char *argv[])
 				atualiza grafo das posições
 			}
 
-	}	*/
+	}
 
 	// Percorre a fila de eventos 
 		// Se for a entrada de um carro
@@ -106,5 +109,7 @@ int main(int argc, char *argv[])
                       //Insere a posiçao da qual o carro saiu no grafo
 		// Se for uma restrição nova
 			// Atualiza matriz de posições
+
+	*/
 
 }

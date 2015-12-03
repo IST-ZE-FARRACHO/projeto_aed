@@ -75,7 +75,7 @@ LinkedList * ReadLiberationFile(char * file, LinkedList * liberationlist)
 
 	FILE * f;
 
-	f = AbreFicheiro(file, "r");
+	f = OpenFile(file, "r");
 
 	do{	
  		

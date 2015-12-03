@@ -77,8 +77,8 @@ void freeLinkedList(LinkedList * first, void (* freeItemFnt)(Item))
     next = aux->next;
 
     /* Free current item                                          */
-  /*    freeItemFnt(aux->this);*/
-    free(aux->this);
+    freeItemFnt( (Item) aux->this);
+    //free(aux->this);
 
     /* Free current node                                          */
     free(aux);
