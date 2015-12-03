@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 	int st[park->G->V];
 	long int wt[park->G->V];
 
-	GRAPHpfs(park->G, 2, st, wt);
+	GRAPHpfs(park->G, 30, st, wt);
 
 	for(i = 0; i < park->G->V; i++)
 		printf("Parent: %d  Distance: %ld   Node: %d   Coord: %d %d %d\n", st[i], wt[i], i, park->G->node_info[i].pos->x, park->G->node_info[i].pos->y, park->G->node_info[i].pos->z);
@@ -72,7 +72,9 @@ int main(int argc, char *argv[])
 
 	InsertSpotMatrix(park, spots_matrix, st, wt);
 
-	printf("\n\n\n");
+	printf("%d\n",spots_matrix[0][0].node);
+
+	printf("\n\n");
 
 	for(i = 0; i < park->S; i++)
 	{

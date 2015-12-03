@@ -39,35 +39,6 @@ void quick_sort (Parking_spot a[], int n)
     quick_sort(a + i, n - i);
 }
 
-void merge(Parking_spot a[], int l, int m, int r, int maxN)
-{
-	int i, j, k;
-	Parking_spot aux[maxN];
-
-	for (i = m+1; i > l; i--)
-		aux[i-1] = a[i-1];
-	for (j = m; j < r; j++)
-		aux[r+m-j] = a[j+1];
-	for (k = l; k <= r; k++)
-		if (LessNumPQ((Item) aux[i].distance, (Item) aux[j].distance))
-			a[k] = aux[i++];
-		else
-			a[k] = aux[j--];
-}
-
-
-void mergesort(Parking_spot a[], int l, int r, int maxN)
-{
-	int m = (r+1)/2;
-	printf("%d  %ld\n", m, a[0].distance);
-	if (r <= 1)
-		return;
-	mergesort(a, l, m, maxN);
-	mergesort(a, m+1, r, maxN);
-	merge(a, l, m, r, maxN);
-}
-
-
 Parking_spot ** CreatesSpotsTable(Park *p)
 {
 	int i;
@@ -80,7 +51,7 @@ Parking_spot ** CreatesSpotsTable(Park *p)
 		exit(0);
 	}
 
-	for(i = 0; i < p->Spots; i++)
+	for(i = 0; i < p->S; i++)
 	{
 		spots_matrix[i] = (Parking_spot *) malloc((p->Spots)*sizeof(Parking_spot));
 
@@ -115,8 +86,6 @@ void InsertSpotMatrix(Park *p, Parking_spot ** spots_matrix, int st[], long int 
 			x++;
 		}
 	}
-
-	printf("%ld\n", spots_matrix[1][0].distance);
 
 	for(y = 0; y < p->S; y++)
 		quick_sort(spots_matrix[y], p->Spots);

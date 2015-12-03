@@ -14,8 +14,6 @@
  #include "tools.h"
 
 void quick_sort (Parking_spot a[], int n);
-void merge(Parking_spot a[], int l, int m, int r, int maxN);
-void mergesort(Parking_spot a[], int l, int r, int maxN);
 Parking_spot ** CreatesSpotsTable(Park *p);
 void InsertSpotMatrix(Park *p, Parking_spot ** spots_matrix, int st[], long int wt[]);
 
