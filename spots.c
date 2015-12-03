@@ -16,6 +16,28 @@
 #include <string.h>
 #include "spots.h"
 
+void quick_sort (Parking_spot a[], int n) 
+{
+	Parking_spot t;
+
+    int i, j, p;
+    if (n < 2)
+        return;
+    p = a[n / 2].distance;
+    for (i = 0, j = n - 1;; i++, j--) {
+        while (a[i].distance < p)
+            i++;
+        while (p < a[j].distance)
+            j--;
+        if (i >= j)
+            break;
+        t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+    }
+    quick_sort(a, i);
+    quick_sort(a + i, n - i);
+}
 
 void merge(Parking_spot a[], int l, int m, int r, int maxN)
 {
@@ -37,8 +59,8 @@ void merge(Parking_spot a[], int l, int m, int r, int maxN)
 void mergesort(Parking_spot a[], int l, int r, int maxN)
 {
 	int m = (r+1)/2;
-
-	if (r <= l)
+	printf("%d  %ld\n", m, a[0].distance);
+	if (r <= 1)
 		return;
 	mergesort(a, l, m, maxN);
 	mergesort(a, m+1, r, maxN);
@@ -85,24 +107,16 @@ void InsertSpotMatrix(Park *p, Parking_spot ** spots_matrix, int st[], long int 
 			{
 				spots_matrix[y][x].node = i;
 				spots_matrix[y][x].status = p->G->node_info[i].status;
-				printf("valor: %d\n", i);
 
 				pos = Get_Pos(p->accesses[y].pos->x, p->accesses[y].pos->y, p->accesses[y].pos->z, p->N, p->M);
 				GRAPHpfs(p->G, pos, st, wt);
 				spots_matrix[y][x].distance = 3*wt[i];
-				printf("access: %d  dist: %ld\n", pos, spots_matrix[y][x].distance);	
 			}
 			x++;
 		}
 	}
 
 	for(y = 0; y < p->S; y++)
-		mergesort(spots_matrix[y], 0, p->Spots, p->G->V);
-
-	for(y = 0; y < p->S; y++){
-		for(x = 0; x < p->Spots; x++){
-			printf("%ld ", spots_matrix[y][x].distance);
-		}
-		printf("\n\n");
-	}	
+		quick_sort(spots_matrix[y], p->Spots);
+		
 }

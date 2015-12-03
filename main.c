@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	Heap * timeline;
 	Parking_spot **spots_matrix;
 
-	int nr_eventos, i, a = 0, b = 0, c = 0;
+	int nr_eventos, i, j, a = 0, b = 0, c = 0;
 
 	LinkedList * eventslist, * carlist, * wait_carlist, * liberationlist, * restrictionlist; /*Declares list*/
 
@@ -72,14 +72,16 @@ int main(int argc, char *argv[])
 
 	InsertSpotMatrix(park, spots_matrix, st, wt);
 
+	printf("\n\n\n");
 
-	/*for(i = 0; i < park->S; i++)
+	for(i = 0; i < park->S; i++)
 	{
-		for(aux = spot_trees_vector; aux[i] != NULL; aux[i] = aux[i]->left)
+		for(j = 0; j < park->Spots; j++)
 		{
-			printf("access: %d  %d\n", i, aux[i]->parking->node);
-		}	
-	}*/
+			printf("%ld  ", spots_matrix[i][j].distance);
+		}
+		printf("\n\n");
+	}
 
 	
 	/* while(não chegar ao último elemento do heap)
